@@ -1,0 +1,57 @@
+name: Mirror WordPress site
+
+# GitHub の Actions タブ → "Mirror WordPress site" → "Run workflow" で手動実行します。
+# 元サイトを静的 HTML として site/ に複製し、このワークフローを実行したブランチにコミットします。
+on:
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: 複製元サイトの URL
+        default: https://oimofes.jp/
+        required: true
+      extra_hosts:
+        description: 画像等を別ホスト (CDN) から配信している場合のホスト名 (カンマ区切り、任意)
+        default: ''
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mirror-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Mirror site into site/
+        env:
+          SITE_URL: ${{ inputs.site_url }}
+          EXTRA_HOSTS: ${{ inputs.extra_hosts }}
+        run: |
+          rm -rf site
+          bash scripts/mirror.sh
+
+      - name: Post-process HTML
+        env:
+          SITE_URL: ${{ inputs.site_url }}
+        run: node scripts/postprocess.mjs
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site PAGES.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: mirror ${{ inputs.site_url }} ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push
