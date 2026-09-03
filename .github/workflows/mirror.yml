@@ -39,6 +39,11 @@ jobs:
           rm -rf site
           bash scripts/mirror.sh
 
+      - name: Fetch lazy-loaded images and other assets wget missed
+        env:
+          SITE_URL: ${{ inputs.site_url }}
+        run: node scripts/fetch-missing.mjs
+
       - name: Post-process HTML
         env:
           SITE_URL: ${{ inputs.site_url }}

@@ -23,7 +23,8 @@ WordPress (oimofes.jp)  ──複製──▶  site/ (静的 HTML)  ──AI で
 | `site/` | 複製された静的サイト本体。**公開されるのはこの中身だけ** |
 | `PAGES.md` | 全ページの一覧 (URL・ファイル・タイトル)。複製時に自動生成 |
 | `scripts/mirror.sh` | 元サイトを `site/` に複製するスクリプト (wget) |
-| `scripts/postprocess.mjs` | 複製後の後処理 (WordPress 固有タグの除去、URL の整理、`PAGES.md` 生成) |
+| `scripts/fetch-missing.mjs` | 遅延読み込み (lazyload) の画像など、wget が取りこぼした素材を追加取得 |
+| `scripts/postprocess.mjs` | 複製後の後処理 (WordPress 固有タグの除去、URL の相対化、ファイル名の整理、`PAGES.md` 生成) |
 | `scripts/extra-urls.txt` | どこからもリンクされていないページがあれば URL を追記 |
 | `.github/workflows/mirror.yml` | GitHub 上のボタンで複製を実行するワークフロー |
 | `.github/workflows/deploy-pages.yml` | `site/` を GitHub Pages に公開するワークフロー |
@@ -53,8 +54,9 @@ wget と Node.js 18 以上が必要です (Mac: `brew install wget node`)。
 ```bash
 git clone https://github.com/nonii-design/oimofes.jp.git
 cd oimofes.jp
-bash scripts/mirror.sh
-node scripts/postprocess.mjs
+bash scripts/mirror.sh          # wget でページと画像を取得
+node scripts/fetch-missing.mjs  # 遅延読み込み画像など wget が取りこぼしたものを追加取得
+node scripts/postprocess.mjs    # 後処理 (不要タグ除去・パス整理・PAGES.md 生成)
 git add -A site PAGES.md
 git commit -m "chore: mirror oimofes.jp"
 git push

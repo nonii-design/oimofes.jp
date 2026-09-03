@@ -5,38 +5,46 @@
 //   node scripts/postprocess.mjs
 //
 // やること:
-//   1. WordPress 固有で静的サイトには不要なタグを削除
-//      (REST API / oEmbed / RSD / pingback のリンク、generator メタ、絵文字スクリプトなど)
-//   2. 元サイトの絶対 URL (https://oimofes.jp/...) を相対 URL に書き換え
-//      (NEW_BASE を指定すれば、その URL を新しいベースにする)
-//   3. 全ページの一覧 PAGES.md を生成 (AI がサイト構造を把握しやすくするため)
+//   1. "style.css@ver=1.2.css" のような wget が付けたクエリ付きファイル名を "style.css" に戻す
+//      (拡張子が崩れていると、公開サーバーが正しい MIME タイプを返せず JS/CSS が読み込まれない)
+//   2. WordPress 固有で静的サイトには不要なタグを削除
+//      (REST API / oEmbed / RSD / pingback / RSS のリンク、generator メタ、絵文字スクリプトなど)
+//   3. 遅延読み込み (Smush 等) の data-src / data-srcset を通常の src / srcset に戻す
+//   4. 元サイトの絶対 URL (https://oimofes.jp/...) を、各ページからの相対パスに書き換える
+//      (どのドメイン・どのサブパスで公開しても壊れないようにする)
+//      ただし og:image / canonical など SNS・検索エンジン向けの URL は PUBLIC_URL の絶対 URL にする
+//   5. "about/index.html" 形式のリンクを "about/" に整える
+//   6. 全ページの一覧 PAGES.md を生成 (AI がサイト構造を把握しやすくするため)
 //
 // 環境変数:
-//   OUT_DIR   対象ディレクトリ        (既定: site)
-//   SITE_URL  複製元サイトの URL      (既定: https://oimofes.jp/)
-//   NEW_BASE  書き換え後のベース URL  (既定: 空 = ルート相対 "/..." にする)
+//   OUT_DIR     対象ディレクトリ                (既定: site)
+//   SITE_URL    複製元サイトの URL              (既定: https://oimofes.jp/)
+//   PUBLIC_URL  公開後の URL (og:url 等に使用)  (既定: SITE_URL と同じ)
 // =============================================================================
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, rename, rm, access } from 'node:fs/promises';
 import path from 'node:path';
 
 const OUT_DIR = process.env.OUT_DIR || 'site';
 const SITE_URL = (process.env.SITE_URL || 'https://oimofes.jp/').replace(/\/+$/, '');
 const HOST = new URL(SITE_URL).host.replace(/^www\./, '');
-const NEW_BASE = (process.env.NEW_BASE || '').replace(/\/+$/, '');
+const PUBLIC_URL = (process.env.PUBLIC_URL || SITE_URL).replace(/\/+$/, '');
 // PAGES.md は OUT_DIR の 1 つ上 (通常はリポジトリルート) に置く
 const PAGES_FILE = process.env.PAGES_FILE || path.join(path.dirname(path.resolve(OUT_DIR)), 'PAGES.md');
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const exists = (p) => access(p).then(() => true, () => false);
 
 // 元サイトの絶対 URL。JSON 内の "https:\/\/host" のようなエスケープ形式にも対応。
 const ORIGIN_RE = new RegExp(`https?:(?:\\\\?/){2}(?:www\\.)?${escapeRe(HOST)}(?=[/"'\\\\\\s<>)]|$)`, 'gi');
 
-// 削除するタグ (順序は無関係。属性順に依存しないよう先読みで判定)
+// 削除するタグ (属性順に依存しないよう先読みで判定)
 const REMOVALS = [
   /<link(?=[^>]*rel=["']https:\/\/api\.w\.org\/["'])[^>]*>\s*/gi,
   /<link(?=[^>]*rel=["']EditURI["'])[^>]*>\s*/gi,
   /<link(?=[^>]*rel=["']wlwmanifest["'])[^>]*>\s*/gi,
   /<link(?=[^>]*rel=["']alternate["'])(?=[^>]*oembed)[^>]*>\s*/gi,
+  // WordPress 6.x が出力する REST API へのリンク (type="application/json")
+  /<link(?=[^>]*rel=["']alternate["'])(?=[^>]*application\/json)[^>]*>\s*/gi,
   // RSS / Atom フィードは静的サイトでは配信されないため、リンクも削除
   /<link(?=[^>]*rel=["']alternate["'])(?=[^>]*(?:rss|atom)\+xml)[^>]*>\s*/gi,
   /<link(?=[^>]*rel=["']shortlink["'])[^>]*>\s*/gi,
@@ -45,6 +53,8 @@ const REMOVALS = [
   /<script[^>]*>(?:(?!<\/script>)[\s\S])*?_wpemojiSettings[\s\S]*?<\/script>\s*/gi,
   /<script(?=[^>]*wp-emoji-release)[^>]*><\/script>\s*/gi,
 ];
+
+const TEXT_FILE_RE = /\.(html?|css|js|xml|json|txt|svg)$/i;
 
 async function* walk(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -66,24 +76,126 @@ function toUrlPath(relFile) {
   return p;
 }
 
+// ---------------------------------------------------------------------------
+// 1. クエリ付きファイル名 ("foo.js@ver=1.2", "style.css@ver=1.css") を元の名前に戻す
+// ---------------------------------------------------------------------------
+const renames = new Map(); // 旧ベース名 -> 新ベース名
+{
+  const files = [];
+  for await (const f of walk(OUT_DIR)) if (path.basename(f).includes('@')) files.push(f);
+  for (const oldPath of files) {
+    const oldBase = path.basename(oldPath);
+    const newBase = oldBase.split('@')[0];
+    if (!newBase) continue;
+    const newPath = path.join(path.dirname(oldPath), newBase);
+    if (await exists(newPath)) {
+      // 別バージョンが既に存在する場合は片方だけ残す (中身はほぼ同一のため)
+      await rm(oldPath);
+    } else {
+      await rename(oldPath, newPath);
+    }
+    renames.set(oldBase, newBase);
+  }
+  console.log(`==> Renamed ${renames.size} versioned asset files.`);
+}
+
+// 参照側の置換用 (長い名前から順に置換して部分一致の誤爆を防ぐ)
+const renameEntries = [...renames.entries()].sort((a, b) => b[0].length - a[0].length);
+function applyRenames(text) {
+  for (const [oldBase, newBase] of renameEntries) {
+    if (text.includes(oldBase)) text = text.split(oldBase).join(newBase);
+    // HTML 内では & が &amp; になっていることがある
+    const escaped = oldBase.replace(/&/g, '&amp;');
+    if (escaped !== oldBase && text.includes(escaped)) text = text.split(escaped).join(newBase);
+  }
+  return text;
+}
+
+// ---------------------------------------------------------------------------
+// 3. 遅延読み込み属性を通常属性に戻す
+// ---------------------------------------------------------------------------
+function unlazy(html) {
+  return html.replace(/<(img|source|iframe|video)\b[^>]*\bdata-src(?:set)?=[^>]*>/gi, (tag) => {
+    if (!/\bdata-src(set)?=/.test(tag)) return tag;
+    let t = tag;
+    // ダミーの src (data: の SVG や透明 GIF) を削除
+    t = t.replace(/\s(?:src|srcset)=["']data:[^"']*["']/gi, '');
+    t = t.replace(/\sdata-src=/gi, ' src=');
+    t = t.replace(/\sdata-srcset=/gi, ' srcset=');
+    t = t.replace(/\sdata-sizes=/gi, ' sizes=');
+    t = t.replace(/\sclass=(["'])([^"']*)\1/i, (_, q, cls) => {
+      const kept = cls.split(/\s+/).filter((c) => c && !/^lazyload(ed)?$/.test(c) && c !== 'lazy');
+      return kept.length ? ` class=${q}${kept.join(' ')}${q}` : '';
+    });
+    t = t.replace(/\s*--smush-placeholder-[a-z-]+:\s*[^;"']+;?/gi, '');
+    t = t.replace(/\sstyle=(["'])\s*\1/i, '');
+    return t;
+  });
+}
+
+// ---------------------------------------------------------------------------
+// 4. ルート相対 "/path" をそのファイルからの相対パスに書き換える
+// ---------------------------------------------------------------------------
+function relativizeRootPaths(text, depth, isHtml) {
+  const prefix = depth === 0 ? './' : '../'.repeat(depth);
+  if (isHtml) {
+    // 属性値 ="/..." (// で始まるプロトコル相対は除く)
+    text = text.replace(/(\s(?:href|src|data-src|data-original|data-bg|data-background|poster|action)=["'])\/(?!\/)/gi, `$1${prefix}`);
+    // srcset の各エントリ
+    text = text.replace(/(\s(?:srcset|data-srcset)=["'])([^"']+)/gi, (_, attr, val) =>
+      attr + val.replace(/(^|,\s*)\/(?!\/)/g, `$1${prefix}`));
+  }
+  // CSS の url(/...)
+  text = text.replace(/url\(\s*(["']?)\/(?!\/)/gi, `url($1${prefix}`);
+  return text;
+}
+
+// og:*, twitter:*, canonical は絶対 URL に戻す (SNS シェア・検索エンジン用)
+function absolutizeSeoTags(html, pageUrlPath) {
+  html = html.replace(/<meta(?=[^>]*(?:property|name)=["'](?:og|twitter):[^"']+["'])[^>]*>/gi, (tag) =>
+    tag.replace(/(content=["'])(?:\.\.\/|\.\/)*\/?(?=[^"'])/i, (m, attr) => {
+      // 相対化済み ("../x", "./x") か ルート相対 ("/x") のみ PUBLIC_URL を付ける
+      return /^content=["'](?:\.\.?\/)/i.test(m) || /^content=["']\//.test(m) ? `${attr}${PUBLIC_URL}/` : m;
+    }));
+  // canonical は wget が相対リンクに変換してしまい元のパス情報が失われるため、
+  // ページの公開パスから組み立て直す
+  html = html.replace(/<link(?=[^>]*rel=["']canonical["'])[^>]*>/gi, (tag) =>
+    tag.replace(/href=["'][^"']*["']/i, `href="${PUBLIC_URL}${pageUrlPath}"`));
+  return html;
+}
+
+// ---------------------------------------------------------------------------
+// メイン処理
+// ---------------------------------------------------------------------------
 const pages = [];
 let filesChanged = 0;
 
 for await (const file of walk(OUT_DIR)) {
-  if (!/\.(html?|css|js|xml|json|txt|svg)$/i.test(file)) continue;
+  if (!TEXT_FILE_RE.test(file)) continue;
 
   const original = await readFile(file, 'utf8');
   let out = original;
+  const rel = path.relative(OUT_DIR, file);
+  const depth = rel.split(path.sep).length - 1;
+  const isHtml = /\.html?$/i.test(file);
 
-  if (/\.html?$/i.test(file)) {
+  out = applyRenames(out);
+
+  if (isHtml) {
     for (const re of REMOVALS) out = out.replace(re, '');
-    // wget が生成した "about/index.html" 形式のリンクを "about/" 形式に整える
-    // (Web サーバーはディレクトリ指定で index.html を返すため、URL がきれいになる)
-    out = out.replace(/(href=["'])((?:[^"'>]*\/)?)index\.html(?=["'#?])/gi, (_, attr, dir) => attr + (dir || './'));
-    pages.push({ file: path.relative(OUT_DIR, file), title: extractTitle(out) });
+    out = unlazy(out);
   }
 
-  out = out.replace(ORIGIN_RE, NEW_BASE);
+  // 元サイトの絶対 URL → ルート相対 → 相対パス
+  out = out.replace(ORIGIN_RE, '');
+  out = relativizeRootPaths(out, depth, isHtml);
+
+  if (isHtml) {
+    // "about/index.html" → "about/" 、 "index.html" → "./"
+    out = out.replace(/(href=["'])((?:[^"'>]*\/)?)index\.html(?=["'#?])/gi, (_, attr, dir) => attr + (dir || './'));
+    out = absolutizeSeoTags(out, toUrlPath(rel));
+    pages.push({ file: rel, title: extractTitle(out) });
+  }
 
   if (out !== original) {
     await writeFile(file, out, 'utf8');
