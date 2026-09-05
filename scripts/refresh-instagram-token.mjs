@@ -35,7 +35,15 @@ const res = await fetch(url);
 const body = await res.json().catch(() => ({}));
 
 if (!res.ok || !body.access_token) {
-  console.error(`!! トークンを更新できませんでした: ${body?.error?.message || `HTTP ${res.status}`}`);
+  const msg = body?.error?.message || `HTTP ${res.status}`;
+  // 発行から 24 時間以内のトークンは更新できない仕様。
+  // このワークフローは 6 時間おきに動くので、登録直後は必ずこの状態になる。
+  // 異常ではないので、通常終了して次回にまわす。
+  if (/24 hours|too soon|at least 24/i.test(msg)) {
+    console.log('==> まだ発行から 24 時間経っていないため、更新は次回にまわします。');
+    process.exit(0);
+  }
+  console.error(`!! トークンを更新できませんでした: ${msg}`);
   console.error('   期限切れの場合は README の手順で再発行し、シークレットを差し替えてください。');
   process.exit(1);
 }
