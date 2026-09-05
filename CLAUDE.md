@@ -23,8 +23,10 @@
 5. **画像を追加するときは `site/wp-content/uploads/` 配下に置く。** 既存の構成に合わせる。
 6. **`scripts/mirror.sh` を再実行すると `site/` が元サイトの内容で上書きされる。**
    手作業で編集を始めた後は、ユーザーの明確な指示なしに再実行しない。
-7. WordPress 由来の動的機能 (フォーム送信、検索、コメント) は静的サイトでは動かない。
-   関連する修正依頼を受けたら、外部サービスへの置き換えを提案する (README.md 参照)。
+7. **お問い合わせフォームは自前の実装に置き換え済み。**
+   `site/contact-form.js` が Google Apps Script (`scripts/contact-form.gs`) へ送り、
+   event@nonii.co.jp にメールで届く。見た目は `custom.css` の「お問い合わせフォーム」。
+   WordPress 由来の他の動的機能 (検索、コメント) は静的サイトでは動かない。
 8. **`<!-- INSTAGRAM:START -->` 〜 `<!-- INSTAGRAM:END -->` の中は手で編集しない。**
    `scripts/fetch-instagram.mjs` が 6 時間おきに自動生成している (2 か所ある)。
    表示件数を変えたいときはスクリプト冒頭の `SLOTS` を直す。

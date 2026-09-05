@@ -263,6 +263,170 @@
   .oimo-ig__item:nth-child(n + 7) { animation-delay: 300ms; }
 }
 
+/* ---------------------------------------------------------------------------
+   お問い合わせフォーム
+   もとの Forminator (Material デザイン) の見た目に合わせた自前のフォーム。
+   送信の処理は site/contact-form.js。
+   --------------------------------------------------------------------------- */
+.oimo-form {
+  font-family: var(--oimo-font-gothic);
+  color: #2b2c2c;
+  text-align: left;
+}
+
+.oimo-form__row {
+  display: block;
+  margin: 0 0 1.9em;
+  position: relative;
+}
+
+.oimo-form__label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #2b2c2c;
+}
+
+.oimo-form__req { color: #d0342c; }
+
+.oimo-form__opt {
+  margin-left: 0.4em;
+  padding: 0.1em 0.5em;
+  border-radius: 3px;
+  background: #eceff1;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* 下線だけの入力欄 (元のデザインに合わせている) */
+.oimo-form__input {
+  width: 100%;
+  padding: 0.55em 0.2em;
+  border: 0;
+  border-bottom: 1px solid #cfd8dc;
+  border-radius: 0;
+  background: transparent;
+  color: #2b2c2c;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oimo-form__input:focus {
+  outline: none;
+  border-bottom-color: var(--oimo-yellow);
+  box-shadow: 0 1px 0 0 var(--oimo-yellow);
+}
+
+.oimo-form__input::placeholder { color: #9aa5ab; }
+
+.oimo-form__select {
+  appearance: none;
+  padding-right: 1.8em;
+  cursor: pointer;
+  /* 右端の下向き矢印 */
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b2c2c' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.2em center;
+  background-size: 18px 18px;
+}
+
+.oimo-form__textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.oimo-form__file {
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  color: #2b2c2c;
+}
+
+.oimo-form__file::file-selector-button {
+  margin-right: 0.9em;
+  padding: 0.5em 1.1em;
+  border: 1px solid #cfd8dc;
+  border-radius: 4px;
+  background: #eceff1;
+  color: #2b2c2c;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.oimo-form__hint,
+.oimo-form__count {
+  display: block;
+  margin-top: 0.4em;
+  color: #78868d;
+  font-size: 12px;
+}
+
+.oimo-form__count { text-align: right; }
+
+/* 機械的な投稿をふるい落とす項目。目に触れないようにする */
+.oimo-form__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.oimo-form__actions {
+  margin: 0;
+  text-align: right;
+}
+
+.oimo-form__submit {
+  padding: 0.95em 2.6em;
+  border: 0;
+  border-radius: 4px;
+  background: var(--oimo-yellow);
+  color: #2b2c2c;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.oimo-form__submit:hover:not(:disabled) { filter: brightness(1.06); }
+.oimo-form__submit:active:not(:disabled) { transform: translateY(1px); }
+
+.oimo-form__submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* 送信結果の表示 */
+.oimo-form__note {
+  margin: 0 0 1.2em;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.oimo-form__note:empty { display: none; }
+
+.oimo-form__note.is-done,
+.oimo-form__note.is-error,
+.oimo-form__note.is-busy {
+  padding: 0.85em 1.1em;
+  border-radius: 6px;
+}
+
+.oimo-form__note.is-done  { background: #e8f5e9; color: #1b5e20; }
+.oimo-form__note.is-error { background: #fdecea; color: #a02419; }
+.oimo-form__note.is-busy  { background: #eceff1; color: #445056; }
+
 /* 準備中のボタンは押せないことが分かるようにする */
 .h-button__outer > span.h-button {
   cursor: default;
