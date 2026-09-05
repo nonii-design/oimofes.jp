@@ -12,8 +12,9 @@
 (function () {
   'use strict';
 
-  // 例: 'https://script.google.com/macros/s/AKfycb.../exec'
-  var ENDPOINT = '';
+  // Google Apps Script のウェブアプリ URL
+  // (差し替えるときは、Apps Script で再デプロイして得た URL に置き換える)
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyLqdUeZcVYGMdYvF6LocDyYa6xaG8Dv8nn-93_8CaBuXE4Yie-iamI9Pa5v4hyqA4fjw/exec';
 
   var MAIL_TO = 'event@nonii.co.jp';
   var MAX_FILE_BYTES = 8 * 1024 * 1024;
