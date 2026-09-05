@@ -1,6 +1,36 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="ja" prefix="og: https://ogp.me/ns#">
 <head>
+<!-- ▼ 表示のちらつき防止 (scripts では生成していない。手で編集可)
+     スタイルシートが 20 個以上あり、読み込み途中の崩れた状態が一瞬見えてしまうため、
+     準備ができるまで下地をブランドカラーで覆い、整ってからふわりと表示する。
+     JavaScript が無効な場合は何も隠さない (下の class が付かない)。 -->
+<style id="oimo-boot">
+  html.oimo-loading { background-color: #f2be19; }
+  html.oimo-loading body { opacity: 0; }
+  body { opacity: 1; transition: opacity 480ms ease; }
+  @media (prefers-reduced-motion: reduce) { body { transition: none; } }
+</style>
+<script>
+  (function () {
+    var h = document.documentElement;
+    h.className += ' oimo-loading';
+    var shown = false;
+    function reveal() {
+      if (shown) return;
+      shown = true;
+      requestAnimationFrame(function () {
+        h.className = h.className.replace(/\s*\boimo-loading\b/, '') + ' oimo-ready';
+      });
+    }
+    // 書体とスタイルが整ったら表示する
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(reveal); }
+    window.addEventListener('DOMContentLoaded', function () { setTimeout(reveal, 60); });
+    // 何かが失敗しても必ず表示されるようにする保険
+    setTimeout(reveal, 1800);
+  })();
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="http://gmpg.org/xfn/11">

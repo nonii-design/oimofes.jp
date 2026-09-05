@@ -26,6 +26,7 @@ WordPress (oimofes.jp)  ──複製──▶  site/ (静的 HTML)  ──AI で
 | `scripts/fetch-missing.mjs` | 遅延読み込み (lazyload) の画像など、wget が取りこぼした素材を追加取得 |
 | `scripts/fetch-instagram.mjs` | Instagram の最新投稿を取り込み、トップページの埋め込みを更新 |
 | `scripts/refresh-instagram-token.mjs` | Instagram トークンの 60 日期限を自動で延長 |
+| `scripts/optimize-images.py` | 表示サイズに対して大きすぎる画像を Web 向けに縮小 |
 | `scripts/postprocess.mjs` | 複製後の後処理 (WordPress 固有タグの除去、URL の相対化、ファイル名の整理、`PAGES.md` 生成) |
 | `scripts/extra-urls.txt` | どこからもリンクされていないページがあれば URL を追記 |
 | `.github/workflows/mirror.yml` | GitHub 上のボタンで複製を実行するワークフロー |

@@ -49,6 +49,13 @@ jobs:
           SITE_URL: ${{ inputs.site_url }}
         run: node scripts/postprocess.mjs
 
+      # 元サイトには表示サイズに対して極端に大きな画像が含まれるため、Web 向けに縮小する。
+      # (ヘッダーのロゴは 34035x13284px / 8.9MB あり、読み込みが極端に重くなっていた)
+      - name: Optimize images
+        run: |
+          python3 -m pip install --quiet --upgrade Pillow
+          python3 scripts/optimize-images.py
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
