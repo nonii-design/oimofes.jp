@@ -78,14 +78,22 @@ function toUrlPath(relFile) {
 
 // ---------------------------------------------------------------------------
 // 1. クエリ付きファイル名 ("foo.js@ver=1.2", "style.css@ver=1.css") を元の名前に戻す
+//
+// 注意: wget は URL の "?" を "@" に置き換えるが、"@" はファイル名にも普通に使われる
+// (Illustrator が書き出す "アートボード-1@4x.png" など)。
+// そこで「@ の直前がすでに拡張子で終わっている」場合だけをクエリと判断して切り落とす。
 // ---------------------------------------------------------------------------
+const QUERY_AT_RE = /^(.*\.[a-z0-9]{2,5})@(?:$|ver=|v=|m=|x=|\d+$|[a-z_]+=)/i;
+
 const renames = new Map(); // 旧ベース名 -> 新ベース名
 {
   const files = [];
   for await (const f of walk(OUT_DIR)) if (path.basename(f).includes('@')) files.push(f);
   for (const oldPath of files) {
     const oldBase = path.basename(oldPath);
-    const newBase = oldBase.split('@')[0];
+    const m = oldBase.match(QUERY_AT_RE);
+    if (!m) continue; // ファイル名本来の "@" (例: "...@4x.png") は触らない
+    const newBase = m[1];
     if (!newBase) continue;
     const newPath = path.join(path.dirname(oldPath), newBase);
     if (await exists(newPath)) {
