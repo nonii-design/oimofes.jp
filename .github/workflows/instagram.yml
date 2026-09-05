@@ -1,0 +1,61 @@
+name: Update Instagram feed
+
+# Instagram (@oimo.fes) の最新投稿を取得して、トップページの埋め込みを更新します。
+# 6 時間ごとに自動実行され、変更があればコミットします (コミットされると公開も自動で走ります)。
+#
+# 事前準備: リポジトリの Settings → Secrets and variables → Actions で
+#           INSTAGRAM_TOKEN という名前のシークレットにアクセストークンを登録してください。
+#           手順は README.md の「Instagram の埋め込み」を参照。
+on:
+  schedule:
+    - cron: '25 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # 既定ブランチをそのまま使う
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch latest posts
+        env:
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+        run: node scripts/fetch-instagram.mjs
+
+      # トークンの 60 日期限を自動で延長する。
+      # 失敗しても投稿の更新自体は済んでいるので、ここでは止めない。
+      - name: Refresh the access token
+        if: ${{ secrets.INSTAGRAM_TOKEN != '' }}
+        env:
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          GH_TOKEN: ${{ secrets.INSTAGRAM_TOKEN_WRITER }}
+        run: |
+          npm install --no-save --no-audit --no-fund libsodium-wrappers
+          node scripts/refresh-instagram-token.mjs
+        continue-on-error: true
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          if git diff --cached --quiet; then
+            echo "Instagram の投稿に変更はありませんでした。"
+            exit 0
+          fi
+          git commit -m "chore: Instagram の埋め込みを更新 ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push

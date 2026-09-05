@@ -25,6 +25,17 @@
    手作業で編集を始めた後は、ユーザーの明確な指示なしに再実行しない。
 7. WordPress 由来の動的機能 (フォーム送信、検索、コメント) は静的サイトでは動かない。
    関連する修正依頼を受けたら、外部サービスへの置き換えを提案する (README.md 参照)。
+8. **`<!-- INSTAGRAM:START -->` 〜 `<!-- INSTAGRAM:END -->` の中は手で編集しない。**
+   `scripts/fetch-instagram.mjs` が 6 時間おきに自動生成している (2 か所ある)。
+   表示件数を変えたいときはスクリプト冒頭の `SLOTS` を直す。
+9. **HTML を大きく差し替えたら、`<div>` と `</div>` の数が合っているか必ず確認する。**
+   Colibri の HTML は入れ子が深く、閉じタグを 1 つ落とすとページ全体のレイアウトが崩れる。
+
+   ```bash
+   python3 -c "import re;t=open('site/index.html',encoding='utf-8').read();b=t[t.find('<body'):];print(len(re.findall(r'<div\b',b))-len(re.findall(r'</div>',b)))"
+   ```
+
+   0 以外なら閉じタグが合っていない。
 
 ## サイトの特徴 (複製時点)
 

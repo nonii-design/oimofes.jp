@@ -20,11 +20,17 @@
    もとは 1 枚の画像に焼き込まれていた内容を、編集できるよう HTML 化したもの。
    バッジと入場料は元画像から切り出してそのまま使用している。
    --------------------------------------------------------------------------- */
+/* ページビルダー Colibri の CSS が後から読み込まれ、
+   セクションの文字色 (白) が効いてしまうため !important で上書きする */
+.oimo-info,
+.oimo-info p {
+  color: var(--oimo-brown) !important;
+}
+
 .oimo-info {
   max-width: 640px;
   margin: 0 auto;
   text-align: center;
-  color: var(--oimo-brown);
 }
 
 .oimo-info img {
@@ -52,14 +58,15 @@
   margin: 0 auto 3.2em;
 }
 
-/* 「開催期間」「場所」の茶色い丸ピル */
-.oimo-info__pill {
+/* 「開催期間」「場所」の茶色い丸ピル
+   上の .oimo-info p より詳細度を高くするため p.〜 の形で指定する */
+.oimo-info p.oimo-info__pill {
   display: inline-block;
   margin: 0 0 0.7em;
   padding: 0.42em 2.2em;
   border-radius: 999px;
   background: var(--oimo-brown);
-  color: #fff;
+  color: #fff !important;
   font-family: var(--oimo-font-gothic);
   font-size: clamp(15px, 3.4vw, 22px);
   font-weight: 700;
@@ -135,6 +142,81 @@
   font-size: clamp(12.5px, 2.9vw, 15px);
   font-weight: 500;
   line-height: 1.8;
+}
+
+/* ---------------------------------------------------------------------------
+   Instagram の埋め込み
+   投稿タイルは scripts/fetch-instagram.mjs が自動生成する。
+   --oimo-ig-cols で 1 行あたりの枚数を指定している。
+   --------------------------------------------------------------------------- */
+.oimo-ig {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.oimo-ig__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--oimo-ig-cols, 4), 1fr);
+  gap: 10px;
+}
+
+/* 画面が狭いときは枚数を減らして 1 枚あたりを大きく見せる */
+@media (max-width: 900px) {
+  .oimo-ig__grid { grid-template-columns: repeat(min(var(--oimo-ig-cols, 4), 4), 1fr); }
+}
+
+@media (max-width: 560px) {
+  .oimo-ig__grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+}
+
+.oimo-ig__item {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  background: rgba(79, 34, 36, 0.08);
+}
+
+.oimo-ig__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.oimo-ig__item:hover img,
+.oimo-ig__item:focus-visible img {
+  transform: scale(1.06);
+}
+
+/* 動画・リールを示す印 */
+.oimo-ig__badge {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.oimo-ig .oimo-ig__more {
+  margin: 1.4em 0 0;
+  text-align: center !important;
+  font-family: var(--oimo-font-gothic) !important;
+  font-size: clamp(13px, 3vw, 16px);
+  font-weight: 700;
+  letter-spacing: normal !important;
+}
+
+.oimo-ig .oimo-ig__more a {
+  color: var(--oimo-brown) !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* 準備中のボタンは押せないことが分かるようにする */

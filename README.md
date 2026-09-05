@@ -24,6 +24,8 @@ WordPress (oimofes.jp)  ──複製──▶  site/ (静的 HTML)  ──AI で
 | `PAGES.md` | 全ページの一覧 (URL・ファイル・タイトル)。複製時に自動生成 |
 | `scripts/mirror.sh` | 元サイトを `site/` に複製するスクリプト (wget) |
 | `scripts/fetch-missing.mjs` | 遅延読み込み (lazyload) の画像など、wget が取りこぼした素材を追加取得 |
+| `scripts/fetch-instagram.mjs` | Instagram の最新投稿を取り込み、トップページの埋め込みを更新 |
+| `scripts/refresh-instagram-token.mjs` | Instagram トークンの 60 日期限を自動で延長 |
 | `scripts/postprocess.mjs` | 複製後の後処理 (WordPress 固有タグの除去、URL の相対化、ファイル名の整理、`PAGES.md` 生成) |
 | `scripts/extra-urls.txt` | どこからもリンクされていないページがあれば URL を追記 |
 | `.github/workflows/mirror.yml` | GitHub 上のボタンで複製を実行するワークフロー |
@@ -108,6 +110,49 @@ git push
 | 管理画面からの記事投稿 | Claude Code に依頼して HTML を追加する運用に変わる |
 
 これらは複製後に、`PAGES.md` を見ながら該当箇所を Claude Code に修正依頼してください。
+
+## Instagram の埋め込み
+
+トップページの Instagram 欄 2 か所は、**6 時間おきに @oimo.fes の最新投稿を取り込んで自動更新** します
+(`.github/workflows/instagram.yml`)。投稿画像はリポジトリ内に保存するので、
+Instagram 側の画像 URL が期限切れになっても表示は崩れません。
+
+**動かすにはアクセストークンの登録が 1 回だけ必要です。** 未登録のあいだは、
+アカウントへのリンクだけが表示されます (エラーにはなりません)。
+
+### トークンの取り方
+
+1. Instagram アプリで @oimo.fes を **プロアカウント (ビジネス or クリエイター)** に切り替える
+   （設定 → アカウントの種類とツール → プロアカウントに切り替える）
+2. <https://developers.facebook.com/apps/> で **アプリを作成** する
+   （ユースケースは「Instagram」→「Instagram API setup with Instagram login」）
+3. アプリの Instagram 設定画面で **「Generate token」** を押し、@oimo.fes でログインして
+   表示された長いトークンをコピーする
+4. GitHub のリポジトリ → **Settings → Secrets and variables → Actions → New repository secret**
+   - Name: `INSTAGRAM_TOKEN`
+   - Secret: コピーしたトークン
+5. **Actions → Update Instagram feed → Run workflow** で動作を確認する
+
+### トークンの期限について
+
+Instagram のトークンは 60 日で切れますが、上のワークフローは実行のたびに期限を延長するので、
+**通常は放置で動き続けます**。
+
+延長後の新しいトークンをシークレットに自動保存するには、
+Secrets の書き込み権限を持つ Personal Access Token を `INSTAGRAM_TOKEN_WRITER` という名前で
+登録してください。登録しない場合も期限延長自体は行われますが、
+まれに文字列が変わったときだけ手動での差し替えが必要になります。
+
+### 手元で試す
+
+```bash
+INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
+```
+
+### 表示件数を変えたい
+
+`scripts/fetch-instagram.mjs` の先頭にある `SLOTS` で、
+2 か所それぞれの枚数 (既定 4 枚 / 7 枚) を変更できます。
 
 ## 将来の発展 (任意)
 
