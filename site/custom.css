@@ -406,6 +406,20 @@
   cursor: progress;
 }
 
+/* 届け先の案内 */
+.oimo-form__to {
+  margin: 0 0 1.1em;
+  color: #78868d;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.oimo-form__to a {
+  color: #78868d;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* 送信結果の表示 */
 .oimo-form__note {
   margin: 0 0 1.2em;

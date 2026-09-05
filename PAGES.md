@@ -2,7 +2,7 @@
 
 複製元: https://oimofes.jp  
 生成日時: 2026-09-05T09:04:13.831Z  
-ページ数: 37
+ページ数: 38
 
 このファイルは `node scripts/postprocess.mjs` が自動生成します。手で編集しないでください。
 
@@ -35,6 +35,7 @@
 | `/shoplist-2023-07/` | `site/shoplist-2023-07/index.html` | ［過去開催］ 夏おいもフェス SHIZUOKA 2023 出店店舗一覧 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/shoplist-2024/` | `site/shoplist-2024/index.html` | ［過去開催］ おいもフェス SHIZUOKA 2024 出店店舗一覧 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/shoplist-2025/` | `site/shoplist-2025/index.html` | おいもフェス SHIZUOKA 2025年開催 – 店舗一覧 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
+| `/shoplist-2026/` | `site/shoplist-2026/index.html` | ［過去開催］ おいもフェス SHIZUOKA 2026年開催 – 店舗一覧 - 【静岡最大級】おいもフェス FUJICITY 2026 - 全国の焼き芋が集まるおいもの祭典│ 富士中央公園 イベント広場 |
 | `/shoplist/` | `site/shoplist/index.html` | 出店店舗一覧 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/shoplist23-7/` | `site/shoplist23-7/index.html` | 23年夏開催・おいもフェス SHIZUOKA店舗一覧 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/sponsor2023-07/` | `site/sponsor2023-07/index.html` | ［23年夏開催］おいもフェス SHIZUOKAの協賛・スポンサー企業さま一覧 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
