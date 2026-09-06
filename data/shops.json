@@ -1,0 +1,156 @@
+{
+  "note": "店舗一覧のデータ。scripts/build-shops.mjs がこれを読んで HTML を生成する。",
+  "event": "おいもフェス SHIZUOKA 2026 (2026年2月27日〜3月1日 グランシップ広場)",
+  "groups": [
+    {
+      "id": "oimo",
+      "title": "全国おいもエリア",
+      "shops": [
+        {
+          "name": "壺焼き芋 なべちゃん",
+          "area": "埼玉",
+          "image": "wp-content/uploads/2026/02/壺焼き芋なべちゃん_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU5LjglFdST/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "芋の巣",
+          "area": "大阪",
+          "image": "wp-content/uploads/2026/02/浪漫焼き芋_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DVAQvswjH7g/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "sweet＆healthy SAZANKA",
+          "area": "宮崎",
+          "image": "wp-content/uploads/2026/02/SAZANKA_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU1o-Z7D_T5/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "尾張芋屋 芋吉",
+          "area": "愛知",
+          "image": "wp-content/uploads/2026/02/尾張芋屋芋吉_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU9XWgdFF67/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "京都芋屋芋と野菜",
+          "area": "京都",
+          "image": "wp-content/uploads/2026/02/京都芋屋芋と野菜_01.jpg",
+          "width": 1080,
+          "height": 1350
+        },
+        {
+          "name": "干し芋専門店ほしいもの百貨",
+          "area": "茨城",
+          "image": "wp-content/uploads/2026/02/ほしいもの百貨_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU4Nwm1ia_a/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "クリーミーコロッケ",
+          "area": "大阪",
+          "image": "wp-content/uploads/2026/02/クリーミーコロッケ_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU7wZSMiPPv/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "THE IMOMITSU",
+          "area": "茨城",
+          "image": "wp-content/uploads/2026/02/THEIMOMITSU_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU6ykLRCOsw/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "oimodo",
+          "area": "静岡",
+          "image": "wp-content/uploads/2026/02/oimodo_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU4iW3oj-bP/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "oimo&coco.",
+          "area": "静岡",
+          "image": "wp-content/uploads/2026/02/おいもここ_01-1.jpg",
+          "width": 1080,
+          "height": 1350
+        },
+        {
+          "name": "みなと屋",
+          "area": "神奈川",
+          "image": "wp-content/uploads/2026/02/みなと屋_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU8GjypDHRv/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "芋屋 蜜の月 倉敷本店",
+          "area": "岡山",
+          "image": "wp-content/uploads/2026/02/芋屋蜜の月_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU9r8e5AbGU/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "小江戸川越 芋福堂",
+          "area": "埼玉",
+          "image": "wp-content/uploads/2026/02/小江戸川越芋福堂_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU19j2zjYBt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "蜜芋処〜えんむすび",
+          "area": "岐阜",
+          "image": "wp-content/uploads/2026/02/えんむすび_01.jpg",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU2mwUEjWmP/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "神戸芋屋 志のもと",
+          "area": "兵庫",
+          "image": "wp-content/uploads/2026/02/志のもと_01.jpg",
+          "width": 1080,
+          "height": 1350
+        }
+      ]
+    },
+    {
+      "id": "producers",
+      "title": "生産者エリア",
+      "shops": [
+        {
+          "name": "ふもとも農園",
+          "image": "wp-content/uploads/2026/02/2.png",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DUzEM6zDcXU/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "JAふじ伊豆",
+          "image": "wp-content/uploads/2026/02/4.png",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DUzYybfCFdX/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        },
+        {
+          "name": "エナジーファーム",
+          "image": "wp-content/uploads/2026/02/6.png",
+          "width": 1080,
+          "height": 1350,
+          "link": "https://www.instagram.com/p/DU0B_7fiCF8/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+        }
+      ]
+    }
+  ]
+}

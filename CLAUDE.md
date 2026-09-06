@@ -7,7 +7,9 @@
 
 - `site/` — 公開される静的サイト本体 (HTML / CSS / JS / 画像)。編集対象はここ。
 - `PAGES.md` — 全ページの URL・ファイルパス・タイトルの一覧。**ページを探すときはまずこれを読む。**
-- `scripts/` — 元サイトの複製・後処理スクリプト。通常の編集作業では触らない。
+- `partials/` — 全ページ共通のヘッダー (`header.html`) とフッター (`footer.html`)。**ここを直して `node scripts/sync-partials.mjs`。**
+- `data/shops.json` — 店舗一覧のデータ。**ここを直して `node scripts/build-shops.mjs`。**
+- `scripts/` — 複製・後処理・生成スクリプト。上の 2 つと `build-fonts.py` / `fetch-instagram.mjs` 以外は通常触らない。
 - `.github/workflows/` — 複製 (mirror.yml) と公開 (deploy-pages.yml) のワークフロー。
 
 ## 編集ルール
@@ -56,6 +58,19 @@
    ボタン・見出し・ナビの見た目は Colibri のインライン CSS より後に効かせるため `!important` で上書きしている。
    新しいブロックにも `.h-button` / `h2`〜`h6` / `.h-column` を使えば同じ見た目・動きになる。
    `data-aos` による表示アニメーションは無効化済みなので、新たに書かない。
+14. **ヘッダー・フッターは `partials/` が唯一の原本。** 各ページの `<!-- HEADER:START -->`〜`<!-- HEADER:END -->` と
+   `<!-- FOOTER:START -->`〜`<!-- FOOTER:END -->` の中は `node scripts/sync-partials.mjs` が生成するので手で編集しない。
+   メニューの項目やロゴを変えるときは `partials/header.html` を直してから同スクリプトを実行する
+   (`{{ROOT}}` はページごとの相対パスに置き換わる)。
+15. **店舗一覧は `data/shops.json` が原本。** `<!-- SHOPS:START <グループID> -->`〜`<!-- SHOPS:END -->` の中は
+   `node scripts/build-shops.mjs` が生成する。店舗の追加・削除・並び替えは JSON を直して実行する。
+   画像は `site/wp-content/uploads/` に置き、`python3 scripts/optimize-images.py` を先に実行すると
+   縮小版が `srcset` に自動で入る。
+16. **トップページ `site/index.html` は Colibri を使わない手書きの HTML。** jQuery / Swiper / Colibri の JS・CSS を
+   読み込まず、`custom.css` の「C:」の節 (`.oimo-hero` / `.oimo-section` / `.oimo-card` / `.oimo-faq` など) と
+   `oimo-ui.js` だけで動く。セクションを足すときは既存の `<section class="oimo-section">` の形に合わせる。
+   `<body id="colibri">` の id は、下層ページ (Colibri 製) と同じ共通スタイルを当てるために残している。
+   FAQ は `<details>` / `<summary>` で、JavaScript なしで開閉する。
 
 ## サイトの特徴 (複製時点)
 

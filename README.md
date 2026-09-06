@@ -204,6 +204,24 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 `scripts/fetch-instagram.mjs` の先頭にある `SLOTS` で、
 2 か所それぞれの枚数 (既定 4 枚 / 7 枚) を変更できます。
 
+## 共通部品 (ヘッダー / フッター) と店舗一覧
+
+繰り返し出てくる部分は 1 か所を直せば全ページに反映されるようにしています。
+
+| 直したいもの | 編集するファイル | そのあと実行するコマンド |
+| --- | --- | --- |
+| メニューの項目、ロゴ、フッターのリンク | `partials/header.html` / `partials/footer.html` | `node scripts/sync-partials.mjs` |
+| 出店店舗の追加・削除・並び替え | `data/shops.json` | `node scripts/build-shops.mjs` |
+
+- 各ページの `<!-- HEADER:START -->` … `<!-- HEADER:END -->` などのマーカーの間はスクリプトが書き込むので、
+  直接編集しても次の実行で上書きされます。
+- `data/shops.json` の各店舗は `name` (店名)、`area` (都道府県・任意)、`image` (site/ からの相対パス)、
+  `link` (Instagram の投稿など・任意) を持ちます。画像は `site/wp-content/uploads/` に置き、
+  先に `python3 scripts/optimize-images.py` を実行しておくと縮小版が自動で `srcset` に入ります。
+- トップページ (`site/index.html`) は WordPress のページビルダーに依存しない軽い HTML に書き直しています。
+  jQuery や Swiper などは読み込まず、見た目は `site/custom.css`、動きは `site/oimo-ui.js` だけで完結します。
+  下層ページは複製時の構造 (Colibri) のままですが、ヘッダーとフッターは上の共通部品に置き換えています。
+
 ## フォント
 
 ブランド書体「コーポレート・ロゴ ver3」(Medium / Bold) を Web フォントとして配信しています。

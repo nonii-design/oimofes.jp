@@ -17,10 +17,10 @@
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* --- 1. ナビゲーションの固定表示 --------------------------------------- */
-  var navOuter = document.querySelector('.h-navigation_outer');
-  var header = document.querySelector('.page-header');
+  // 共通ヘッダー (.oimo-header) か、Colibri 製ページのナビ (.h-navigation_outer)
+  var navOuter = document.querySelector('.oimo-header, .h-navigation_outer');
 
-  if (navOuter && header) {
+  if (navOuter) {
     var navBottom = 0;
     var stuck = false;
     var ticking = false;
@@ -61,8 +61,12 @@
 
   /* --- 2. スクロールに合わせた表示 --------------------------------------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
+    // 対象: Colibri 製ページの列 (.h-column) と、data-reveal を付けた要素
+    var isTarget = function (el) {
+      return el.classList.contains('h-column') || el.hasAttribute('data-reveal');
+    };
     var columns = Array.prototype.slice.call(
-      document.querySelectorAll('#colibri .h-section:not(.h-navigation) .h-row > .h-column')
+      document.querySelectorAll('#colibri .h-section:not(.h-navigation) .h-row > .h-column, [data-reveal]')
     ).filter(function (col) {
       if (col.closest('#hero')) return false;                       // ヒーローは独自の動き
       if (col.parentElement.closest('.h-column')) return false;      // 入れ子の内側は親に任せる
@@ -71,9 +75,7 @@
     });
 
     columns.forEach(function (col) {
-      var siblings = Array.prototype.filter.call(col.parentElement.children, function (el) {
-        return el.classList.contains('h-column');
-      });
+      var siblings = Array.prototype.filter.call(col.parentElement.children, isTarget);
       var index = Math.min(siblings.indexOf(col), 5);
       col.style.setProperty('--oimo-reveal-delay', (index * 80) + 'ms');
       col.classList.add('oimo-reveal');
@@ -98,7 +100,7 @@
 
   /* --- 3. 現在地のメニューに下線 ---------------------------------------- */
   var links = [];
-  Array.prototype.forEach.call(document.querySelectorAll('ul.colibri-menu'), function (ul) {
+  Array.prototype.forEach.call(document.querySelectorAll('ul.colibri-menu, .oimo-nav__list'), function (ul) {
     Array.prototype.forEach.call(ul.children, function (li) {
       var a = li.querySelector(':scope > a');
       var m = a && /#([\w-]+)$/.exec(a.getAttribute('href') || '');
@@ -139,6 +141,33 @@
     window.addEventListener('scroll', onScrollPick, { passive: true });
     window.addEventListener('resize', onScrollPick);
     pick();
+  }
+
+  /* --- 3b. 共通ヘッダーのモバイルメニュー --------------------------------- */
+  var toggle = document.querySelector('.oimo-header__toggle');
+  if (toggle) {
+    var overlay = document.querySelector('.oimo-nav__overlay');
+    var setOpen = function (open) {
+      html.classList.toggle('oimo-nav-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+    };
+    toggle.addEventListener('click', function () {
+      setOpen(!html.classList.contains('oimo-nav-open'));
+    });
+    if (overlay) overlay.addEventListener('click', function () { setOpen(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.oimo-nav a'), function (a) {
+      a.addEventListener('click', function () { setOpen(false); });
+    });
+    if (window.matchMedia) {
+      var wide = window.matchMedia('(min-width: 992px)');
+      var onWide = function (e) { if (e.matches) setOpen(false); };
+      if (wide.addEventListener) wide.addEventListener('change', onWide);
+      else if (wide.addListener) wide.addListener(onWide);
+    }
   }
 
   /* --- 4. ページ間の遷移 ------------------------------------------------- */
