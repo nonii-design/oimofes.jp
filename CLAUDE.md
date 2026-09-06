@@ -25,6 +25,8 @@
 5. **画像を追加するときは `site/wp-content/uploads/` 配下に置く。** 既存の構成に合わせる。
 6. **`scripts/mirror.sh` を再実行すると `site/` が元サイトの内容で上書きされる。**
    手作業で編集を始めた後は、ユーザーの明確な指示なしに再実行しない。
+   **独自ドメインを GitHub Pages に向けたあとは、複製元がこのサイト自身になるため実行してはいけない。**
+   (自分の出力を取り込んで上書きすることになる)
 7. **お問い合わせフォームは自前の実装に置き換え済み。**
    `site/contact-form.js` が Google Apps Script (`scripts/contact-form.gs`) へ送り、
    event@nonii.co.jp にメールで届く。見た目は `custom.css` の「お問い合わせフォーム」。
