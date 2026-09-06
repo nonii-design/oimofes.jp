@@ -58,6 +58,9 @@
    ボタン・見出し・ナビの見た目は Colibri のインライン CSS より後に効かせるため `!important` で上書きしている。
    新しいブロックにも `.h-button` / `h2`〜`h6` / `.h-column` を使えば同じ見た目・動きになる。
    `data-aos` による表示アニメーションは無効化済みなので、新たに書かない。
+   **表示期間を決めたいブロックには `data-oimo-from="YYYY-MM-DD"` / `data-oimo-to="YYYY-MM-DD"` を付ける。**
+   その期間だけ表示される (開始日の 0:00 から終了日の終わりまで)。両方空なら常に表示。
+   出店者募集のセクション (`#entry`) がこの仕組みを使っている。
 14. **ヘッダー・フッターは `partials/` が唯一の原本。** 各ページの `<!-- HEADER:START -->`〜`<!-- HEADER:END -->` と
    `<!-- FOOTER:START -->`〜`<!-- FOOTER:END -->` の中は `node scripts/sync-partials.mjs` が生成するので手で編集しない。
    メニューの項目やロゴを変えるときは `partials/header.html` を直してから同スクリプトを実行する

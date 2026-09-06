@@ -4,6 +4,7 @@
    2. 画面に入ったブロックをふわりと表示 (IntersectionObserver)
    3. トップページでは今見ているセクションのメニューに下線を付ける
    4. ページ間の遷移 (View Transitions) と「ちらつき防止」の連携
+   5. 表示期間を決めたブロック (data-oimo-from / data-oimo-to) の出し分け
    見た目は custom.css の「B: 書体の統一・余白/角丸/影・モーション」で定義。
    動きを減らす設定 (prefers-reduced-motion) の利用者には 2 を適用しない。
    =========================================================================== */
@@ -12,6 +13,39 @@
 
   var html = document.documentElement;
   html.classList.add('oimo-js');
+
+  /* --- 5. 表示期間 -------------------------------------------------------
+     data-oimo-from="2026-01-20" data-oimo-to="2026-01-31" を書いた要素は
+     その期間だけ表示する (from は当日の 0:00 から、to は当日の終わりまで)。
+     どちらも空 (または未指定) なら常に表示する。
+     JavaScript が動かない環境では、そのまま表示されたままになる。 */
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-oimo-from], [data-oimo-to]'), function (el) {
+    var parse = function (name) {
+      var v = (el.getAttribute(name) || '').trim();
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+      return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
+    };
+    var from = parse('data-oimo-from');
+    var to = parse('data-oimo-to');
+    if ((from && today < from) || (to && today > to)) {
+      el.hidden = true;
+      return;
+    }
+    // 受付期間を書く場所があれば、日付を「1月20日（火）〜1月31日（土）」の形で入れる
+    var slot = el.querySelector('.oimo-entry__dates');
+    if (slot && from && to) {
+      var week = ['日', '月', '火', '水', '木', '金', '土'];
+      var label = function (d) {
+        return (d.getMonth() + 1) + '月' + d.getDate() + '日（' + week[d.getDay()] + '）';
+      };
+      slot.textContent = label(from) + '〜' + label(to);
+      var line = slot.closest('.oimo-entry__period');
+      if (line) line.hidden = false;
+    }
+  });
 
   var reduceMotion = window.matchMedia
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

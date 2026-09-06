@@ -25,7 +25,6 @@
 | `/category/uncategorized/` | `site/category/uncategorized/index.html` | 未分類 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/cook-23-02/` | `site/cook-23-02/index.html` | 23年冬開催 – 親子でおいも料理体験 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/dosanko/` | `site/dosanko/index.html` | 2024年度どさん芋農業体験 2days《さつまいも×川根本町》 古民家ゲストハウスの宿泊付き - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
-| `/entry/` | `site/entry/index.html` | 【出店者募集】おいもフェス SHIZUOKA ┃ 募集概要・エントリーフォーム - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/history/` | `site/history/index.html` | 過去開催の様子 - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/information/` | `site/information/index.html` | お知らせ - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |
 | `/oimo-dance-music-2023-07.html` | `site/oimo-dance-music-2023-07.html` | 夏だ！おいもだ！ダンスだ！ 音楽最高だ！！ - 【静岡最大級】おいもフェス SHIZUOKA 2026 - 静岡最大の焼き芋イベント│ グランシップ広場 JR東静岡駅 徒歩1分 |

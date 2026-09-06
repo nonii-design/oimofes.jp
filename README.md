@@ -222,6 +222,24 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
   jQuery や Swiper などは読み込まず、見た目は `site/custom.css`、動きは `site/oimo-ui.js` だけで完結します。
   下層ページは複製時の構造 (Colibri) のままですが、ヘッダーとフッターは上の共通部品に置き換えています。
 
+## 出店者募集の表示期間
+
+トップページの「出店者募集」(`#entry`) は、エントリー受付の期間だけ表示できます。
+`site/index.html` の該当セクションにある 2 つの属性に日付を入れてください。
+
+```html
+<section class="oimo-section oimo-entry" id="entry"
+         data-oimo-from="2026-01-20" data-oimo-to="2026-01-31">
+```
+
+- 開始日の 0:00 から終了日の終わりまで表示され、それ以外の期間は自動的に隠れます。
+- 日付を入れると「エントリー受付期間：1月20日（火）〜1月31日（土）」の行も自動で表示されます。
+- 両方を空 (`data-oimo-from=""`) にすると常に表示されます。
+- エントリーの誘導先は出店者ポータル (https://event-portal.nonii.co.jp/) です。リンク先を変えるときは
+  同じセクションの `<a class="h-button" href="...">` を書き換えてください。
+
+同じ属性は他のブロックにも使えます (期間限定のお知らせなど)。仕組みは `site/oimo-ui.js` の「表示期間」にあります。
+
 ## フォント
 
 ブランド書体「コーポレート・ロゴ ver3」(Medium / Bold) を Web フォントとして配信しています。
