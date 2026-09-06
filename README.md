@@ -204,6 +204,23 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 `scripts/fetch-instagram.mjs` の先頭にある `SLOTS` で、
 2 か所それぞれの枚数 (既定 4 枚 / 7 枚) を変更できます。
 
+## フォント
+
+ブランド書体「コーポレート・ロゴ ver3」(Medium / Bold) を Web フォントとして配信しています。
+
+- `site/fonts/corporate-logo-medium.woff2` / `corporate-logo-bold.woff2` — サイト内で使われている文字だけを
+  抜き出したサブセット (各 300KB 台)。`site/custom.css` の `@font-face` から読み込みます。
+- 元の OTF は `fonts-src/` に置きます。ライセンス上の再配布を避けるため Git には含めません (`.gitignore` 済み)。
+- 文章を大きく追加・変更してサブセットに無い文字が出てきたら、`fonts-src/` に OTF を置いた状態で
+
+  ```bash
+  pip install fonttools brotli
+  python3 scripts/build-fonts.py
+  ```
+
+  を実行すると `site/fonts/` が作り直されます。無い文字は代替の Noto Sans JP で表示されるだけで、崩れはしません。
+- 本文は Google Fonts の Noto Sans JP。以前テーマが読み込んでいた欧文 6 書体と M PLUS Rounded 1c は外しました。
+
 ## 将来の発展 (任意)
 
 ページ数が多く、ヘッダー・フッターなどの共通部分を毎回全ページ書き換えるのが手間になってきたら、

@@ -45,6 +45,11 @@
    ```
 
    0 以外なら閉じタグが合っていない。
+12. **ブランド書体「コーポレート・ロゴ ver3」は `site/fonts/*.woff2` (サブセット) で配信している。**
+   元の OTF は `fonts-src/` に置く (gitignore 済み・再配布しない)。サイトに新しい文字を多く追加したら
+   `python3 scripts/build-fonts.py` を再実行してサブセットを作り直す (足りない文字は代替フォントで表示される)。
+   見出し・ナビ・ボタンが Corporate Logo、本文が Noto Sans JP。指定は `custom.css` の `--oimo-font-brand` /
+   `--oimo-font-gothic` を使い、HTML に直接フォント名を書かない。Google Fonts は Noto Sans JP のみ読み込む。
 
 ## サイトの特徴 (複製時点)
 

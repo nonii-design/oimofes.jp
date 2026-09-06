@@ -3,15 +3,35 @@
    全ページの <head> から読み込む。テーマ本体の CSS は編集しないこと。
    =========================================================================== */
 
+/* ブランド書体「コーポレート・ロゴ ver3」
+   fonts/*.woff2 は scripts/build-fonts.py がサイト内で使われている文字だけを
+   抜き出して生成したサブセット (元の OTF は fonts-src/ に置き、リポジトリには含めない)。
+   文章を大きく追加したら同スクリプトを再実行して文字を補充する。 */
+@font-face {
+  font-family: "Corporate Logo";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/corporate-logo-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Corporate Logo";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/corporate-logo-bold.woff2") format("woff2");
+}
+
 /* 配色・字体のトークン
-   ブランドの本来の書体は「コーポレート・ロゴ」だが Web フォントとして配信できないため、
-   丸ゴシック系の M PLUS Rounded 1c を代替として指定している。
-   正規フォントを使う場合はここの --oimo-font-rounded を差し替える。 */
+   見出し・ナビ・ボタンは Corporate Logo、本文は Noto Sans JP を使う。
+   欧文の代替は Corporate Logo に近い骨格の丸ゴシック系を並べている。 */
 :root {
   --oimo-brown: #4f2224;
   --oimo-yellow: #f2be19;
-  --oimo-font-rounded: "M PLUS Rounded 1c", "Noto Sans JP", "Hiragino Maru Gothic ProN",
+  --oimo-font-brand: "Corporate Logo", "Hiragino Maru Gothic ProN", "Noto Sans JP",
     "Hiragino Sans", "Yu Gothic", sans-serif;
+  --oimo-font-rounded: var(--oimo-font-brand);
   --oimo-font-gothic: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
 }
 

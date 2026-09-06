@@ -10,3 +10,6 @@ node_modules/
 *.tmp
 *.orig
 .listing
+
+# フォントの元ファイル (OTF) は再配布しない。Web 用の woff2 だけを site/fonts/ に置く
+fonts-src/
