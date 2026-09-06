@@ -50,6 +50,12 @@
    `python3 scripts/build-fonts.py` を再実行してサブセットを作り直す (足りない文字は代替フォントで表示される)。
    見出し・ナビ・ボタンが Corporate Logo、本文が Noto Sans JP。指定は `custom.css` の `--oimo-font-brand` /
    `--oimo-font-gothic` を使い、HTML に直接フォント名を書かない。Google Fonts は Noto Sans JP のみ読み込む。
+13. **共通の UI の動きは `site/oimo-ui.js` (全ページで読み込み) と `custom.css` の「B:」の節にある。**
+   ナビの固定表示 (`html.oimo-nav-stuck`)、スクロールに合わせた表示 (`.oimo-reveal` / `.is-in`)、
+   現在地メニューの下線 (`li.oimo-active`)、ページ間の View Transitions を担う。
+   ボタン・見出し・ナビの見た目は Colibri のインライン CSS より後に効かせるため `!important` で上書きしている。
+   新しいブロックにも `.h-button` / `h2`〜`h6` / `.h-column` を使えば同じ見た目・動きになる。
+   `data-aos` による表示アニメーションは無効化済みなので、新たに書かない。
 
 ## サイトの特徴 (複製時点)
 

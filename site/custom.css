@@ -466,3 +466,326 @@
   cursor: default;
   opacity: 0.85;
 }
+
+/* ===========================================================================
+   B: 書体の統一・余白/角丸/影・モーション (全ページ共通)
+   挙動 (ナビの固定・スクロール連動の表示) は site/oimo-ui.js。
+   Colibri のインライン CSS が後から効くため、書体と色の指定は !important。
+   =========================================================================== */
+:root {
+  --oimo-brown-hover: #6b3234;
+  --oimo-accent: #a25e05;                 /* 元テーマのナビ hover 色 */
+  --oimo-radius: 14px;
+  --oimo-radius-sm: 8px;
+  --oimo-shadow: 0 10px 30px rgba(79, 34, 36, 0.12);
+  --oimo-shadow-hover: 0 16px 40px rgba(79, 34, 36, 0.18);
+  --oimo-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --oimo-nav-h: 0px;
+}
+
+/* --- 書体: 見出し・ナビ・ボタンは Corporate Logo、本文は Noto Sans JP --- */
+#colibri,
+#colibri p,
+#colibri li,
+#colibri dd,
+#colibri dt,
+#colibri td,
+#colibri th,
+#colibri label,
+#colibri input,
+#colibri textarea,
+#colibri select,
+#colibri .h-text,
+#colibri .ac-q,
+#colibri .ac-a {
+  font-family: var(--oimo-font-gothic) !important;
+}
+
+#colibri h1,
+#colibri h2,
+#colibri h3,
+#colibri h4,
+#colibri h5,
+#colibri h6,
+#colibri .logo-text,
+#colibri .h-button,
+#colibri .oimo-form__submit,
+#colibri .oimo-info__pill,
+#colibri ul.colibri-menu > li > a {
+  font-family: var(--oimo-font-brand) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+}
+
+/* WordPress の編集で付いた span の font-family (Muli / Arial など) は親に合わせる。
+   読み込みをやめた書体名が残っていると、ブラウザ既定の明朝体で表示されてしまうため */
+#colibri [style*="font-family"] {
+  font-family: inherit !important;
+}
+
+#colibri h1,
+#colibri h2,
+#colibri h3 {
+  line-height: 1.35;
+}
+
+#colibri h4,
+#colibri h5,
+#colibri h6 {
+  line-height: 1.5;
+}
+
+/* 見出しの直下の余白を一定にする */
+#colibri h2 + p,
+#colibri h4 + p {
+  margin-top: 0.6em;
+}
+
+/* --- ボタン: 塗りの茶色に統一し、丸く、浮かせる --- */
+#colibri .h-button,
+#colibri .oimo-form__submit {
+  background-image: none !important;
+  background-color: var(--oimo-brown) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 0.95em 2.2em !important;
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: var(--oimo-shadow);
+  transition:
+    transform 220ms var(--oimo-ease),
+    box-shadow 220ms var(--oimo-ease),
+    background-color 220ms var(--oimo-ease);
+}
+
+#colibri a.h-button:hover,
+#colibri a.h-button:focus-visible,
+#colibri .oimo-form__submit:hover:not(:disabled) {
+  background-color: var(--oimo-brown-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--oimo-shadow-hover);
+  filter: none;
+}
+
+#colibri a.h-button:active,
+#colibri .oimo-form__submit:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--oimo-shadow);
+}
+
+#colibri .h-button .h-svg-icon,
+#colibri .h-button svg {
+  fill: currentColor;
+}
+
+/* --- 画像とカード: 角を丸め、写真はごく軽く持ち上げる --- */
+#colibri .h-image__frame,
+#colibri .h-image__frame img,
+#colibri .h-column img:not(.logo-image):not(.h-logo__image):not(.h-logo__alt-image) {
+  border-radius: var(--oimo-radius-sm);
+}
+
+#colibri #hero img,
+#colibri .oimo-info img {
+  border-radius: 0;
+}
+
+#colibri .h-image__frame {
+  overflow: hidden;
+}
+
+#colibri .h-image__frame img {
+  transition: transform 500ms var(--oimo-ease);
+}
+
+#colibri .h-image__frame:hover img {
+  transform: scale(1.03);
+}
+
+/* 店舗カード (画像 + 店名の見出しを持つ白い列): 角丸と影をそろえ、ホバーで少し浮かせる */
+#colibri .h-column__inner:has(> .h-column__content > * > .h-image__frame-container-outer):has(h6) {
+  border-radius: var(--oimo-radius);
+  overflow: hidden;
+  box-shadow: var(--oimo-shadow) !important;
+  transition: transform 300ms var(--oimo-ease), box-shadow 300ms var(--oimo-ease);
+}
+
+#colibri .h-column__inner:has(> .h-column__content > * > .h-image__frame-container-outer):has(h6):hover {
+  transform: translateY(-4px);
+  box-shadow: var(--oimo-shadow-hover) !important;
+}
+
+/* Instagram のタイルも同じ角丸に */
+.oimo-ig__item {
+  border-radius: var(--oimo-radius-sm);
+}
+
+/* FAQ (アコーディオン) */
+#colibri .ac {
+  border-radius: var(--oimo-radius-sm);
+  overflow: hidden;
+}
+
+/* --- ナビゲーション: 下線でホバーと現在地を示す --- */
+#colibri ul.colibri-menu > li > a {
+  position: relative;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  color: var(--oimo-brown) !important;
+  transition: color 200ms var(--oimo-ease);
+}
+
+/* 横並びのメニューだけ。モバイルの開閉メニューは区切り線をそのまま使う */
+#colibri .h-menu-horizontal ul.colibri-menu > li > a {
+  display: inline-block;
+}
+
+#colibri .h-menu-horizontal ul.colibri-menu > li > a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 280ms var(--oimo-ease);
+}
+
+#colibri ul.colibri-menu > li:hover > a,
+#colibri ul.colibri-menu > li.oimo-active > a,
+#colibri ul.colibri-menu:not(.oimo-nav-tracking) > li.current_page_item > a {
+  color: var(--oimo-accent) !important;
+}
+
+#colibri .h-menu-horizontal ul.colibri-menu > li:hover > a::after,
+#colibri .h-menu-horizontal ul.colibri-menu > li.oimo-active > a::after,
+#colibri .h-menu-horizontal ul.colibri-menu:not(.oimo-nav-tracking) > li.current_page_item > a::after {
+  transform: scaleX(1);
+}
+
+/* --- ナビゲーションの固定表示 (oimo-ui.js が html に oimo-nav-stuck を付ける) --- */
+html {
+  scroll-padding-top: calc(var(--oimo-nav-h) + 12px);
+}
+
+html.oimo-nav-stuck .page-header {
+  padding-top: var(--oimo-nav-h);
+}
+
+html.oimo-nav-stuck .h-navigation_outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  animation: oimo-nav-in 380ms var(--oimo-ease) both;
+}
+
+/* 半透明の下地は疑似要素で描く。
+   backdrop-filter を .h-navigation 自身に掛けると、その中にあるモバイルメニュー
+   (position: fixed) の基準がずれてしまうため。 */
+html.oimo-nav-stuck .h-navigation_outer::before {
+  content: "";
+  display: block;          /* テーマの clearfix (display: table) を打ち消す */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  box-shadow: 0 6px 24px rgba(79, 34, 36, 0.10);
+}
+
+html.oimo-nav-stuck #colibri .h-navigation {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+/* 下層ページのナビは内側の行 (boxed) に黄色が塗られているので、こちらも透明にする */
+html.oimo-nav-stuck #colibri .h-navigation .h-row-container {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+@keyframes oimo-nav-in {
+  from { transform: translateY(-100%); }
+  to   { transform: none; }
+}
+
+/* --- スクロールに合わせた表示 (oimo-ui.js が .oimo-reveal を付ける) --- */
+html.oimo-js .oimo-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 650ms var(--oimo-ease),
+    transform 650ms var(--oimo-ease);
+  transition-delay: var(--oimo-reveal-delay, 0ms);
+}
+
+html.oimo-js .oimo-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Colibri の AOS (data-aos) による表示アニメーションは使わない */
+#colibri [data-aos] {
+  visibility: visible !important;
+  animation-name: none !important;
+  opacity: 1;
+}
+
+/* --- ページ間の遷移 --- */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: oimo-vt-out 200ms ease both;
+}
+
+::view-transition-new(root) {
+  animation: oimo-vt-in 320ms var(--oimo-ease) both;
+}
+
+@keyframes oimo-vt-out {
+  to { opacity: 0; }
+}
+
+@keyframes oimo-vt-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- 動きを減らす設定の利用者 --- */
+@media (prefers-reduced-motion: reduce) {
+  html.oimo-js .oimo-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  html.oimo-nav-stuck .h-navigation_outer,
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  #colibri .h-button,
+  #colibri .h-image__frame img,
+  #colibri ul.colibri-menu > li > a,
+  #colibri ul.colibri-menu > li > a::after {
+    transition: none;
+  }
+}
