@@ -36,7 +36,7 @@ const INDEX = path.join(OUT_DIR, 'index.html');
 // 表示期間をポータルから操作したいブロックを増やすときは、ここに 1 行足す。
 // slot_key はポータル側 (event_hp_display_slots.slot_key) と同じ文字列にすること。
 const SLOTS = [
-  { slotKey: 'entry.recruit', id: 'entry', label: '出店者募集' },
+  { slotKey: 'entry.recruit', id: 'entry', label: '出店者募集ボタン' },
 ];
 
 // 日本に夏時間は無いので固定オフセットで扱う (ポータル・HP と同じ考え方)
@@ -109,11 +109,11 @@ for (const target of SLOTS) {
   // auto: 期間で判定 / force_on: 常に表示 / force_off: 即時終了 (完売時など)
   const force = slot.forceState === 'force_on' ? 'on' : slot.forceState === 'force_off' ? 'off' : '';
 
-  // 対象ブロックの開始タグだけを書き換える
-  const tagRe = new RegExp(`<section\\b[^>]*\\bid="${target.id}"[^>]*>`);
+  // 対象の開始タグだけを書き換える (section / a / div など要素は問わない)
+  const tagRe = new RegExp(`<[a-z]+\\b[^>]*\\bid="${target.id}"[^>]*>`);
   const tag = tagRe.exec(html);
   if (!tag) {
-    console.error(`!! ${INDEX} に id="${target.id}" のセクションが見つかりません`);
+    console.error(`!! ${INDEX} に id="${target.id}" の要素が見つかりません`);
     process.exit(1);
   }
 

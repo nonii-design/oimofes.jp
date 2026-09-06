@@ -1597,26 +1597,17 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
 
 .oimo-footer__copy a { text-decoration: none; }
 
-/* --- 出店者募集 ---------------------------------------------------------
-   表示期間は HTML の data-oimo-from / data-oimo-to で決める (site/oimo-ui.js)。 */
-.oimo-entry {
-  background: var(--oimo-yellow);
+/* --- 出店者募集ボタン (ヒーロー) ---------------------------------------
+   募集期間だけ表示する。期間は HTML の data-oimo-from / data-oimo-to で決まり、
+   イベント管理ポータルから scripts/fetch-display-slots.mjs が取り込む。
+   来場者向けのボタンと区別できるよう、黄色地に茶文字で反転させている。 */
+#colibri .h-button.oimo-entry-btn {
+  background-color: #fff !important;
+  color: var(--oimo-brown) !important;
 }
 
-#colibri .oimo-entry h2,
-#colibri .oimo-entry p {
-  color: var(--oimo-brown);
+#colibri a.h-button.oimo-entry-btn:hover,
+#colibri a.h-button.oimo-entry-btn:focus-visible {
+  background-color: #fff7e0 !important;
+  color: var(--oimo-brown) !important;
 }
-
-#colibri .oimo-entry__period {
-  display: inline-block;
-  margin: 0 0 1.6em;
-  padding: 0.42em 1.6em;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.65);
-  font-family: var(--oimo-font-brand) !important;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.oimo-entry__cta { margin: 0; }

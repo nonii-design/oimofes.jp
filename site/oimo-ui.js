@@ -50,20 +50,6 @@
       return;
     }
     el.hidden = false;
-
-    // 受付期間を書く場所があれば、日付を「1月20日（火）〜1月31日（土）」の形で入れる
-    var slot = el.querySelector('.oimo-entry__dates');
-    if (slot && from && to) {
-      var week = ['日', '月', '火', '水', '木', '金', '土'];
-      var label = function (ms) {
-        // 日本時間の日付として組み立てる
-        var d = new Date(ms + 9 * 60 * 60 * 1000);
-        return (d.getUTCMonth() + 1) + '月' + d.getUTCDate() + '日（' + week[d.getUTCDay()] + '）';
-      };
-      slot.textContent = label(from) + '〜' + label(to);
-      var line = slot.closest('.oimo-entry__period');
-      if (line) line.hidden = false;
-    }
   });
 
   var reduceMotion = window.matchMedia

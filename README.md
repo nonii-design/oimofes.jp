@@ -224,12 +224,14 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 
 ## ブロックの表示期間
 
-トップページの「出店者募集」(`#entry`) のように、決まった期間だけ出したいブロックがあります。
+トップページのヒーローにある「出店者募集［エントリー］」ボタン (`#entry`) のように、
+決まった期間だけ出したい要素があります。
 設定のしかたは 2 通りで、どちらでも同じ属性を使います。
 
 ```html
-<section class="oimo-section oimo-entry" id="entry"
-         data-oimo-from="2026-01-20" data-oimo-to="2026-01-31">
+<a class="h-button oimo-entry-btn" id="entry"
+   data-oimo-from="2026-01-20" data-oimo-to="2026-01-31"
+   href="https://event-portal.nonii.co.jp/apply/oimo-fes-fujicity-2026">
 ```
 
 - 開始日の 0:00 から終了日の終わりまで表示され、それ以外の期間は自動的に隠れます。
@@ -238,7 +240,6 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 - 両方を空 (`data-oimo-from=""`) にすると常に表示されます。
 - `data-oimo-force="off"` を足すと期間に関わらず非表示、`"on"` なら常に表示になります
   (締切・完売時の手動スイッチ)。
-- 日付を入れると「エントリー受付期間：1月20日（火）〜1月31日（土）」の行も自動で出ます。
 
 仕組みは `site/oimo-ui.js` の「表示期間」にあります。
 
@@ -269,8 +270,9 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 
 **準備するもの**
 
-1. ポータルにおいもフェスのイベントを登録し、`slot_key` に `entry.recruit` を作る
-   (対応表は `scripts/fetch-display-slots.mjs` の `SLOTS`。ブロックを増やすときはここに 1 行足す)
+1. ポータルにおいもフェスのイベントを登録する。管理画面「HP掲載スケジュール」を開くと
+   `entry.recruit` の行が自動でできる
+   (対応表は `scripts/fetch-display-slots.mjs` の `SLOTS`。対象を増やすときはここに 1 行足す)
 2. このリポジトリの Settings → Secrets and variables → Actions で登録する
    - Secrets: `HP_DISPLAY_SLOTS_TOKEN` … ポータルの `HP_DISPLAY_SLOTS_PUBLIC_TOKEN` と同じ値
    - Variables: `OIMO_EVENT_SLUG` … ポータルのイベント slug (既定は `oimo-fes-fujicity-2026`)

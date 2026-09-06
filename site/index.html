@@ -107,6 +107,13 @@
         <a class="h-button" href="https://www.instagram.com/oimo.fes/" target="_blank" rel="noopener">
           <span>おいもフェス Instagram</span><svg class="oimo-icon oimo-icon--btn" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1896.0833"><path d="M1024 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm138 0q0 164-115 279t-279 115-279-115-115-279 115-279 279-115 279 115 115 279zm108-410q0 38-27 65t-65 27-65-27-27-65 27-65 65-27 65 27 27 65zM768 266q-7 0-76.5-.5t-105.5 0-96.5 3-103 10T315 297q-50 20-88 58t-58 88q-11 29-18.5 71.5t-10 103-3 96.5 0 105.5.5 76.5-.5 76.5 0 105.5 3 96.5 10 103T169 1349q20 50 58 88t88 58q29 11 71.5 18.5t103 10 96.5 3 105.5 0 76.5-.5 76.5.5 105.5 0 96.5-3 103-10 71.5-18.5q50-20 88-58t58-88q11-29 18.5-71.5t10-103 3-96.5 0-105.5-.5-76.5.5-76.5 0-105.5-3-96.5-10-103T1367 443q-20-50-58-88t-88-58q-29-11-71.5-18.5t-103-10-96.5-3-105.5 0-76.5.5zm768 630q0 229-5 317-10 208-124 322t-322 124q-88 5-317 5t-317-5q-208-10-322-124T5 1213q-5-88-5-317t5-317q10-208 124-322t322-124q88-5 317-5t317 5q208 10 322 124t124 322q5 88 5 317z"></path></svg>
         </a>
+        <!-- 出店者募集。data-oimo-from / data-oimo-to の期間だけ表示される
+             (値は scripts/fetch-display-slots.mjs がイベント管理ポータルから取り込む) -->
+        <a class="h-button oimo-entry-btn" id="entry" data-oimo-from="" data-oimo-to=""
+           href="https://event-portal.nonii.co.jp/apply/oimo-fes-fujicity-2026" target="_blank" rel="noopener">
+          <span>出店者募集［エントリー］</span>
+          <svg class="oimo-icon oimo-icon--btn" aria-hidden="true" focusable="false" viewBox="0 0 1792 1896.0833"><path d="M1408 928v320q0 119-84.5 203.5T1120 1536H288q-119 0-203.5-84.5T0 1248V416q0-119 84.5-203.5T288 128h704q14 0 23 9t9 23v64q0 14-9 23t-23 9H288q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113V928q0-14 9-23t23-9h64q14 0 23 9t9 23zm384-864v512q0 26-19 45t-45 19-45-19l-176-176-652 652q-10 10-23 10t-23-10L695 983q-10-10-10-23t10-23l652-652-176-176q-19-19-19-45t19-45 45-19h512q26 0 45 19t19 45z"></path></svg>
+        </a>
         <span class="h-button is-disabled" aria-disabled="true">
           <span>入場チケット［準備中］</span><svg class="oimo-icon oimo-icon--btn" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1896.0833"><path d="M1024 452l316 316-572 572-316-316zm-211 979l618-618q19-19 19-45t-19-45l-362-362q-18-18-45-18t-45 18L361 979q-19 19-19 45t19 45l362 362q18 18 45 18t45-18zm889-637l-907 908q-37 37-90.5 37t-90.5-37l-126-126q56-56 56-136t-56-136-136-56-136 56L91 1178q-37-37-37-90.5T91 997L998 91q37-37 90.5-37t90.5 37l125 125q-56 56-56 136t56 136 136 56 136-56l126 125q37 37 37 90.5t-37 90.5z"></path></svg>
         </span>
@@ -264,21 +271,6 @@
     <!-- SHOPS:END -->
   </div>
 </section>
-<!-- ▼ 出店者募集
-     data-oimo-from / data-oimo-to に「YYYY-MM-DD」を書くと、その期間だけ表示される
-     (from は当日の 0:00 から、to は当日の 23:59 まで含む)。
-     どちらも空にすると常に表示される。仕組みは site/oimo-ui.js の「表示期間」。 -->
-<section class="oimo-section oimo-entry" id="entry" data-oimo-from="" data-oimo-to="">
-  <div class="oimo-section__inner oimo-section__inner--narrow">
-    <h2>出店者募集</h2>
-    <p class="oimo-lead">おいもフェス FUJICITY 2026 への出店をご希望の方は、<br>出店者ポータルからエントリーをお願いいたします。</p>
-    <p class="oimo-entry__period" hidden>エントリー受付期間：<span class="oimo-entry__dates"></span></p>
-    <p class="oimo-entry__cta">
-      <a class="h-button" href="https://event-portal.nonii.co.jp/" target="_blank" rel="noopener">出店エントリーはこちら</a>
-    </p>
-  </div>
-</section>
-<!-- ▲ 出店者募集 -->
 <section class="oimo-section oimo-section--tint" id="instagram">
   <div class="oimo-section__inner">
     <h2>Instagram</h2>
