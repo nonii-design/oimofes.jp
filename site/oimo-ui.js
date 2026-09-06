@@ -17,29 +17,48 @@
   /* --- 5. 表示期間 -------------------------------------------------------
      data-oimo-from="2026-01-20" data-oimo-to="2026-01-31" を書いた要素は
      その期間だけ表示する (from は当日の 0:00 から、to は当日の終わりまで)。
+     時刻まで指定したいときは "2026-01-31T18:00:00" の形も使える (この時刻まで)。
      どちらも空 (または未指定) なら常に表示する。
-     JavaScript が動かない環境では、そのまま表示されたままになる。 */
-  var today = new Date();
-  today.setHours(0, 0, 0, 0);
+     data-oimo-force="on" は常に表示、"off" は常に非表示 (完売時などの手動スイッチ)。
 
-  Array.prototype.forEach.call(document.querySelectorAll('[data-oimo-from], [data-oimo-to]'), function (el) {
-    var parse = function (name) {
-      var v = (el.getAttribute(name) || '').trim();
-      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
-      return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
-    };
-    var from = parse('data-oimo-from');
-    var to = parse('data-oimo-to');
-    if ((from && today < from) || (to && today > to)) {
+     日付は日本時間で判定する。海外や時計がずれた端末でも同じ表示になるようにするため、
+     端末のタイムゾーンは使わない。日本に夏時間は無いので固定オフセットでよい。
+     値は scripts/fetch-display-slots.mjs がイベント管理ポータルから取り込む。
+     JavaScript が動かない環境では、そのまま表示されたままになる。 */
+  var JST = '+09:00';
+  var now = Date.now();
+
+  /** "YYYY-MM-DD" または "YYYY-MM-DDTHH:MM:SS" を日本時間として解釈する */
+  var parseJst = function (value, endOfDay) {
+    var v = (value || '').trim();
+    if (!v) return null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+      v += endOfDay ? 'T23:59:59.999' : 'T00:00:00';
+    }
+    // 末尾にオフセットが無ければ日本時間として読む
+    var ms = Date.parse(/(?:Z|[+-]\d{2}:\d{2})$/.test(v) ? v : v + JST);
+    return isNaN(ms) ? null : ms;
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-oimo-from], [data-oimo-to], [data-oimo-force]'), function (el) {
+    var force = (el.getAttribute('data-oimo-force') || '').trim();
+    var from = parseJst(el.getAttribute('data-oimo-from'), false);
+    var to = parseJst(el.getAttribute('data-oimo-to'), true);
+
+    if (force === 'off' || (force !== 'on' && ((from && now < from) || (to && now > to)))) {
       el.hidden = true;
       return;
     }
+    el.hidden = false;
+
     // 受付期間を書く場所があれば、日付を「1月20日（火）〜1月31日（土）」の形で入れる
     var slot = el.querySelector('.oimo-entry__dates');
     if (slot && from && to) {
       var week = ['日', '月', '火', '水', '木', '金', '土'];
-      var label = function (d) {
-        return (d.getMonth() + 1) + '月' + d.getDate() + '日（' + week[d.getDay()] + '）';
+      var label = function (ms) {
+        // 日本時間の日付として組み立てる
+        var d = new Date(ms + 9 * 60 * 60 * 1000);
+        return (d.getUTCMonth() + 1) + '月' + d.getUTCDate() + '日（' + week[d.getUTCDay()] + '）';
       };
       slot.textContent = label(from) + '〜' + label(to);
       var line = slot.closest('.oimo-entry__period');

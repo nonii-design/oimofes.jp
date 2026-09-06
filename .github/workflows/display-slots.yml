@@ -1,0 +1,58 @@
+name: Sync display schedule
+
+# イベント管理ポータル (event-nonii-portal) の「HP掲載スケジュール」を取り込み、
+# トップページのブロックの表示期間を更新します。
+#
+# 実行のきっかけは 3 つ:
+#   1. schedule    毎日 日本時間 0:00。日付が変わる瞬間に合わせて作り直す
+#   2. repository_dispatch  ポータルで設定を保存したときに、ポータルから叩いてもらう (即時反映)
+#   3. workflow_dispatch    手で実行する
+#
+# 事前準備: リポジトリの Settings → Secrets and variables → Actions で
+#           HP_DISPLAY_SLOTS_TOKEN にポータルの公開 API トークンを登録してください。
+#           手順は README.md の「イベント管理ポータルとの連携」を参照。
+on:
+  schedule:
+    # cron は UTC。15:00 UTC = 翌 0:00 JST
+    - cron: '0 15 * * *'
+  repository_dispatch:
+    types: [hp-display-slots]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: display-slots
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch display schedule
+        env:
+          HP_DISPLAY_SLOTS_TOKEN: ${{ secrets.HP_DISPLAY_SLOTS_TOKEN }}
+          # イベントの slug を変えるときは Variables に OIMO_EVENT_SLUG を登録する
+          OIMO_EVENT_SLUG: ${{ vars.OIMO_EVENT_SLUG }}
+        run: node scripts/fetch-display-slots.mjs
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          if git diff --cached --quiet; then
+            echo "表示期間に変更はありませんでした。"
+            exit 0
+          fi
+          git commit -m "chore: 掲載スケジュールを更新 ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push

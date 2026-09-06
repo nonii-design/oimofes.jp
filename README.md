@@ -222,10 +222,10 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
   jQuery や Swiper などは読み込まず、見た目は `site/custom.css`、動きは `site/oimo-ui.js` だけで完結します。
   下層ページは複製時の構造 (Colibri) のままですが、ヘッダーとフッターは上の共通部品に置き換えています。
 
-## 出店者募集の表示期間
+## ブロックの表示期間
 
-トップページの「出店者募集」(`#entry`) は、エントリー受付の期間だけ表示できます。
-`site/index.html` の該当セクションにある 2 つの属性に日付を入れてください。
+トップページの「出店者募集」(`#entry`) のように、決まった期間だけ出したいブロックがあります。
+設定のしかたは 2 通りで、どちらでも同じ属性を使います。
 
 ```html
 <section class="oimo-section oimo-entry" id="entry"
@@ -233,12 +233,63 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 ```
 
 - 開始日の 0:00 から終了日の終わりまで表示され、それ以外の期間は自動的に隠れます。
-- 日付を入れると「エントリー受付期間：1月20日（火）〜1月31日（土）」の行も自動で表示されます。
+- 判定は**日本時間**で行います。海外からの閲覧でも同じ表示になります。
+- 時刻まで決めたいときは `data-oimo-to="2026-01-31T18:00:00"` の形も使えます。
 - 両方を空 (`data-oimo-from=""`) にすると常に表示されます。
-- エントリーの誘導先は出店者ポータル (https://event-portal.nonii.co.jp/) です。リンク先を変えるときは
-  同じセクションの `<a class="h-button" href="...">` を書き換えてください。
+- `data-oimo-force="off"` を足すと期間に関わらず非表示、`"on"` なら常に表示になります
+  (締切・完売時の手動スイッチ)。
+- 日付を入れると「エントリー受付期間：1月20日（火）〜1月31日（土）」の行も自動で出ます。
 
-同じ属性は他のブロックにも使えます (期間限定のお知らせなど)。仕組みは `site/oimo-ui.js` の「表示期間」にあります。
+仕組みは `site/oimo-ui.js` の「表示期間」にあります。
+
+### 方法 1: HTML を直接編集する
+
+上の属性を書き換えて保存するだけです。ポータルの設定がなくても動きます。
+
+### 方法 2: イベント管理ポータルから操作する
+
+[イベント管理ポータル](https://event-portal.nonii.co.jp/) の `/admin/hp-display-slots` で設定した
+「HP掲載スケジュール」を取り込みます。BON BON BON の公式サイトと同じ仕組みです。
+
+```
+ポータルで保存
+   └→ GitHub Actions (display-slots.yml)
+        └→ scripts/fetch-display-slots.mjs がポータルの公開 API から期間を取得
+             └→ site/index.html の data-oimo-from / to を書き換えてコミット
+                  └→ GitHub Pages が公開（反映まで 1〜2 分）
+```
+
+取り込みが走るきっかけは 3 つです。
+
+| きっかけ | 内容 |
+| --- | --- |
+| 毎日 日本時間 0:00 | 日付が変わる瞬間に合わせて作り直す |
+| ポータルからの通知 | 保存した直後に反映させる（下記の設定が必要） |
+| 手動実行 | Actions タブから `Sync display schedule` を実行 |
+
+**準備するもの**
+
+1. ポータルにおいもフェスのイベントを登録し、`slot_key` に `entry.recruit` を作る
+   (対応表は `scripts/fetch-display-slots.mjs` の `SLOTS`。ブロックを増やすときはここに 1 行足す)
+2. このリポジトリの Settings → Secrets and variables → Actions で登録する
+   - Secrets: `HP_DISPLAY_SLOTS_TOKEN` … ポータルの `HP_DISPLAY_SLOTS_PUBLIC_TOKEN` と同じ値
+   - Variables: `OIMO_EVENT_SLUG` … ポータルのイベント slug (既定は `oimo-fes-fujicity-2026`)
+3. 保存時に即時反映させたい場合は、ポータルから GitHub に通知を送る
+   (BON BON BON でいう `/api/revalidate` にあたる部分)
+
+   ```
+   POST https://api.github.com/repos/nonii-design/oimofes.jp/dispatches
+   Authorization: Bearer <contents:write 権限のトークン>
+   Accept: application/vnd.github+json
+   { "event_type": "hp-display-slots" }
+   ```
+
+**ポータルが落ちていても表示は壊れません。** 取り込みに失敗した場合は、
+最後にコミットされた日付がそのまま使われます (BON BON BON がコード内の既定日程に戻すのと同じ考え方)。
+
+なお BON BON BON は Next.js なのでサーバー側の時刻で判定していますが、
+こちらは静的サイトのため閲覧者の端末で判定します。日本時間固定なのでタイムゾーンの影響は受けませんが、
+端末の時計が大きくずれている場合だけ表示がずれます。
 
 ## フォント
 
