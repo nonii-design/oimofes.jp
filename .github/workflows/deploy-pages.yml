@@ -29,7 +29,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      # Pages 系の 3 つは最新版でも Node 20 のままで、実行時に廃止予定の警告が出る。
+      # GitHub が Node 24 対応版を出したら上げること (2026-09 時点で未提供)。
       - uses: actions/configure-pages@v5
         with:
           # Pages が未設定なら自動で有効化を試みる (Source = GitHub Actions)
