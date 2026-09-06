@@ -68,7 +68,8 @@ let files = 0;
 let replaced = 0;
 for (const file of walk(SITE)) {
   const src = fs.readFileSync(file, 'utf8');
-  if (!/<!-- (HEADER|FOOTER):START -->/.test(src)) continue;
+  // 生成後のマーカーには説明が付くので、START の後ろは何でもよいことにする
+  if (!/<!-- (HEADER|FOOTER):START[^>]*-->/.test(src)) continue;
   const dir = pageDir(file);
   const prefix = rootPrefix(dir);
   let out = src;
