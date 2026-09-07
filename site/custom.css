@@ -746,7 +746,10 @@ html.oimo-nav-stuck .h-navigation_outer {
   left: 0;
   right: 0;
   z-index: 1000;
-  animation: oimo-nav-in 380ms var(--oimo-ease) both;
+  /* fill-mode は付けない。付けると終了後も transform (単位行列) が残り、
+     この要素が position: fixed の基準になってしまう
+     → 中のモバイルメニューがヘッダーの高さに切り取られる */
+  animation: oimo-nav-in 380ms var(--oimo-ease);
 }
 
 /* 半透明の下地は疑似要素で描く。
@@ -784,6 +787,13 @@ html.oimo-nav-stuck #colibri .h-navigation .h-row-container {
 @keyframes oimo-nav-in {
   from { transform: translateY(-100%); }
   to   { transform: none; }
+}
+
+/* メニューを開いている間は、固定バーの登場アニメーションを動かさない。
+   アニメーション中は transform が乗るため、上と同じ理由でメニューが切れる */
+html.oimo-nav-open .oimo-header,
+html.oimo-nav-open .h-navigation_outer {
+  animation: none;
 }
 
 /* --- スクロールに合わせた表示 (oimo-ui.js が .oimo-reveal を付ける) --- */
@@ -1024,6 +1034,8 @@ html.oimo-nav-open .oimo-header__bar:nth-child(3) { transform: translateY(-7px) 
   .oimo-header__toggle { display: flex; }
 
   .oimo-nav {
+    display: flex;
+    flex-direction: column;
     position: fixed;
     top: 0;
     right: 0;
@@ -1049,6 +1061,9 @@ html.oimo-nav-open .oimo-header__bar:nth-child(3) { transform: translateY(-7px) 
   .oimo-nav__list {
     flex-direction: column;
     gap: 0;
+    /* パネルの上下の中央に置く。項目が増えて入り切らなくなったときは
+       上下に寄って、そのままスクロールできる (justify-content だと上が切れる) */
+    margin-block: auto;
   }
 
   #colibri .oimo-nav__list a {
@@ -1056,9 +1071,20 @@ html.oimo-nav-open .oimo-header__bar:nth-child(3) { transform: translateY(-7px) 
     padding: 14px 6px;
     border-bottom: 1px solid rgba(79, 34, 36, 0.15);
     font-size: 17px;
+    /* 下層ページはテーマ側の中央そろえが効いてしまうので、左そろえにそろえる */
+    text-align: left;
   }
 
   .oimo-nav__list a::after { display: none; }
+
+  /* 黄色い下地の上ではアクセント色が沈んで、リンクが薄く見えてしまう。
+     今いるページは色を変えずに太字だけで示す */
+  #colibri .oimo-nav__list li:hover > a,
+  #colibri .oimo-nav__list li.oimo-active > a,
+  #colibri .oimo-nav__list:not(.oimo-nav-tracking) li.is-current > a {
+    color: var(--oimo-brown);
+    font-weight: 700;
+  }
 
   .oimo-nav__overlay {
     display: block;
@@ -1097,7 +1123,10 @@ html.oimo-nav-stuck .oimo-header {
   left: 0;
   z-index: 1000;
   background: transparent;
-  animation: oimo-nav-in 380ms var(--oimo-ease) both;
+  /* fill-mode は付けない。付けると終了後も transform (単位行列) が残り、
+     この要素が position: fixed の基準になってしまう
+     → 中のモバイルメニューがヘッダーの高さに切り取られる */
+  animation: oimo-nav-in 380ms var(--oimo-ease);
 }
 
 html.oimo-nav-stuck .oimo-header::before {
