@@ -30,7 +30,7 @@
     setTimeout(reveal, 1800);
   })();
 </script>
-<link rel="preload" as="image" href="./wp-content/uploads/2026/09/おいもフェス_FUJICITY2026_ロゴ.png" fetchpriority="high">
+<link rel="preload" as="image" href="./wp-content/uploads/2026/09/おいもフェス_FUJICITY2026_ロゴ_trim.png" fetchpriority="high">
 <link rel="preload" as="font" type="font/woff2" href="./fonts/corporate-logo-bold.woff2" crossorigin>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -99,13 +99,17 @@
 <section class="oimo-hero" id="hero">
   <div class="oimo-hero__inner">
     <div class="oimo-hero__content">
-      <!-- スマホでは、ロゴとおいもを横に並べて高さの中央でそろえる。
+      <!-- スマホでは、おいもとロゴを別のレイヤーとして重ねる。
+           data-oimo-parallax はスクロールに対する速さ (oimo-ui.js が読む)。
+           奥のおいもをゆっくり、手前のロゴを速く動かして視差を出す。
            おいもは背景ではなく画像として置き、ボタンをその下に流す (custom.css の @media) -->
       <div class="oimo-hero__lead">
-        <h1 class="oimo-hero__title">
-          <img src="./wp-content/uploads/2026/09/おいもフェス_FUJICITY2026_ロゴ.png" alt="おいもフェス FUJICITY 2026" width="2000" height="781" fetchpriority="high" decoding="async">
+        <div class="oimo-hero__layer oimo-hero__layer--potato" data-oimo-parallax="0.18">
+          <img class="oimo-hero__potato" src="./wp-content/uploads/2026/09/おいも_単体.jpg" alt="" width="234" height="704" decoding="async">
+        </div>
+        <h1 class="oimo-hero__title oimo-hero__layer" data-oimo-parallax="-0.07">
+          <img src="./wp-content/uploads/2026/09/おいもフェス_FUJICITY2026_ロゴ_trim.png" alt="おいもフェス FUJICITY 2026" width="1418" height="471" fetchpriority="high" decoding="async">
         </h1>
-        <img class="oimo-hero__potato" src="./wp-content/uploads/2026/09/おいも_単体.jpg" alt="" width="234" height="704" decoding="async">
       </div>
       <div class="oimo-hero__actions">
         <a class="h-button" href="https://www.instagram.com/oimo.fes/" target="_blank" rel="noopener">
@@ -392,9 +396,8 @@
     <a class="oimo-access__pin" href="https://maps.app.goo.gl/xnTf7jAzwyPRVUY86?g_st=ic" target="_blank" rel="noopener" aria-label="Google マップで開く"><svg class="oimo-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 545.5"><path d="M256 80c79.336 0 144 64.664 144 144 0 22.5-9.116 48.313-21.5 76.5s-28.314 58.098-44.5 86C301.628 442.306 269 489 269 489l-13 19-13-19s-32.628-46.694-65-102.5c-16.186-27.902-32.116-57.813-44.5-86S112 246.5 112 224c0-79.336 64.664-144 144-144zm0 32c-62.04 0-112 49.96-112 112 0 12.844 6.884 37.06 18.5 63.5s27.686 55.738 43.5 83c25.155 43.364 40.74 66.3 50 80 9.26-13.7 24.845-36.636 50-80 15.815-27.262 31.884-56.56 43.5-83S368 236.844 368 224c0-62.04-49.96-112-112-112zm0 80c17.673 0 32 14.327 32 32s-14.327 32-32 32-32-14.327-32-32 14.327-32 32-32z"></path></svg></a>
     <h2 class="oimo-access__title"><a href="https://www.google.com/maps/search/?api=1&amp;query=%E5%AF%8C%E5%A3%AB%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%85%AC%E5%9C%92" target="_blank" rel="noopener">アクセス – 富士中央公園 イベント広場</a></h2>
     <p class="oimo-access__address">静岡県富士市永田町2-112</p>
-    <p>路線バス「ロゼシアター入口」から徒歩7分<br>JR富士駅・吉原中央駅からバス</p>
-    <p>公園駐車場 256台あり（無料 / 8:30〜22:00）<br>満車の場合は、以下の周辺コインパーキングもご利用ください。</p>
-    <p class="oimo-access__cta"><a class="h-button" href="https://pppark.com/search/%E9%9D%99%E5%B2%A1%E7%9C%8C/%E5%AF%8C%E5%A3%AB%E5%B8%82" target="_blank" rel="noopener">PPPark! 周辺駐車場を検索</a></p>
+    <p>路線バス「ロゼシアター」から徒歩1分</p>
+    <p>公園駐車場 256台あり（無料 / 8:30〜22:00）</p>
     <div class="oimo-access__map" data-reveal>
       <iframe src="https://maps.google.com/maps?q=%E9%9D%99%E5%B2%A1%E7%9C%8C%E5%AF%8C%E5%A3%AB%E5%B8%82%E6%B0%B8%E7%94%B0%E7%94%BA2-112%20%E5%AF%8C%E5%A3%AB%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%85%AC%E5%9C%92&amp;z=16&amp;output=embed" class="map-iframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="富士中央公園 イベント広場の地図"></iframe>
     </div>
@@ -558,12 +561,12 @@
         <details class="oimo-faq__item">
           <summary class="oimo-faq__summary">
             <span class="oimo-faq__mark">Q.</span>
-            <span class="oimo-faq__q">電車・バスでのアクセスは？</span>
+            <span class="oimo-faq__q">バスでのアクセスは？</span>
             <svg class="oimo-faq__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="oimo-faq__answer">
             <span class="oimo-faq__mark">A.</span>
-            <div class="oimo-faq__text">路線バス「ロゼシアター入口」から徒歩7分です。JR富士駅・吉原中央駅からバスをご利用ください。駐車場は混雑が予想されるため、公共交通機関でのご来場をおすすめします。</div>
+            <div class="oimo-faq__text">路線バス「ロゼシアター」から徒歩1分です。駐車場は混雑が予想されるため、路線バスでのご来場をおすすめします。</div>
           </div>
         </details>
         <details class="oimo-faq__item">
@@ -574,7 +577,7 @@
           </summary>
           <div class="oimo-faq__answer">
             <span class="oimo-faq__mark">A.</span>
-            <div class="oimo-faq__text">富士中央公園の駐車場（256台・無料）をご利用いただけます。満車の場合は周辺のコインパーキングをご利用ください。かなりの混雑が予想されますので、可能な限り電車・バス等の公共交通機関をご利用ください。</div>
+            <div class="oimo-faq__text">富士中央公園の駐車場（256台・無料 / 8:30〜22:00）をご利用いただけます。かなりの混雑が予想されますので、可能な限り路線バスでのご来場をご検討ください。</div>
           </div>
         </details>
         <details class="oimo-faq__item">

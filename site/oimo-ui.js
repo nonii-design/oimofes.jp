@@ -5,8 +5,9 @@
    3. トップページでは今見ているセクションのメニューに下線を付ける
    4. ページ間の遷移 (View Transitions) と「ちらつき防止」の連携
    5. 表示期間を決めたブロック (data-oimo-from / data-oimo-to) の出し分け
+   6. 視差効果 (data-oimo-parallax を書いたレイヤーをスクロールに合わせて動かす)
    見た目は custom.css の「B: 書体の統一・余白/角丸/影・モーション」で定義。
-   動きを減らす設定 (prefers-reduced-motion) の利用者には 2 を適用しない。
+   動きを減らす設定 (prefers-reduced-motion) の利用者には 2 と 6 を適用しない。
    =========================================================================== */
 (function () {
   'use strict';
@@ -207,6 +208,45 @@
       if (wide.addEventListener) wide.addEventListener('change', onWide);
       else if (wide.addListener) wide.addListener(onWide);
     }
+  }
+
+  /* --- 6. 視差効果 --------------------------------------------------------
+     data-oimo-parallax="0.18" を書いた要素に、スクロール量 × その値を
+     --oimo-parallax (px) として入れる。動かすかどうかと向きは CSS 側で決める
+     (transform を使うので、レイアウトの計算は起きない)。
+     プラスは「奥」(ページよりゆっくり動く)、マイナスは「手前」。
+     ちらつき防止のアニメーションと取り合いにならないよう、
+     transform を当てるのは画像そのものではなく囲みの要素にしている。
+     --------------------------------------------------------------------- */
+  var pxLayers = document.querySelectorAll('[data-oimo-parallax]');
+  var pxNoMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (pxLayers.length && !pxNoMotion) {
+    // 変数名は px… で始める。このファイルは全体が 1 つの関数なので、
+    // 上の機能と同じ名前で var を書くと同じ変数になってしまう
+    // (間引き用のフラグを共有してしまい、片方が動かなくなる)
+    var pxPending = false;
+    var pxApply = function () {
+      pxPending = false;
+      for (var i = 0; i < pxLayers.length; i++) {
+        var el = pxLayers[i];
+        var speed = parseFloat(el.getAttribute('data-oimo-parallax'));
+        if (!speed) continue;
+        // 親のセクションを通り過ぎたら、それ以上は動かさない
+        var host = el.closest('section') || el.parentNode;
+        var limit = host ? host.offsetHeight : 0;
+        var y = window.pageYOffset || html.scrollTop || 0;
+        if (limit && y > limit) y = limit;
+        el.style.setProperty('--oimo-parallax', (y * speed).toFixed(1) + 'px');
+      }
+    };
+    var pxOnScroll = function () {
+      if (pxPending) return;
+      pxPending = true;
+      window.requestAnimationFrame(pxApply);
+    };
+    window.addEventListener('scroll', pxOnScroll, { passive: true });
+    window.addEventListener('resize', pxOnScroll, { passive: true });
+    pxApply();
   }
 
   /* --- 4. ページ間の遷移 ------------------------------------------------- */
