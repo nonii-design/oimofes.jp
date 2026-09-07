@@ -1079,6 +1079,14 @@ html.oimo-nav-open .oimo-header__bar:nth-child(3) { transform: translateY(-7px) 
   html.oimo-nav-open { overflow: hidden; }
 }
 
+/* トップページのスマホ表示では、左上のロゴを出さない。
+   すぐ下に大きな FUJICITY のロゴがあり、二重になるため。
+   (.oimo-home はトップページの body にだけ付いている。
+    767px はヒーローがスマホ用の並びに変わる幅と同じ) */
+@media (max-width: 767px) {
+  .oimo-home .oimo-header__logo { display: none; }
+}
+
 /* 固定表示 (oimo-ui.js が html に oimo-nav-stuck を付ける) */
 html.oimo-nav-stuck .oimo-header-slot { padding-top: var(--oimo-nav-h); }
 
@@ -1308,9 +1316,13 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
 }
 
 .oimo-hero__title img {
+  /* block にして行ボックスを消す。inline のままだと h1 の line-height 分
+     (テーマ側が上書きしている) だけ下に余白ができ、おいもとの中央がずれる */
+  display: block;
   width: 100%;
   max-width: 660px;
   height: auto;
+  margin: 0 auto;
 }
 
 .oimo-hero__actions {
@@ -1336,18 +1348,49 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
   pointer-events: none;
 }
 
+/* おいも単体の画像はスマホ表示のときだけ使う (広い画面は背景の作品画像) */
+.oimo-hero__potato { display: none; }
+
 @media (max-width: 767px) {
   .oimo-hero {
+    /* ヘッダーの高さを引く。100svh のままだとヘッダー分だけ画面の外に伸び、
+       中央そろえにしたときに内容が下に沈んで見える
+       (--oimo-nav-h は oimo-ui.js が実測して入れる) */
+    min-height: calc(100svh - var(--oimo-nav-h, 76px));
     align-items: flex-start;
-    padding: 20px 20px 0;
-    background-image: url("wp-content/uploads/2024/01/おいもフェスバナー_スマホ用@4x-5.png");
-    background-position: 56.5% 54.4%;
+    padding: 32px 20px;
+    /* 背景の作品画像は使わず、平らな黄色にする。おいもは画像として置く */
+    background-image: none;
   }
 
   .oimo-hero__inner { grid-template-columns: minmax(0, 1fr); }
-  .oimo-hero__content { padding: 60px 0 40px; text-align: left; }
-  .oimo-hero__title img { max-width: 78%; }
-  .oimo-hero__actions { flex-direction: column; align-items: center; gap: 14px; }
+  .oimo-hero__content { padding: 0; text-align: left; }
+
+  /* ロゴとおいもを横に並べ、ロゴをおいもの高さの中央にそろえる */
+  .oimo-hero__lead {
+    display: grid;
+    grid-template-columns: minmax(0, 62fr) minmax(0, 34fr);
+    align-items: center;
+    gap: 4%;
+  }
+
+  .oimo-hero__title img { max-width: 100%; margin: 0; }
+
+  .oimo-hero__potato {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ボタンはおいもの下に置く */
+  .oimo-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  #colibri .oimo-hero .h-button { justify-content: center; }
 }
 
 /* --- お問い合わせ -------------------------------------------------------- */
