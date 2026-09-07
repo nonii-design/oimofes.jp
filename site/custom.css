@@ -995,6 +995,9 @@ html.oimo-js .oimo-reveal.is-in {
   transform: scaleX(1);
 }
 
+/* メニューパネルの見出しロゴはスマホ / タブレットのときだけ使う */
+.oimo-nav__logo { display: none; }
+
 /* ハンバーガー (スマホ / タブレット) */
 .oimo-header__toggle {
   display: none;
@@ -1043,7 +1046,8 @@ html.oimo-nav-open .oimo-header__bar:nth-child(3) { transform: translateY(-7px) 
     z-index: 1200;
     width: min(320px, 85vw);
     margin: 0;
-    padding: 84px 20px 32px;
+    /* 上は閉じるボタンと同じ高さにロゴを置くので、そのぶんだけ空ける */
+    padding: 22px 20px 32px;
     overflow-y: auto;
     background: var(--oimo-yellow);
     box-shadow: -12px 0 40px rgba(79, 34, 36, 0.25);
@@ -1058,17 +1062,28 @@ html.oimo-nav-open .oimo-header__bar:nth-child(3) { transform: translateY(-7px) 
     transition: transform 340ms var(--oimo-ease);
   }
 
+  /* 閉じるボタン (右上・44px) とぶつからない幅で、左上に置く */
+  .oimo-nav__logo {
+    display: block;
+    width: 148px;
+    max-width: calc(100% - 60px);
+    height: auto;
+    margin: 0 0 26px;
+  }
+
   .oimo-nav__list {
     flex-direction: column;
     gap: 0;
-    /* パネルの上下の中央に置く。項目が増えて入り切らなくなったときは
-       上下に寄って、そのままスクロールできる (justify-content だと上が切れる) */
-    margin-block: auto;
+    /* 項目はロゴのすぐ下から始める。余りは下に置く
+       (上下の中央にすると、ロゴと項目の間だけが大きく空いて離れて見える。
+        項目が増えて入り切らないときは、そのままスクロールできる) */
+    margin-bottom: auto;
   }
 
   #colibri .oimo-nav__list a {
     display: block;
-    padding: 14px 6px;
+    /* 指で押しやすい高さにして、パネルの余りも減らす */
+    padding: 18px 6px;
     border-bottom: 1px solid rgba(79, 34, 36, 0.15);
     font-size: 17px;
     /* 下層ページはテーマ側の中央そろえが効いてしまうので、左そろえにそろえる */
