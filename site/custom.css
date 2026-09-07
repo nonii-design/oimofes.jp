@@ -1404,11 +1404,11 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
       drop-shadow(0 10px 22px rgba(79, 34, 36, 0.25));
   }
 
-  /* ボタンはおいもの下。全幅ではなく、文字の分だけの幅にそろえる */
+  /* ボタンはおいもの下。全幅ではなく文字の分だけの幅にして、中央にそろえる */
   .oimo-hero__actions {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 11px;
     margin-top: 32px;
   }
 
@@ -1416,8 +1416,8 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
   #colibri .oimo-hero .h-button {
     justify-content: center;
     width: auto;
-    padding: 0.9em 1.6em !important;
-    font-size: 13px !important;
+    padding: 0.95em 1.8em !important;
+    font-size: 14px !important;
   }
 }
 
