@@ -1122,6 +1122,17 @@ html.oimo-nav-stuck .oimo-header__inner {
 
 html.oimo-nav-stuck .oimo-header__logo img { height: 38px; }
 
+/* トップページのスマホ表示では、固定バーの下地を出さない。
+   ロゴを隠しているのでメニューボタンだけが浮かぶ形になる。
+   写真の上でもボタンが埋もれないよう、影を少し強くする */
+@media (max-width: 767px) {
+  html.oimo-nav-stuck body.oimo-home .oimo-header::before { display: none; }
+
+  html.oimo-nav-stuck body.oimo-home .oimo-header__toggle {
+    box-shadow: 0 4px 16px rgba(79, 34, 36, 0.28);
+  }
+}
+
 /* --- セクションの共通レイアウト ------------------------------------------ */
 /* トップページはテーマの CSS を読み込まないので、最小限のリセットをここで行う */
 body.oimo-home {
