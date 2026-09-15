@@ -1471,6 +1471,8 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
   #colibri .oimo-hero .h-button {
     justify-content: center;
     width: auto;
+    /* 縦に並ぶので、文字数が違っても幅をそろえる (はみ出す端末では横幅いっぱい) */
+    min-width: min(232px, 100%);
     padding: 0.95em 1.8em !important;
     font-size: 14px !important;
   }
@@ -1783,17 +1785,17 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
 
 .oimo-footer__copy a { text-decoration: none; }
 
-/* --- 出店者募集ボタン (ヒーロー) ---------------------------------------
+/* --- ヒーローの白いボタン (今はボランティア募集) -------------------------
    募集期間だけ表示する。期間は HTML の data-oimo-from / data-oimo-to で決まり、
    イベント管理ポータルから scripts/fetch-display-slots.mjs が取り込む。
-   来場者向けのボタンと区別できるよう、黄色地に茶文字で反転させている。 */
-#colibri .h-button.oimo-entry-btn {
+   来場者向けのボタンと区別できるよう、白地に茶文字で反転させている。 */
+#colibri .h-button.oimo-hero-btn--light {
   background-color: #fff !important;
   color: var(--oimo-brown) !important;
 }
 
-#colibri a.h-button.oimo-entry-btn:hover,
-#colibri a.h-button.oimo-entry-btn:focus-visible {
+#colibri a.h-button.oimo-hero-btn--light:hover,
+#colibri a.h-button.oimo-hero-btn--light:focus-visible {
   background-color: #fff7e0 !important;
   color: var(--oimo-brown) !important;
 }

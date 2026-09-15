@@ -69,7 +69,8 @@
    **表示期間を決めたいブロックには `data-oimo-from="YYYY-MM-DD"` / `data-oimo-to="YYYY-MM-DD"` を付ける。**
    その期間だけ表示される (開始日の 0:00 から終了日の終わりまで・**日本時間で判定**)。両方空なら常に表示。
    `data-oimo-force="off"` で強制非表示、`"on"` で強制表示。
-   ヒーローの出店者募集ボタン (`#entry`) がこれを使っている (リンク先はポータルの `/apply/<slug>`)。
+   ヒーローのボランティア募集ボタン (`#volunteer`) がこれを使っている。
+   ポータル側の slot_key は `entry.recruit` のまま (出店者募集ボタンから中身を差し替えた枠)。
    この値は `scripts/fetch-display-slots.mjs` がイベント管理ポータルから取り込むこともある
    (`.github/workflows/display-slots.yml`)。**ポータル連携中のブロックを手で編集しても、
    次回の取り込みで上書きされる。** 対応表はスクリプト冒頭の `SLOTS`。詳細は README。

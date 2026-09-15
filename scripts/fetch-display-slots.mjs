@@ -35,8 +35,12 @@ const INDEX = path.join(OUT_DIR, 'index.html');
 // ポータルの slot_key と、トップページのブロック (id) の対応表。
 // 表示期間をポータルから操作したいブロックを増やすときは、ここに 1 行足す。
 // slot_key はポータル側 (event_hp_display_slots.slot_key) と同じ文字列にすること。
+// slotKey はポータル側に既にある行 (entry.recruit) をそのまま使っている。
+// ボタンの中身を出店者募集からボランティア募集に差し替えたが、
+// ポータル側の slot_key / ラベルを変えると行を作り直すことになるため、
+// 「ヒーローの募集ボタンの表示期間」という枠として流用している。
 const SLOTS = [
-  { slotKey: 'entry.recruit', id: 'entry', label: '出店者募集ボタン' },
+  { slotKey: 'entry.recruit', id: 'volunteer', label: 'ボランティア募集ボタン' },
 ];
 
 // 日本に夏時間は無いので固定オフセットで扱う (ポータル・HP と同じ考え方)

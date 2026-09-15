@@ -224,14 +224,14 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 
 ## ブロックの表示期間
 
-トップページのヒーローにある「出店者募集［エントリー］」ボタン (`#entry`) のように、
+トップページのヒーローにある「ボランティア募集」ボタン (`#volunteer`) のように、
 決まった期間だけ出したい要素があります。
 設定のしかたは 2 通りで、どちらでも同じ属性を使います。
 
 ```html
-<a class="h-button oimo-entry-btn" id="entry"
+<a class="h-button oimo-hero-btn--light" id="volunteer"
    data-oimo-from="2026-01-20" data-oimo-to="2026-01-31"
-   href="https://event-portal.nonii.co.jp/apply/oimo-fes-fujicity-2026">
+   href="https://prtimes.jp/main/html/rd/p/000000224.000101362.html">
 ```
 
 - 開始日の 0:00 から終了日の終わりまで表示され、それ以外の期間は自動的に隠れます。
