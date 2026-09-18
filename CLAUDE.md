@@ -9,7 +9,8 @@
 - `PAGES.md` — 全ページの URL・ファイルパス・タイトルの一覧。**ページを探すときはまずこれを読む。**
 - `partials/` — 全ページ共通のヘッダー (`header.html`) とフッター (`footer.html`)。**ここを直して `node scripts/sync-partials.mjs`。**
 - `data/shops.json` — 店舗一覧のデータ。**ここを直して `node scripts/build-shops.mjs`。**
-- `scripts/` — 複製・後処理・生成スクリプト。上の 2 つと `build-fonts.py` / `fetch-instagram.mjs` 以外は通常触らない。
+- `scripts/` — 複製・後処理・生成スクリプト。上の 2 つと `build-fonts.py` / `fetch-instagram.mjs` /
+  `fix-jsonld-urls.mjs` (構造化データの URL を直す) 以外は通常触らない。
 - `.github/workflows/` — 複製 (mirror.yml) と公開 (deploy-pages.yml) のワークフロー。
 
 ## 編集ルール
@@ -17,6 +18,11 @@
 1. **`site/` 内の HTML を直接編集する。** ビルド工程はない。保存した内容がそのまま公開される。
 2. **リンクや画像のパスは相対パスのまま維持する。** `../wp-content/uploads/...` のような形式が正。
    `https://oimofes.jp/...` のような絶対 URL を新たに書かない。
+   **ただし `<head>` の構造化データ (JSON-LD) と `<link rel="canonical">` は例外で、絶対 URL で書く。**
+   検索エンジンはページの場所に関係なく同じ URL として読む必要があるため。
+   複製時に JSON-LD の中まで相対パスにされてトップを指す `item` が空文字になり、
+   Search Console にパンくずの重大な問題として報告された。直すには
+   `node scripts/fix-jsonld-urls.mjs` (何度実行してもよい)。
 3. **ヘッダー・フッター・ナビなど共通部分を変えるときは、全ページに同じ変更を適用する。**
    `PAGES.md` の一覧をもとに `site/**/*.html` を横断的に確認し、`Grep` で該当箇所を洗い出してから直す。
 4. **CSS の変更は既存のテーマ CSS に追記するのではなく、`site/custom.css` を作り全ページから読み込む** 形を推奨する
