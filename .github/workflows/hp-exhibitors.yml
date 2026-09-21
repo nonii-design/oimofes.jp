@@ -1,0 +1,74 @@
+name: Sync HP exhibitors
+
+# イベント管理ポータル (event-nonii-portal) の「HP掲載 出店者」を取り込み、
+# トップページの店舗一覧 (全国おいもエリア・生産者エリア) を更新します。
+#
+# 実行のきっかけは 3 つ:
+#   1. schedule    毎日 日本時間 0:10 (掲載スケジュールの取り込みと重ならないように 10 分ずらす)
+#   2. repository_dispatch  ポータルで「HPに公開」を保存したときに、ポータルから叩いてもらう (即時反映)
+#   3. workflow_dispatch    手で実行する
+#
+# 事前準備: Settings → Secrets and variables → Actions で
+#           HP_EXHIBITORS_TOKEN にポータルの HP_EXHIBITORS_PUBLIC_TOKEN を登録してください。
+on:
+  schedule:
+    # cron は UTC。15:10 UTC = 翌 0:10 JST
+    - cron: '10 15 * * *'
+  repository_dispatch:
+    types: [hp-exhibitors]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: hp-exhibitors
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # 画像の軽量化 (scripts/optimize-images.py) に使う
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pillow
+
+      - name: Fetch published exhibitors
+        env:
+          HP_EXHIBITORS_TOKEN: ${{ secrets.HP_EXHIBITORS_TOKEN }}
+          # イベントの slug を変えるときは Variables に OIMO_EVENT_SLUG を登録する
+          OIMO_EVENT_SLUG: ${{ vars.OIMO_EVENT_SLUG }}
+        run: node scripts/fetch-hp-exhibitors.mjs
+
+      - name: Commit and push
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site data
+          if git diff --cached --quiet; then
+            echo "店舗一覧に変更はありませんでした。"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "chore: 店舗一覧をポータルから更新 ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # GITHUB_TOKEN による push は他のワークフローを起動しないため、公開を明示的に実行する
+      - name: Deploy to GitHub Pages
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref "${{ github.ref_name }}"
