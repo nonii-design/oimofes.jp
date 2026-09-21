@@ -188,6 +188,36 @@
   text-transform: none !important;
 }
 
+/* 店舗一覧の「順次更新中」注記 (ポータルのチェックで表示/非表示) */
+#colibri .oimo-updating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px auto 1.6em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(79, 34, 36, 0.2);
+  color: var(--oimo-brown);
+  font-size: clamp(12px, 2.8vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.oimo-updating__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: oimo-updating-blink 1.6s ease-in-out infinite;
+}
+@keyframes oimo-updating-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oimo-updating__dot { animation: none; }
+}
+
 .oimo-comingsoon {
   max-width: 760px;
   margin: 0 auto 2.2em;

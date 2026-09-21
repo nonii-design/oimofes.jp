@@ -15,6 +15,7 @@
 //      (ページ内は相対パスのまま)
 //   4. 置き換えたエリアの「近日公開」のお知らせ (<!-- SHOPS:NOTICE <id> -->) を空にする
 //   5. scripts/build-shops.mjs を実行して HTML を作り直す
+//   6. 「順次更新中」の注記 (<!-- SHOPS:UPDATING <id> -->) を、ポータルの notices.updating に合わせて出し入れ
 //
 // 環境変数:
 //   HP_EXHIBITORS_TOKEN  ポータルの公開 API のトークン (必須)
@@ -111,7 +112,28 @@ try {
 }
 
 const vendors = Array.isArray(json?.vendors) ? json.vendors : [];
-console.log(`==> ${EVENT_SLUG}: 公開中 ${vendors.length} 店舗を取得しました`);
+const showUpdating = json?.notices?.updating === true;
+console.log(`==> ${EVENT_SLUG}: 公開中 ${vendors.length} 店舗を取得しました / 順次更新中の表示: ${showUpdating ? 'あり' : 'なし'}`);
+
+// --- 「順次更新中」の注記を各一覧に反映 (店舗の増減とは独立に毎回そろえる) ------------------
+const UPDATING_NOTICE =
+  '<p class="oimo-updating"><span class="oimo-updating__dot" aria-hidden="true"></span>出店店舗は順次更新中です</p>';
+let indexHtml = await readFile(INDEX, 'utf8');
+let noticeChanged = false;
+for (const groupId of new Set(Object.values(AREA_GROUPS))) {
+  const re = new RegExp(`(<!-- SHOPS:UPDATING ${groupId}[^>]*-->)[\\s\\S]*?(<!-- /SHOPS:UPDATING -->)`);
+  const m = re.exec(indexHtml);
+  if (!m) continue;
+  const next = showUpdating ? `${m[1]}\n    ${UPDATING_NOTICE}\n    ${m[2]}` : `${m[1]}\n    ${m[2]}`;
+  if (next !== m[0]) {
+    indexHtml = indexHtml.slice(0, m.index) + next + indexHtml.slice(m.index + m[0].length);
+    noticeChanged = true;
+  }
+}
+if (noticeChanged) {
+  await writeFile(INDEX, indexHtml);
+  console.log(`    - 「順次更新中」の表示を${showUpdating ? '出しました' : '消しました'}`);
+}
 
 // --- 2. エリアごとに振り分け -----------------------------------------------
 const byGroup = new Map();
@@ -127,7 +149,7 @@ for (const v of vendors) {
 
 if (byGroup.size === 0) {
   console.log('==> トップページに載せる店舗が無いため、前回開催の一覧をそのまま残します');
-  process.exit(0);
+  process.exit(0); // 注記の変更は上で書き込み済み
 }
 
 // --- 3. 画像を保存 -----------------------------------------------------------

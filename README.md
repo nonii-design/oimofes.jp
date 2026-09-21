@@ -316,6 +316,8 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
   エリア紹介カードをクリックすると表示される `#gourmet` / `#experience` のセクションです。
 - 店名の右の「［静岡］」は応募時の都道府県、画像のリンク先は STEP2 で登録した Instagram です。
 - 置き換えたエリアの「近日公開」のお知らせ (`<!-- SHOPS:NOTICE <id> -->` の中) は自動で空になります。
+- 各一覧の「出店店舗は順次更新中です」(`<!-- SHOPS:UPDATING <id> -->` の中) は、ポータルの
+  「HP掲載 出店者」のチェックボックスで出し入れします (API の `notices.updating`)。
 - 取り込みは 毎日 0:10 (JST) / ポータルからの通知 (`repository_dispatch: hp-exhibitors`) / Actions タブから手動 の 3 通り。
 - Secrets: `HP_EXHIBITORS_TOKEN` … ポータルの `HP_EXHIBITORS_PUBLIC_TOKEN` と同じ値。
 
