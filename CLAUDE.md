@@ -80,6 +80,11 @@
    この値は `scripts/fetch-display-slots.mjs` がイベント管理ポータルから取り込むこともある
    (`.github/workflows/display-slots.yml`)。**ポータル連携中のブロックを手で編集しても、
    次回の取り込みで上書きされる。** 対応表はスクリプト冒頭の `SLOTS`。詳細は README。
+   **`<!-- SLOT:START <slot_key> -->`〜`<!-- SLOT:END -->` の中は、期間だけでなく
+   中身 (見出し・文章・ボタンの文言とリンク先) もポータルから生成する。** 同スクリプトの
+   `render…` 関数が書き出すので、中を手で編集しない。ポータル側で枠を増やすときは
+   `event-nonii-portal` の `src/lib/hp-display-slots.ts` の `DEFAULT_SLOTS` に 1 行足す
+   (slot_key の末尾が `.button` ならボタン用、先頭が `notice.` ならお知らせ用の入力欄が出る)。
 14. **ヘッダー・フッターは `partials/` が唯一の原本。** 各ページの `<!-- HEADER:START -->`〜`<!-- HEADER:END -->` と
    `<!-- FOOTER:START -->`〜`<!-- FOOTER:END -->` の中は `node scripts/sync-partials.mjs` が生成するので手で編集しない。
    メニューの項目やロゴを変えるときは `partials/header.html` を直してから同スクリプトを実行する
