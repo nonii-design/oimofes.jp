@@ -45,6 +45,40 @@
           "link": "https://www.instagram.com/p/DU0B_7fiCF8/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
         }
       ]
+    },
+    {
+      "id": "gourmet",
+      "title": "全国グルメエリア",
+      "shops": [
+        {
+          "name": "B-FRITES",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/7ac61513-05cc-4ed9-adb2-1dda92980a59-66vtqp.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/b_frites214/"
+        }
+      ],
+      "portal": {
+        "event": "oimo-fes-fujicity-2026",
+        "syncedAt": "2026-09-21T07:42:37.966Z",
+        "count": 1
+      }
+    },
+    {
+      "id": "experience",
+      "title": "体験・あそび・物販エリア",
+      "shops": [
+        {
+          "name": "Fluffycrown",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/cac81186-a04c-4069-b7b0-98c50ffc3f97-19ce2lk.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/fluffycrown_krk/"
+        }
+      ],
+      "portal": {
+        "event": "oimo-fes-fujicity-2026",
+        "syncedAt": "2026-09-21T07:42:37.966Z",
+        "count": 1
+      }
     }
   ]
 }

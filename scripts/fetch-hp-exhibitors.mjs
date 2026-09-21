@@ -47,7 +47,9 @@ const IMAGE_DIR_REL = `wp-content/uploads/portal/${EVENT_SLUG}`;
 // data/shops.json にグループを足してから、ここに 1 行足す。
 const AREA_GROUPS = {
   全国おいもエリア: 'oimo',
+  全国グルメエリア: 'gourmet',
   生産者エリア: 'producers',
+  '体験・あそび・物販エリア': 'experience',
 };
 
 /** 「静岡県」→「静岡」 (北海道はそのまま) */

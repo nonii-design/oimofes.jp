@@ -311,7 +311,9 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 - **エリアに 1 店舗でも公開があれば、そのエリアの前回開催の店舗はすべて消えて新しい一覧に置き換わります。**
   公開が 0 店舗のエリアは前回開催の一覧のまま残ります。
 - ポータルの出店エリアとグループの対応は `scripts/fetch-hp-exhibitors.mjs` の `AREA_GROUPS`
-  (全国おいもエリア → `oimo`、生産者エリア → `producers`)。他のエリアは一覧が無いため載せません。
+  (全国おいもエリア → `oimo`、全国グルメエリア → `gourmet`、生産者エリア → `producers`、
+  体験・あそび・物販エリア → `experience`)。グルメ・体験あそびの一覧は、トップページの
+  エリア紹介カードをクリックすると表示される `#gourmet` / `#experience` のセクションです。
 - 店名の右の「［静岡］」は応募時の都道府県、画像のリンク先は STEP2 で登録した Instagram です。
 - 置き換えたエリアの「近日公開」のお知らせ (`<!-- SHOPS:NOTICE <id> -->` の中) は自動で空になります。
 - 取り込みは 毎日 0:10 (JST) / ポータルからの通知 (`repository_dispatch: hp-exhibitors`) / Actions タブから手動 の 3 通り。
