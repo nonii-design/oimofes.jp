@@ -20,7 +20,8 @@
         {
           "name": "THE IMOMITSU",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5ef88258-137e-4ae8-92a1-4fdfac8c7502-1r1sgrm.jpg",
-          "area": "茨城"
+          "area": "茨城",
+          "link": "https://www.instagram.com/imomitsu.2023/"
         },
         {
           "name": "おいもカフェ みなと屋",
@@ -85,7 +86,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:18:14.597Z",
+        "syncedAt": "2026-09-21T14:45:17.601Z",
         "count": 14
       }
     },
