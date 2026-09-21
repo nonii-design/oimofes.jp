@@ -21,12 +21,33 @@
           "name": "THE IMOMITSU",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5ef88258-137e-4ae8-92a1-4fdfac8c7502-1r1sgrm.jpg",
           "area": "茨城"
+        },
+        {
+          "name": "おいもカフェ みなと屋",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8add27c2-6705-4132-b451-dbc6f991562c-17dhag9.jpg",
+          "area": "神奈川"
+        },
+        {
+          "name": "お芋処えんむすび",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/c22e039d-77b9-4cd5-9c01-64876ecc3869-1ta0tbw.jpg",
+          "area": "岐阜",
+          "link": "https://www.instagram.com/mitsuimodokoro_enmusubi/"
+        },
+        {
+          "name": "芋の巣",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/fcefc6f4-6e9f-47ac-b43f-54465efe4b26-1vzqjcf.jpg",
+          "area": "大阪"
+        },
+        {
+          "name": "芋屋蜜三郎",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/bc995b2d-a1b4-4a80-aa64-3a3992e899c7-qtkgds.jpg",
+          "area": "岡山"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:16:49.519Z",
-        "count": 3
+        "syncedAt": "2026-09-21T08:17:20.858Z",
+        "count": 7
       }
     },
     {
@@ -80,12 +101,35 @@
           "name": "TACOCAFE",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/41cd64ed-dcd1-49c1-acb6-ce12dc0b915c-1y2s8vi.jpg",
           "area": "静岡"
+        },
+        {
+          "name": "WARABIYA",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/cc391f9f-dffb-4025-b46b-ec336179b104-xbb38a.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/warabiya_mishima/"
+        },
+        {
+          "name": "アオモリヤ",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/51ddbf78-20aa-4457-9a2b-7879aab6ce73-1f7n6ei.jpg",
+          "area": "青森"
+        },
+        {
+          "name": "おにぎり具利",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/9ffb5c9f-5506-47a5-b25b-1151a843ed62-khb0r5.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/guri.shizuoka/"
+        },
+        {
+          "name": "とり途家",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/ebf6831b-54a2-4159-a674-d108f9409bfc-1cbtgo9.jpg",
+          "area": "宮城",
+          "link": "https://www.instagram.com/yumechu_takasago/"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:16:16.607Z",
-        "count": 4
+        "syncedAt": "2026-09-21T08:17:20.858Z",
+        "count": 8
       }
     },
     {
@@ -114,12 +158,18 @@
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/6d8646e4-976b-4e5e-aeac-5730160bd3c4-1sd920q.jpg",
           "area": "静岡",
           "link": "https://www.instagram.com/sail.accessory/"
+        },
+        {
+          "name": "アメ富士",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/54a2306c-01a4-4b69-ba74-909b9f5b574b-191xv7o.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/amefuzi/"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:16:16.607Z",
-        "count": 4
+        "syncedAt": "2026-09-21T08:17:20.858Z",
+        "count": 5
       }
     }
   ]
