@@ -66,6 +66,13 @@ function instagramUrl(v) {
   return /^[A-Za-z0-9._]+$/.test(name) ? `https://www.instagram.com/${name}/` : '';
 }
 
+/** 画像 URL の短い指紋 (ファイル名に付けて、写真の差し替えを検出する) */
+function imageFingerprint(url) {
+  let h = 0;
+  for (const ch of String(url)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h.toString(36);
+}
+
 /** Content-Type / URL から拡張子を決める */
 function extensionFor(url, contentType) {
   const ct = String(contentType || '').toLowerCase();
@@ -140,9 +147,16 @@ async function saveImage(v) {
   }
   const ext = extensionFor(v.imageUrl, res.headers.get('content-type'));
   const file = `${v.applicationId}${ext}`;
-  await writeFile(path.join(imageDirAbs, file), Buffer.from(await res.arrayBuffer()));
   keepFiles.add(file);
-  return `${IMAGE_DIR_REL}/${file}`;
+  // 既にある画像は使い回す (軽量化済みのものを毎回ダウンロードし直して差分を出さない)。
+  // 写真を差し替えたときはポータル側で公開 URL (ファイル名) が変わるので、別名で保存される。
+  const existing = await readdir(imageDirAbs).catch(() => []);
+  const wanted = `${v.applicationId}-${imageFingerprint(v.imageUrl)}${ext}`;
+  keepFiles.delete(file);
+  keepFiles.add(wanted);
+  if (existing.includes(wanted)) return `${IMAGE_DIR_REL}/${wanted}`;
+  await writeFile(path.join(imageDirAbs, wanted), Buffer.from(await res.arrayBuffer()));
+  return `${IMAGE_DIR_REL}/${wanted}`;
 }
 
 // --- 4. data/shops.json を置き換え ------------------------------------------
@@ -170,6 +184,14 @@ for (const [groupId, list] of byGroup) {
   }
   if (shops.length === 0) {
     console.log(`    - ${group.title}: 画像付きの店舗が無いため、前回の一覧を残します`);
+    continue;
+  }
+  // 中身が前回と同じなら何も書かない (毎日の実行で syncedAt だけが変わってコミットされないように)
+  if (
+    group.portal?.event === EVENT_SLUG &&
+    JSON.stringify(group.shops) === JSON.stringify(shops)
+  ) {
+    console.log(`    - ${group.title}: ${shops.length} 店舗 (前回と同じ)`);
     continue;
   }
   group.shops = shops; // 1 店舗でも新しい年度の公開があれば、前回開催の店舗はすべて消す
