@@ -16,12 +16,17 @@
           "name": "sweet&healthy SAZANKA",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/a00b7b9d-0917-4148-9628-f560e3f10b85-159ktbj.jpg",
           "area": "東京"
+        },
+        {
+          "name": "THE IMOMITSU",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5ef88258-137e-4ae8-92a1-4fdfac8c7502-1r1sgrm.jpg",
+          "area": "茨城"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:16:16.607Z",
-        "count": 2
+        "syncedAt": "2026-09-21T08:16:49.519Z",
+        "count": 3
       }
     },
     {
