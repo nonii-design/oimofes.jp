@@ -55,12 +55,17 @@
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/7ac61513-05cc-4ed9-adb2-1dda92980a59-66vtqp.jpg",
           "area": "静岡",
           "link": "https://www.instagram.com/b_frites214/"
+        },
+        {
+          "name": "GARCIA BREWING",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8a8ffc1c-7f77-48de-ae95-dd19e3bc0564-1o0azrf.jpg",
+          "area": "静岡"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T07:42:37.966Z",
-        "count": 1
+        "syncedAt": "2026-09-21T08:15:47.219Z",
+        "count": 2
       }
     },
     {
@@ -72,12 +77,17 @@
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/cac81186-a04c-4069-b7b0-98c50ffc3f97-19ce2lk.jpg",
           "area": "静岡",
           "link": "https://www.instagram.com/fluffycrown_krk/"
+        },
+        {
+          "name": "HANDMADE JEWELRY聖",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5192900e-517f-43e4-8ba1-47e16a65cc4b-1mlgk7s.jpg",
+          "area": "静岡"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T07:42:37.966Z",
-        "count": 1
+        "syncedAt": "2026-09-21T08:15:47.219Z",
+        "count": 2
       }
     }
   ]
