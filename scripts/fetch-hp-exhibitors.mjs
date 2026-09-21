@@ -26,7 +26,8 @@
 //
 // 対応する API: GET /api/public/hp-exhibitors?event=<slug>
 //   → { event, generatedAt, vendors: [{ applicationId, shopName, category, prefecture,
-//        catchphrase, instagram, imageUrl, sortOrder }] }
+//        catchphrase, instagram, imageUrl, imageFocus, sortOrder }] }
+//   imageFocus は写真を正方形に切り抜くときの位置 (管理画面の「HP での切り抜き位置」)。
 // =============================================================================
 import { execFileSync } from 'node:child_process';
 import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises';
@@ -182,6 +183,10 @@ for (const [groupId, list] of byGroup) {
     if (area) shop.area = area;
     const link = instagramUrl(v.instagram);
     if (link) shop.link = link;
+    // 正方形に切り抜くときの位置。書き方が想定どおりのときだけ持ち込む
+    // (build-shops.mjs が style に入れるため。空なら custom.css の既定)
+    const focus = String(v.imageFocus ?? '').trim();
+    if (/^-?[\d.]+(%|px)( -?[\d.]+(%|px))?$/.test(focus)) shop.focus = focus;
     shops.push(shop);
   }
   if (shops.length === 0) {

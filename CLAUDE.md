@@ -95,6 +95,12 @@
    `node scripts/build-shops.mjs` が生成する。店舗の追加・削除・並び替えは JSON を直して実行する。
    画像は `site/wp-content/uploads/` に置き、`python3 scripts/optimize-images.py` を先に実行すると
    縮小版が `srcset` に自動で入る。
+   **写真は正方形に切りそろえて表示する** (`custom.css` の `.oimo-shop__link img`)。
+   元の画像ファイルは加工せず、`object-fit: cover` で見た目だけ切り抜く。切り抜く位置は
+   店舗ごとに `focus` (`"50% 20%"` / `"20%"`) で変えられ、`--oimo-focus` として入る。既定は `50% 8%`
+   (上部に店名の帯がある写真が多いため)。この値はポータルの「HP掲載 出店者」→「HP での切り抜き位置」
+   から `scripts/fetch-hp-exhibitors.mjs` が取り込むので、**ポータル連携中のエリアは JSON を手で
+   直しても次回の取り込みで消える。**
 16. **トップページ `site/index.html` は Colibri を使わない手書きの HTML。** jQuery / Swiper / Colibri の JS・CSS を
    読み込まず、`custom.css` の「C:」の節 (`.oimo-hero` / `.oimo-section` / `.oimo-card` / `.oimo-faq` など) と
    `oimo-ui.js` だけで動く。セクションを足すときは既存の `<section class="oimo-section">` の形に合わせる。
