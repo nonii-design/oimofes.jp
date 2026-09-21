@@ -1347,7 +1347,16 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
   line-height: 0;
 }
 
-.oimo-shop__link img { transition: transform 500ms var(--oimo-ease); }
+/* 店舗の写真は縦長・横長が混ざるので、正方形に切りそろえて並びを整える。
+   元の画像ファイルは加工せず、表示のときだけ切り抜く。
+   切り抜く位置は 1 枚ずつ --oimo-focus で変えられる (既定は中央)。
+   値はイベント管理ポータルの出店者データから data/shops.json 経由で入る。 */
+.oimo-shop__link img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: var(--oimo-focus, 50% 8%);
+  transition: transform 500ms var(--oimo-ease);
+}
 a.oimo-shop__link:hover img { transform: scale(1.03); }
 
 #colibri .oimo-shop__name {

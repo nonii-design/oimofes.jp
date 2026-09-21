@@ -49,12 +49,30 @@ function encodePath(p) {
   return p.split('/').map((seg) => seg.replace(/ /g, '%20').replace(/"/g, '%22')).join('/');
 }
 
+/**
+ * 写真の切り抜き位置。写真は正方形に切りそろえて表示するので、
+ * 顔や商品が切れるときにここをずらす (custom.css の --oimo-focus)。
+ * "50% 30%" のように 2 つ、または "30%" のように縦だけでも書ける。
+ * 空なら中央 (既定) のままにして、余計な style は付けない。
+ */
+function focusStyle(focus) {
+  const v = String(focus ?? '').trim();
+  if (!v) return '';
+  // 受け付けるのは % と px の数値 1〜2 個だけ (HTML に入れる値なので絞る)
+  if (!/^-?[\d.]+(%|px)( -?[\d.]+(%|px))?$/.test(v)) {
+    console.warn(`    ! 切り抜き位置の書き方が読めないので無視しました: "${v}"`);
+    return '';
+  }
+  const pair = v.includes(' ') ? v : `50% ${v}`;
+  return ` style="--oimo-focus: ${pair}"`;
+}
+
 function card(shop, prefix) {
   const src = `${prefix}${encodePath(shop.image)}`;
   const set = srcset(shop.image, prefix);
   if (shop.width) set.push(`${src} ${shop.width}w`);
   const size = shop.width && shop.height ? ` width="${shop.width}" height="${shop.height}"` : '';
-  const img = `<img src="${src}"${set.length ? ` srcset="${set.join(', ')}" sizes="(max-width: 575px) calc(100vw - 88px), (max-width: 991px) 45vw, 360px"` : ''}${size} alt="${esc(shop.name)}" loading="lazy" decoding="async">`;
+  const img = `<img src="${src}"${set.length ? ` srcset="${set.join(', ')}" sizes="(max-width: 575px) calc(100vw - 88px), (max-width: 991px) 45vw, 360px"` : ''}${size}${focusStyle(shop.focus)} alt="${esc(shop.name)}" loading="lazy" decoding="async">`;
   const media = shop.link
     ? `<a class="oimo-shop__link" href="${esc(shop.link)}" target="_blank" rel="noopener">${img}</a>`
     : `<div class="oimo-shop__link">${img}</div>`;
