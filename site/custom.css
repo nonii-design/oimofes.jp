@@ -1340,6 +1340,18 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
 
 .oimo-area img { aspect-ratio: 1 / 1; object-fit: cover; }
 
+/* エリア紹介カードをクリックすると、そのエリアの店舗一覧へ移動する */
+a.oimo-area--link { display: block; color: inherit; text-decoration: none; }
+a.oimo-area--link:hover img { transform: scale(1.02); }
+a.oimo-area--link img { transition: transform 500ms var(--oimo-ease); }
+.oimo-area__more {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--oimo-brown);
+}
+
 .oimo-shop__link {
   display: block;
   overflow: hidden;

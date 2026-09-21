@@ -9,6 +9,8 @@
 - `PAGES.md` — 全ページの URL・ファイルパス・タイトルの一覧。**ページを探すときはまずこれを読む。**
 - `partials/` — 全ページ共通のヘッダー (`header.html`) とフッター (`footer.html`)。**ここを直して `node scripts/sync-partials.mjs`。**
 - `data/shops.json` — 店舗一覧のデータ。**ここを直して `node scripts/build-shops.mjs`。**
+  `portal` が付いたグループはイベント管理ポータルの「HP掲載 出店者」から
+  `scripts/fetch-hp-exhibitors.mjs` が自動で置き換えるので直接編集しない (README「店舗一覧をイベント管理ポータルから自動更新する」)。
 - `scripts/` — 複製・後処理・生成スクリプト。上の 2 つと `build-fonts.py` / `fetch-instagram.mjs` /
   `fix-jsonld-urls.mjs` (構造化データの URL を直す) 以外は通常触らない。
 - `.github/workflows/` — 複製 (mirror.yml) と公開 (deploy-pages.yml) のワークフロー。

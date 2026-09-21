@@ -293,6 +293,32 @@ INSTAGRAM_TOKEN=xxxxx node scripts/fetch-instagram.mjs
 こちらは静的サイトのため閲覧者の端末で判定します。日本時間固定なのでタイムゾーンの影響は受けませんが、
 端末の時計が大きくずれている場合だけ表示がずれます。
 
+## 店舗一覧をイベント管理ポータルから自動更新する
+
+トップページの「全国おいもエリア – 店舗一覧」「生産者エリア – 店舗一覧」は、
+[イベント管理ポータル](https://event-portal.nonii.co.jp/) の `/admin/hp-exhibitors` で
+「HPに公開」にした店舗から自動で作られます。
+
+```
+ポータルで「HPに公開」を保存
+   └→ GitHub Actions (hp-exhibitors.yml)
+        └→ scripts/fetch-hp-exhibitors.mjs が公開 API から店舗を取得
+             └→ 画像を site/wp-content/uploads/portal/<slug>/ に保存し、
+                data/shops.json のグループを置き換えて build-shops.mjs を実行
+                  └→ コミット → GitHub Pages を公開 (反映まで 1〜2 分)
+```
+
+- **エリアに 1 店舗でも公開があれば、そのエリアの前回開催の店舗はすべて消えて新しい一覧に置き換わります。**
+  公開が 0 店舗のエリアは前回開催の一覧のまま残ります。
+- ポータルの出店エリアとグループの対応は `scripts/fetch-hp-exhibitors.mjs` の `AREA_GROUPS`
+  (全国おいもエリア → `oimo`、全国グルメエリア → `gourmet`、生産者エリア → `producers`、
+  体験・あそび・物販エリア → `experience`)。グルメ・体験あそびの一覧は、トップページの
+  エリア紹介カードをクリックすると表示される `#gourmet` / `#experience` のセクションです。
+- 店名の右の「［静岡］」は応募時の都道府県、画像のリンク先は STEP2 で登録した Instagram です。
+- 置き換えたエリアの「近日公開」のお知らせ (`<!-- SHOPS:NOTICE <id> -->` の中) は自動で空になります。
+- 取り込みは 毎日 0:10 (JST) / ポータルからの通知 (`repository_dispatch: hp-exhibitors`) / Actions タブから手動 の 3 通り。
+- Secrets: `HP_EXHIBITORS_TOKEN` … ポータルの `HP_EXHIBITORS_PUBLIC_TOKEN` と同じ値。
+
 ## フォント
 
 ブランド書体「コーポレート・ロゴ ver3」(Medium / Bold) を Web フォントとして配信しています。
