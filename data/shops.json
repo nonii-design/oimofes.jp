@@ -11,12 +11,17 @@
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/fb382a88-ae54-4c40-875c-96236241320f-1jc0shb.jpg",
           "area": "静岡",
           "link": "https://www.instagram.com/oimodo_takajo/"
+        },
+        {
+          "name": "sweet&healthy SAZANKA",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/a00b7b9d-0917-4148-9628-f560e3f10b85-159ktbj.jpg",
+          "area": "東京"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T07:41:21.631Z",
-        "count": 1
+        "syncedAt": "2026-09-21T08:16:16.607Z",
+        "count": 2
       }
     },
     {
@@ -60,12 +65,22 @@
           "name": "GARCIA BREWING",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8a8ffc1c-7f77-48de-ae95-dd19e3bc0564-1o0azrf.jpg",
           "area": "静岡"
+        },
+        {
+          "name": "Spice6",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8114ea67-b347-4616-9614-065aed7f1ccc-qglmrq.jpg",
+          "area": "静岡"
+        },
+        {
+          "name": "TACOCAFE",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/41cd64ed-dcd1-49c1-acb6-ce12dc0b915c-1y2s8vi.jpg",
+          "area": "静岡"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:15:47.219Z",
-        "count": 2
+        "syncedAt": "2026-09-21T08:16:16.607Z",
+        "count": 4
       }
     },
     {
@@ -82,12 +97,24 @@
           "name": "HANDMADE JEWELRY聖",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5192900e-517f-43e4-8ba1-47e16a65cc4b-1mlgk7s.jpg",
           "area": "静岡"
+        },
+        {
+          "name": "maruhana",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/2f51d0ca-5e67-42b3-8578-827b4222f683-18jkavn.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/maruhana.aoi/"
+        },
+        {
+          "name": "sail accessory",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/6d8646e4-976b-4e5e-aeac-5730160bd3c4-1sd920q.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/sail.accessory/"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-21T08:15:47.219Z",
-        "count": 2
+        "syncedAt": "2026-09-21T08:16:16.607Z",
+        "count": 4
       }
     }
   ]
