@@ -243,9 +243,11 @@
 
 /* ---------------------------------------------------------------------------
    Instagram の埋め込み
-   投稿タイルは scripts/fetch-instagram.mjs が自動生成する。
-   パソコンは 1 行 4 枚 × 2 行で最大 8 枚、スマホは 1 行 2 枚で最大 6 枚。
-   枚数の上限は CSS 側で決める (7 枚目以降はスマホでは出さない)。
+   投稿タイルは scripts/fetch-instagram.mjs が自動生成する。並べ方は欄ごとに違う。
+   - 「Instagram」欄 (@oimo.fes)   … パソコン 1 行 4 枚 × 2 行で最大 8 枚 /
+                                      スマホ 1 行 2 枚で最大 6 枚 (7 枚目以降は出さない)
+   - 「おいもフォト」欄 (@oimo.photo) … パソコン・スマホとも 3 列 × 3 行 = 9 枚
+                                      (.oimo-ig--photo)
    --------------------------------------------------------------------------- */
 .oimo-ig {
   width: 100%;
@@ -259,17 +261,24 @@
   gap: 10px;
 }
 
-/* スマホは 1 行 2 枚。7 枚目からは出さない (2 枚 × 3 行 = 6 枚まで) */
+/* スマホは 1 行 2 枚。7 枚目からは出さない (2 枚 × 3 行 = 6 枚まで)。
+   「おいもフォト」欄は 3 列 9 枚で固定なので、この間引きの対象から外す。 */
 @media (max-width: 767px) {
   .oimo-ig__grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .oimo-ig__grid .oimo-ig__item:nth-child(n + 7) { display: none; }
+  .oimo-ig:not(.oimo-ig--photo) .oimo-ig__grid .oimo-ig__item:nth-child(n + 7) { display: none; }
 }
 
 /* --- 「おいもフォト」欄は現像した写真を並べたような見た目にする ------------
    白いフチと影を付けて、1 枚ずつ少しずつ違う角度に傾ける。
    傾きは transform なので、登場アニメーションが transform を使っていると
    打ち消し合う。この欄だけ opacity だけのアニメーションに差し替える。 */
+/* 3 列だと 1 枚が大きくなりすぎる (1180px 幅で 1 枚 393px) ので、
+   「Instagram」欄の 4 列と同じくらいの大きさになるよう幅を抑える */
+.oimo-ig--photo { max-width: 940px; }
+
 .oimo-ig--photo .oimo-ig__grid {
+  /* 3 列 × 3 行 = 9 枚。枚数は scripts/fetch-instagram.mjs の count と合わせる */
+  grid-template-columns: repeat(3, 1fr);
   gap: 22px 18px;
   /* 傾いた角が切れないよう、まわりに少し余白を取る */
   padding: 10px 6px;
@@ -298,8 +307,14 @@
 }
 
 @media (max-width: 767px) {
-  .oimo-ig--photo .oimo-ig__grid { gap: 18px 14px; }
-  .oimo-ig--photo .oimo-ig__item { border-width: 5px; }
+  /* スマホでも 3 列 9 枚のまま。1 枚が小さくなるので余白とフチを詰める */
+  .oimo-ig--photo .oimo-ig__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 8px;
+    padding: 8px 2px;
+  }
+  .oimo-ig--photo .oimo-ig__item { border-width: 4px; }
+  .oimo-ig--photo .oimo-ig__item { box-shadow: 0 4px 11px rgba(79, 34, 36, 0.18); }
 }
 
 .oimo-ig__item {

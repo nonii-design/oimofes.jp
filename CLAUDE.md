@@ -46,8 +46,12 @@
    `INSTAGRAM2` =「Instagram」欄 = @oimo.fes。Instagram API はトークンの持ち主の投稿しか
    返さないので、アカウントごとにトークンが要る (`INSTAGRAM_TOKEN_PHOTO` / `INSTAGRAM_TOKEN`)。
    片方が未設定・期限切れのときは、その欄だけ今の表示のまま残す (画像も消さない)。
-   取り込む枚数はスクリプト冒頭の `SLOTS` の `count`、並べ方は `custom.css` の
-   `.oimo-ig__grid` (パソコン 1 行 4 枚 / スマホ 1 行 2 枚・7 枚目からは非表示)。
+   取り込む枚数はスクリプト冒頭の `SLOTS` の `count`、並べ方は `custom.css`。
+   **欄ごとに違う**: 「Instagram」欄 = `.oimo-ig__grid` (パソコン 1 行 4 枚で 8 枚 /
+   スマホ 1 行 2 枚・7 枚目からは非表示)、「おいもフォト」欄 = `.oimo-ig--photo`
+   (パソコン・スマホとも 3 列 × 3 行 = 9 枚)。**`count` を増やすときは CSS の列数と、
+   スマホの間引き (`nth-child(n + 7)`) の対象から外れているかも合わせて見る。**
+   API から取る件数は `count` のいちばん大きいものに自動で合わせる。
    **bot の push は他のワークフローを起動しない** ので、投稿を取り込むワークフローは
    最後に `gh workflow run deploy-pages.yml` で公開を明示的に実行している
    (`permissions: actions: write` が要る)。これが無いと、取り込んでも公開サイトに出ない。

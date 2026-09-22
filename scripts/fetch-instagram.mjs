@@ -20,7 +20,7 @@
 // 環境変数:
 //   INSTAGRAM_TOKEN         @oimo.fes のアクセストークン
 //   INSTAGRAM_TOKEN_PHOTO   @oimo.photo のアクセストークン
-//   INSTAGRAM_LIMIT         1 アカウントあたりの取得件数 (既定: 8)
+//   INSTAGRAM_LIMIT         1 アカウントあたりの取得件数 (既定: 欄の枚数のいちばん多いもの)
 //   OUT_DIR                 サイトのディレクトリ (既定: site)
 //   IG_USERNAME             「Instagram」欄のアカウント名   (既定: oimo.fes)
 //   IG_USERNAME_PHOTO       「おいもフォト」欄のアカウント名 (既定: oimo.photo)
@@ -33,18 +33,19 @@ import { readFile, writeFile, mkdir, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const API_BASE = (process.env.IG_API_BASE || 'https://graph.instagram.com').replace(/\/$/, '');
-const LIMIT = Number(process.env.INSTAGRAM_LIMIT || 8);
 const OUT_DIR = process.env.OUT_DIR || 'site';
 
 const MEDIA_DIR = path.join(OUT_DIR, 'wp-content/uploads/instagram');
 const INDEX = path.join(OUT_DIR, 'index.html');
 
-// 差し込み先。count はその欄に取り込む枚数。
-// 並べ方 (パソコン 1 行 4 枚 / スマホ 1 行 2 枚・6 枚まで) は custom.css が決める。
+// 差し込み先。count はその欄に取り込む枚数。並べ方は custom.css が決める。
+//   INSTAGRAM  「おいもフォト」欄 … 3 列 × 3 行 = 9 枚
+//   INSTAGRAM2 「Instagram」欄    … パソコン 1 行 4 枚で 8 枚 / スマホ 1 行 2 枚で 6 枚まで
 const SLOTS = [
   {
     name: 'INSTAGRAM',
-    count: 4,
+    // 3 列 × 3 行。並べ方は custom.css の .oimo-ig--photo
+    count: 9,
     username: process.env.IG_USERNAME_PHOTO || 'oimo.photo',
     token: process.env.INSTAGRAM_TOKEN_PHOTO || '',
     tokenName: 'INSTAGRAM_TOKEN_PHOTO',
@@ -59,6 +60,9 @@ const SLOTS = [
     tokenName: 'INSTAGRAM_TOKEN',
   },
 ];
+
+// 取得件数。いちばん多く使う欄に合わせる (足りないと、その欄が埋まらない)
+const LIMIT = Number(process.env.INSTAGRAM_LIMIT) || Math.max(...SLOTS.map((s) => s.count));
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
   .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
