@@ -245,7 +245,7 @@
    Instagram の埋め込み
    投稿タイルは scripts/fetch-instagram.mjs が自動生成する。並べ方は欄ごとに違う。
    - 「Instagram」欄 (@oimo.fes)   … パソコン 1 行 4 枚 × 2 行で最大 8 枚 /
-                                      スマホ 1 行 2 枚で最大 6 枚 (7 枚目以降は出さない)
+                                      スマホ 1 行 2 枚で最大 4 枚 (5 枚目以降は出さない)
    - 「おいもフォト」欄 (@oimo.photo) … パソコン・スマホとも 3 列 × 3 行 = 9 枚
                                       (.oimo-ig--photo)
    --------------------------------------------------------------------------- */
@@ -261,11 +261,12 @@
   gap: 10px;
 }
 
-/* スマホは 1 行 2 枚。7 枚目からは出さない (2 枚 × 3 行 = 6 枚まで)。
+/* スマホは 1 行 2 枚。5 枚目からは出さない (2 枚 × 2 行 = 4 枚まで)。
+   取り込みは 8 枚のままで、パソコンでは 8 枚とも出る。
    「おいもフォト」欄は 3 列 9 枚で固定なので、この間引きの対象から外す。 */
 @media (max-width: 767px) {
   .oimo-ig__grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .oimo-ig:not(.oimo-ig--photo) .oimo-ig__grid .oimo-ig__item:nth-child(n + 7) { display: none; }
+  .oimo-ig:not(.oimo-ig--photo) .oimo-ig__grid .oimo-ig__item:nth-child(n + 5) { display: none; }
 }
 
 /* --- 「おいもフォト」欄は現像した写真を並べたような見た目にする ------------
