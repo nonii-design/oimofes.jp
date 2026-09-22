@@ -74,7 +74,7 @@
         },
         {
           "name": "神戸芋屋 志のもと",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/16cb7583-49bf-481a-a79e-c26bfcba2a97-1fsbo67.jpg",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/16cb7583-49bf-481a-a79e-c26bfcba2a97-i5okb9.jpg",
           "area": "兵庫"
         },
         {
@@ -86,7 +86,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-22T04:11:54.897Z",
+        "syncedAt": "2026-09-22T04:23:43.091Z",
         "count": 14
       }
     },
@@ -176,12 +176,18 @@
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/f0debf7d-4489-4308-8af3-ec8e6673a0a5-1sbfj5d.jpg",
           "area": "静岡",
           "link": "https://www.instagram.com/hoshina_seinikuten/"
+        },
+        {
+          "name": "青空ブックカフェ Nosso Nosso",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/0abfab38-1934-4789-a071-4e1d48682370-1nm06mq.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/nossonosso546/"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-22T04:11:54.897Z",
-        "count": 10
+        "syncedAt": "2026-09-22T04:23:43.091Z",
+        "count": 11
       }
     },
     {
