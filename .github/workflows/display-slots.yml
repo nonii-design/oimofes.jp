@@ -21,6 +21,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # 公開 (deploy-pages.yml) を起動するのに要る
 
 concurrency:
   group: display-slots
@@ -46,6 +47,7 @@ jobs:
         run: node scripts/fetch-display-slots.mjs
 
       - name: Commit and push
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -56,3 +58,12 @@ jobs:
           fi
           git commit -m "chore: 掲載スケジュールを更新 ($(date -u +%Y-%m-%dT%H:%MZ))"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # GITHUB_TOKEN による push は他のワークフローを起動しないため、公開を明示的に実行する
+      # (これが無いと、ポータルで期間を変えても公開サイトには反映されないままになる)
+      - name: Deploy to GitHub Pages
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref "${{ github.ref_name }}"

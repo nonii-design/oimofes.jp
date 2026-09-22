@@ -39,7 +39,8 @@ const OUT_DIR = process.env.OUT_DIR || 'site';
 const MEDIA_DIR = path.join(OUT_DIR, 'wp-content/uploads/instagram');
 const INDEX = path.join(OUT_DIR, 'index.html');
 
-// 差し込み先。count はその欄に並べる枚数 (グリッドの列数にもなる)。
+// 差し込み先。count はその欄に取り込む枚数。
+// 並べ方 (パソコン 1 行 4 枚 / スマホ 1 行 2 枚・6 枚まで) は custom.css が決める。
 const SLOTS = [
   {
     name: 'INSTAGRAM',
@@ -50,7 +51,7 @@ const SLOTS = [
   },
   {
     name: 'INSTAGRAM2',
-    count: 7,
+    count: 8,
     username: process.env.IG_USERNAME || 'oimo.fes',
     token: process.env.INSTAGRAM_TOKEN || '',
     tokenName: 'INSTAGRAM_TOKEN',
@@ -142,7 +143,7 @@ function renderBlock(slot) {
   return `<!-- ${slot.name}:START -->
   <!-- このブロックは scripts/fetch-instagram.mjs が自動生成します。手で編集しないでください。 -->
   <div class="oimo-ig">
-    <div class="oimo-ig__grid" style="--oimo-ig-cols: ${slot.count}">
+    <div class="oimo-ig__grid">
 ${tiles}
     </div>
     <p class="oimo-ig__more">

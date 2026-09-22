@@ -45,7 +45,11 @@
    `INSTAGRAM2` =「Instagram」欄 = @oimo.fes。Instagram API はトークンの持ち主の投稿しか
    返さないので、アカウントごとにトークンが要る (`INSTAGRAM_TOKEN_PHOTO` / `INSTAGRAM_TOKEN`)。
    片方が未設定・期限切れのときは、その欄だけ今の表示のまま残す (画像も消さない)。
-   表示件数やアカウントを変えたいときはスクリプト冒頭の `SLOTS` を直す。
+   取り込む枚数はスクリプト冒頭の `SLOTS` の `count`、並べ方は `custom.css` の
+   `.oimo-ig__grid` (パソコン 1 行 4 枚 / スマホ 1 行 2 枚・7 枚目からは非表示)。
+   **bot の push は他のワークフローを起動しない** ので、投稿を取り込むワークフローは
+   最後に `gh workflow run deploy-pages.yml` で公開を明示的に実行している
+   (`permissions: actions: write` が要る)。これが無いと、取り込んでも公開サイトに出ない。
 9. **画像を追加したら `python3 scripts/optimize-images.py` を実行する。**
    元サイトには表示サイズに対して極端に大きな画像が含まれていた
    (ヘッダーのロゴは 34035x13284px / 8.9MB)。長辺 2000px を上限に縮小する。

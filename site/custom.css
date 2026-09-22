@@ -244,7 +244,8 @@
 /* ---------------------------------------------------------------------------
    Instagram の埋め込み
    投稿タイルは scripts/fetch-instagram.mjs が自動生成する。
-   --oimo-ig-cols で 1 行あたりの枚数を指定している。
+   パソコンは 1 行 4 枚 × 2 行で最大 8 枚、スマホは 1 行 2 枚で最大 6 枚。
+   枚数の上限は CSS 側で決める (7 枚目以降はスマホでは出さない)。
    --------------------------------------------------------------------------- */
 .oimo-ig {
   width: 100%;
@@ -254,17 +255,14 @@
 
 .oimo-ig__grid {
   display: grid;
-  grid-template-columns: repeat(var(--oimo-ig-cols, 4), 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
-/* 画面が狭いときは枚数を減らして 1 枚あたりを大きく見せる */
-@media (max-width: 900px) {
-  .oimo-ig__grid { grid-template-columns: repeat(min(var(--oimo-ig-cols, 4), 4), 1fr); }
-}
-
-@media (max-width: 560px) {
-  .oimo-ig__grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+/* スマホは 1 行 2 枚。7 枚目からは出さない (2 枚 × 3 行 = 6 枚まで) */
+@media (max-width: 767px) {
+  .oimo-ig__grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .oimo-ig__grid .oimo-ig__item:nth-child(n + 7) { display: none; }
 }
 
 .oimo-ig__item {

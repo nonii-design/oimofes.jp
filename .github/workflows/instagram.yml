@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # 公開 (deploy-pages.yml) を起動するのに要る
 
 concurrency:
   group: instagram
@@ -63,6 +64,7 @@ jobs:
         continue-on-error: true
 
       - name: Commit and push
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -73,3 +75,12 @@ jobs:
           fi
           git commit -m "chore: Instagram の埋め込みを更新 ($(date -u +%Y-%m-%dT%H:%MZ))"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # GITHUB_TOKEN による push は他のワークフローを起動しないため、公開を明示的に実行する
+      # (これが無いと、投稿を取り込んでも公開サイトには反映されないままになる)
+      - name: Deploy to GitHub Pages
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref "${{ github.ref_name }}"
