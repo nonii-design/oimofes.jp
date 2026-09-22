@@ -1438,6 +1438,13 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
 @media (max-width: 575px) {
   .oimo-grid--2,
   .oimo-grid--3 { grid-template-columns: minmax(0, 1fr); }
+
+  /* 店舗一覧だけはスマホでも 2 列のままにする (写真が主役で、1 列だと縦に長すぎる)。
+     カードが細くなるぶん、余白と文字を詰める。
+     .oimo-grid--3 (詳細度 0,1,0) に勝つよう、クラス 2 つで指定している。 */
+  .oimo-grid.oimo-shops { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .oimo-shops .oimo-card { padding: 12px 10px; }
+  #colibri .oimo-shops .oimo-shop__name { margin-top: 10px; font-size: 13px; }
 }
 
 .oimo-card {
