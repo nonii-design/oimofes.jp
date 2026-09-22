@@ -82,12 +82,18 @@
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/e6a51cbc-0ca5-4447-bf57-1b1a5f1fcff4-1i9w6k0.jpg",
           "area": "埼玉",
           "link": "https://www.instagram.com/watanabenasien/"
+        },
+        {
+          "name": "芋屋　蜜の月　倉敷本店",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/3adec433-ec66-4b07-bc6b-816f55c05d8f-1r8ea93.jpg",
+          "area": "岡山",
+          "link": "https://www.instagram.com/imoya_mitsunotsuki/"
         }
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-22T04:23:43.091Z",
-        "count": 14
+        "syncedAt": "2026-09-22T04:25:07.975Z",
+        "count": 15
       }
     },
     {
@@ -95,27 +101,17 @@
       "title": "生産者エリア",
       "shops": [
         {
-          "name": "ふもとも農園",
-          "image": "wp-content/uploads/2026/02/2.png",
-          "width": 1080,
-          "height": 1350,
-          "link": "https://www.instagram.com/p/DUzEM6zDcXU/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
-        },
-        {
-          "name": "JAふじ伊豆",
-          "image": "wp-content/uploads/2026/02/4.png",
-          "width": 1080,
-          "height": 1350,
-          "link": "https://www.instagram.com/p/DUzYybfCFdX/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
-        },
-        {
-          "name": "エナジーファーム",
-          "image": "wp-content/uploads/2026/02/6.png",
-          "width": 1080,
-          "height": 1350,
-          "link": "https://www.instagram.com/p/DU0B_7fiCF8/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+          "name": "株式会社 エナジーファーム",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/fbdfe791-6c31-464e-b937-4ad2d3661db9-u4iiic.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/energy_farm_/"
         }
-      ]
+      ],
+      "portal": {
+        "event": "oimo-fes-fujicity-2026",
+        "syncedAt": "2026-09-22T04:25:07.975Z",
+        "count": 1
+      }
     },
     {
       "id": "gourmet",
