@@ -41,7 +41,11 @@
    WordPress 由来の他の動的機能 (検索、コメント) は静的サイトでは動かない。
 8. **`<!-- INSTAGRAM:START -->` 〜 `<!-- INSTAGRAM:END -->` の中は手で編集しない。**
    `scripts/fetch-instagram.mjs` が 6 時間おきに自動生成している (2 か所ある)。
-   表示件数を変えたいときはスクリプト冒頭の `SLOTS` を直す。
+   **欄ごとに別のアカウントを出す**: `INSTAGRAM` =「おいもフォト」欄 = @oimo.photo、
+   `INSTAGRAM2` =「Instagram」欄 = @oimo.fes。Instagram API はトークンの持ち主の投稿しか
+   返さないので、アカウントごとにトークンが要る (`INSTAGRAM_TOKEN_PHOTO` / `INSTAGRAM_TOKEN`)。
+   片方が未設定・期限切れのときは、その欄だけ今の表示のまま残す (画像も消さない)。
+   表示件数やアカウントを変えたいときはスクリプト冒頭の `SLOTS` を直す。
 9. **画像を追加したら `python3 scripts/optimize-images.py` を実行する。**
    元サイトには表示サイズに対して極端に大きな画像が含まれていた
    (ヘッダーのロゴは 34035x13284px / 8.9MB)。長辺 2000px を上限に縮小する。
