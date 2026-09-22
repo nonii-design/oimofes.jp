@@ -12,7 +12,8 @@
   `portal` が付いたグループはイベント管理ポータルの「HP掲載 出店者」から
   `scripts/fetch-hp-exhibitors.mjs` が自動で置き換えるので直接編集しない (README「店舗一覧をイベント管理ポータルから自動更新する」)。
 - `scripts/` — 複製・後処理・生成スクリプト。上の 2 つと `build-fonts.py` / `fetch-instagram.mjs` /
-  `fix-jsonld-urls.mjs` (構造化データの URL を直す) 以外は通常触らない。
+  `fix-jsonld-urls.mjs` (構造化データの URL を直す) /
+  `cap-mobile-headings.mjs` (スマホでの見出しの上限) 以外は通常触らない。
 - `.github/workflows/` — 複製 (mirror.yml) と公開 (deploy-pages.yml) のワークフロー。
 
 ## 編集ルール
@@ -114,6 +115,21 @@
    `oimo-ui.js` だけで動く。セクションを足すときは既存の `<section class="oimo-section">` の形に合わせる。
    `<body id="colibri">` の id は、下層ページ (Colibri 製) と同じ共通スタイルを当てるために残している。
    FAQ は `<details>` / `<summary>` で、JavaScript なしで開閉する。
+
+17. **スマホでの見出しの大きさは 2 か所で抑えている。**
+   Colibri は見出しの大きさを画面幅を見ずに決めるため、放っておくと幅 390px の画面に
+   42px の見出しが出る。**パソコン表示は変えずに、狭い画面だけ上限を付ける** 形で直している。
+   - テーマ既定 (`body h1` = 3.375em など) → `custom.css` の「スマホでの見出しの上限」。
+     セレクタが `html body h1` (詳細度 0,0,3) なのは意図的で、テーマ既定には勝ち、
+     ページごとの `#colibri .style-950 h1` (1,1,1) には負ける。**ここで `!important` を
+     使うと、小さく指定してある見出し (店舗名など) まで大きくしてしまう。**
+   - ページごとの指定 → `node scripts/cap-mobile-headings.mjs`。各ページのインライン CSS の
+     **すぐ後ろに** `clamp()` 付きの指定を書き足す (目印 `/*oimo-cap*/`)。何度実行してもよい。
+     まとめて末尾に足すと、後ろにあるルールにまで勝って逆に大きくなるので、必ず直後に置く。
+   上限は同スクリプトの `CAP`。**上限より小さい指定は触らない (縮めるだけで拡げない)。**
+   日本語は文字どうしのどこでも改行できるため、見出しには `word-break: keep-all` と
+   `overflow-wrap: anywhere` を併せて当てている (`custom.css`)。
+   変更したら、スマホ実測で「拡大 0 件」・パソコン実測で「変化 0 件」を確かめる。
 
 ## サイトの特徴 (複製時点)
 

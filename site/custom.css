@@ -713,6 +713,42 @@
   line-height: 1.5;
 }
 
+/* --- スマホでの見出しの上限 (テーマ既定ぶん) ------------------------------
+   Colibri のテーマ既定は h1 = 3.375em (54px) / h2 = 2.625em (42px) /
+   h3 = 2.25em (36px) を画面幅に関係なく当てるため、スマホでは大きすぎる。
+   狭い画面だけ上限を付け、768px に向けて元の大きさまで戻す。
+
+   セレクタを `html body h1` (詳細度 0,0,3) にしているのは意図的。
+   - テーマ既定の `body h1` (0,0,2) には勝つ
+   - ページごとの `#colibri .style-950 h1` (1,1,1) には負ける
+   つまり **既定値だけを抑え、ページごとの指定は変えない**。ここで !important を
+   使うと後者まで潰し、小さく指定してある見出し (店舗名など) が逆に大きくなる。
+
+   ページごとの指定のほうは scripts/cap-mobile-headings.mjs が
+   各ページのインライン CSS に同じ形の上限を書き足している。 */
+@media (max-width: 767px) {
+  html body h1 { font-size: clamp(26px, 6.9vw, 3.375em); }
+  html body h2 { font-size: clamp(23px, 6.1vw, 2.625em); }
+  html body h3 { font-size: clamp(21px, 5.6vw, 2.25em); }
+}
+
+/* 狭い画面での見出しの折り返し位置。
+   日本語は文字どうしのどこでも改行できるので、放っておくと
+   「おいもフェス SHIZUOKA 2026 & し / ぞ〜かEXPO」のような切れ方をする。
+   keep-all で「単語の途中では折らない」ことにして、空白や約物で折るようにする。
+   ただしそれだけだと、空白のない長い見出しが画面からはみ出す。
+   overflow-wrap: anywhere を併せて、**どうしても入らないときだけ** 途中で折る。
+   (text-wrap: balance は <br> の入った見出しには効かないので使わない) */
+@media (max-width: 767px) {
+  #colibri h1,
+  #colibri h2,
+  #colibri h3,
+  #colibri h4 {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+}
+
 /* 見出しの直下の余白を一定にする */
 #colibri h2 + p,
 #colibri h4 + p {
