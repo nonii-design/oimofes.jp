@@ -48,6 +48,8 @@ const SLOTS = [
     username: process.env.IG_USERNAME_PHOTO || 'oimo.photo',
     token: process.env.INSTAGRAM_TOKEN_PHOTO || '',
     tokenName: 'INSTAGRAM_TOKEN_PHOTO',
+    // 実物の写真のように白フチと影を付けて少し傾ける (custom.css)
+    variant: 'oimo-ig--photo',
   },
   {
     name: 'INSTAGRAM2',
@@ -142,7 +144,7 @@ function renderBlock(slot) {
 
   return `<!-- ${slot.name}:START -->
   <!-- このブロックは scripts/fetch-instagram.mjs が自動生成します。手で編集しないでください。 -->
-  <div class="oimo-ig">
+  <div class="oimo-ig${slot.variant ? ` ${slot.variant}` : ''}">
     <div class="oimo-ig__grid">
 ${tiles}
     </div>

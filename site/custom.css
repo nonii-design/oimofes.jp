@@ -265,6 +265,43 @@
   .oimo-ig__grid .oimo-ig__item:nth-child(n + 7) { display: none; }
 }
 
+/* --- 「おいもフォト」欄は現像した写真を並べたような見た目にする ------------
+   白いフチと影を付けて、1 枚ずつ少しずつ違う角度に傾ける。
+   傾きは transform なので、登場アニメーションが transform を使っていると
+   打ち消し合う。この欄だけ opacity だけのアニメーションに差し替える。 */
+.oimo-ig--photo .oimo-ig__grid {
+  gap: 22px 18px;
+  /* 傾いた角が切れないよう、まわりに少し余白を取る */
+  padding: 10px 6px;
+}
+
+.oimo-ig--photo .oimo-ig__item {
+  border: 7px solid #fff;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 7px 18px rgba(79, 34, 36, 0.18);
+  transition: transform 320ms var(--oimo-ease), box-shadow 320ms var(--oimo-ease);
+}
+
+/* 4 枚ごとに繰り返す。角度と上下のずれを少しずつ変えて、並びを不規則にする */
+.oimo-ig--photo .oimo-ig__item:nth-child(4n + 1) { transform: rotate(-2.4deg) translateY(4px); }
+.oimo-ig--photo .oimo-ig__item:nth-child(4n + 2) { transform: rotate(1.8deg) translateY(-5px); }
+.oimo-ig--photo .oimo-ig__item:nth-child(4n + 3) { transform: rotate(-1.2deg) translateY(6px); }
+.oimo-ig--photo .oimo-ig__item:nth-child(4n + 4) { transform: rotate(2.6deg) translateY(-3px); }
+
+/* 触れたらまっすぐに戻して少し持ち上げる */
+.oimo-ig--photo .oimo-ig__item:hover,
+.oimo-ig--photo .oimo-ig__item:focus-visible {
+  transform: rotate(0deg) translateY(-6px) scale(1.03);
+  box-shadow: 0 14px 28px rgba(79, 34, 36, 0.24);
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .oimo-ig--photo .oimo-ig__grid { gap: 18px 14px; }
+  .oimo-ig--photo .oimo-ig__item { border-width: 5px; }
+}
+
 .oimo-ig__item {
   position: relative;
   display: block;
@@ -320,6 +357,11 @@
    <html> へ oimo-ready を付ける。それを合図に内容を立ち上げる。
    動きを減らす設定の利用者には適用しない。
    --------------------------------------------------------------------------- */
+@keyframes oimo-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 @keyframes oimo-rise {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: none; }
@@ -350,6 +392,12 @@
 @media (prefers-reduced-motion: no-preference) {
   html.oimo-ready .oimo-ig__item {
     animation: oimo-rise 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  /* 写真風の欄は傾きを transform で作っているので、
+     登場は opacity だけにして transform を取り合わないようにする */
+  html.oimo-ready .oimo-ig--photo .oimo-ig__item {
+    animation-name: oimo-fade;
   }
   .oimo-ig__item:nth-child(2) { animation-delay: 50ms; }
   .oimo-ig__item:nth-child(3) { animation-delay: 100ms; }
