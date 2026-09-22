@@ -38,8 +38,9 @@ jobs:
 
       # トークンの 60 日期限を自動で延長する。
       # 失敗しても投稿の更新自体は済んでいるので、ここでは止めない。
+      # secrets は if: では使えない (ワークフロー全体が検証エラーになり、ジョブが 1 つも
+      # 起動しないまま失敗する)。トークンが無いときはスクリプト側が何もせず終了する。
       - name: Refresh the access token
-        if: ${{ secrets.INSTAGRAM_TOKEN != '' }}
         env:
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
           GH_TOKEN: ${{ secrets.INSTAGRAM_TOKEN_WRITER }}
