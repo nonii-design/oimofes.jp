@@ -71,9 +71,11 @@ function instagramUrl(v) {
 }
 
 /** 画像 URL の短い指紋 (ファイル名に付けて、写真の差し替えを検出する) */
+// v2: optimize-images.py が EXIF の回転を焼き込むようになったため、以前に保存した画像を作り直す
+const IMAGE_PIPELINE_VERSION = 'v2';
 function imageFingerprint(url) {
   let h = 0;
-  for (const ch of String(url)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  for (const ch of `${IMAGE_PIPELINE_VERSION}|${String(url)}`) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return h.toString(36);
 }
 

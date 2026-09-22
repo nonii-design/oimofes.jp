@@ -25,7 +25,7 @@ import argparse
 import os
 import sys
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 # 巨大な画像を開くために上限を外す (信頼できる自サイトの画像のみを扱うため)
 Image.MAX_IMAGE_PIXELS = None
@@ -53,6 +53,19 @@ def optimize(path: str, dry_run: bool) -> tuple[int, int, str]:
         return before, before, f"スキップ ({e.__class__.__name__})"
 
     note = ""
+    # EXIF の回転情報を画素に焼き込む。保存時に EXIF が落ちるため、これをしないと
+    # スマホで縦に撮った写真が HP 上で横倒しになる（ポータルから届く出店者写真で発生）
+    transposed = False
+    try:
+        orientation = im.getexif().get(0x0112, 1)
+    except Exception:
+        orientation = 1
+    if orientation not in (None, 1):
+        upright = ImageOps.exif_transpose(im)
+        if upright is not None:
+            im = upright
+            transposed = True
+            note = "回転を補正"
     if max(im.width, im.height) > MAX_EDGE:
         w, h = im.width, im.height
         scale = MAX_EDGE / max(w, h)
@@ -73,7 +86,8 @@ def optimize(path: str, dry_run: bool) -> tuple[int, int, str]:
         return before, before, f"スキップ ({e.__class__.__name__})"
 
     after = os.path.getsize(tmp)
-    if after >= before - MIN_SAVING:
+    # 回転を補正したときは、サイズが増えても必ず書き戻す（向きが優先）
+    if after >= before - MIN_SAVING and not transposed:
         os.remove(tmp)
         return before, before, ""
 
@@ -103,7 +117,7 @@ def main() -> int:
         b, a, note = optimize(path, args.dry_run)
         total_before += b
         total_after += a
-        if a < b:
+        if a < b or note == "回転を補正":
             changed.append((b - a, path, note))
 
     changed.sort(reverse=True)
