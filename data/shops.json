@@ -147,7 +147,8 @@
         {
           "name": "アオモリヤ",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/51ddbf78-20aa-4457-9a2b-7879aab6ce73-4ls04q.jpg",
-          "area": "青森"
+          "area": "青森",
+          "link": "https://www.instagram.com/ocean_151/"
         },
         {
           "name": "おにぎり具利",
@@ -188,7 +189,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-22T04:24:20.298Z",
+        "syncedAt": "2026-09-23T19:02:27.897Z",
         "count": 12
       }
     },
