@@ -53,12 +53,14 @@
         {
           "name": "京都芋屋 芋と野菜",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/4cc34c11-6693-4c73-8b98-4f5fba07a473-bc5ps7.jpg",
-          "area": "京都"
+          "area": "京都",
+          "link": "https://www.instagram.com/imotoyasai_shijokawaramachi/"
         },
         {
           "name": "甲州芋徹",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/d44394dd-69cd-4695-8e68-3608b9e7f05e-zli38l.jpg",
-          "area": "山梨"
+          "area": "山梨",
+          "link": "https://www.instagram.com/imo_tetsu/"
         },
         {
           "name": "小江戸川越 芋福堂",
@@ -92,7 +94,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-22T04:25:07.975Z",
+        "syncedAt": "2026-09-24T19:06:41.855Z",
         "count": 15
       }
     },
@@ -126,12 +128,14 @@
         {
           "name": "GARCIA BREWING",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8a8ffc1c-7f77-48de-ae95-dd19e3bc0564-h9elmz.jpg",
-          "area": "静岡"
+          "area": "静岡",
+          "link": "https://www.instagram.com/garciabrewing.shizuoka/"
         },
         {
           "name": "Spice6",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8114ea67-b347-4616-9614-065aed7f1ccc-1evuih2.jpg",
-          "area": "静岡"
+          "area": "静岡",
+          "link": "https://www.instagram.com/6spice6/"
         },
         {
           "name": "TACOCAFE",
@@ -189,7 +193,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-23T19:02:27.897Z",
+        "syncedAt": "2026-09-24T19:06:41.855Z",
         "count": 12
       }
     },
@@ -206,7 +210,8 @@
         {
           "name": "HANDMADE JEWELRY聖",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5192900e-517f-43e4-8ba1-47e16a65cc4b-fuk63c.jpg",
-          "area": "静岡"
+          "area": "静岡",
+          "link": "https://www.instagram.com/hand_made_jewelry_kiyo/"
         },
         {
           "name": "maruhana",
@@ -241,7 +246,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-22T04:24:20.298Z",
+        "syncedAt": "2026-09-24T19:06:41.855Z",
         "count": 7
       }
     }
