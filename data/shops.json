@@ -15,7 +15,8 @@
         {
           "name": "sweet&healthy SAZANKA",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/a00b7b9d-0917-4148-9628-f560e3f10b85-171l3l3.jpg",
-          "area": "東京"
+          "area": "東京",
+          "link": "https://www.instagram.com/sazanka.oimo/"
         },
         {
           "name": "THE IMOMITSU",
@@ -26,7 +27,8 @@
         {
           "name": "おいもカフェ みなと屋",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8add27c2-6705-4132-b451-dbc6f991562c-mkwbt.jpg",
-          "area": "神奈川"
+          "area": "神奈川",
+          "link": "https://www.instagram.com/oimocafe_3710/"
         },
         {
           "name": "お芋処えんむすび",
@@ -37,7 +39,8 @@
         {
           "name": "芋の巣",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/fcefc6f4-6e9f-47ac-b43f-54465efe4b26-ldvd2n.jpg",
-          "area": "大阪"
+          "area": "大阪",
+          "link": "https://www.instagram.com/imo_no_su_namba/"
         },
         {
           "name": "芋屋蜜三郎",
@@ -94,7 +97,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-24T19:06:41.855Z",
+        "syncedAt": "2026-09-25T19:13:58.796Z",
         "count": 15
       }
     },
