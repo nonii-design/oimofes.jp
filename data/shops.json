@@ -143,7 +143,8 @@
         {
           "name": "TACOCAFE",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/41cd64ed-dcd1-49c1-acb6-ce12dc0b915c-ngx2lq.jpg",
-          "area": "静岡"
+          "area": "静岡",
+          "link": "https://www.instagram.com/tacocafe1101/"
         },
         {
           "name": "WARABIYA",
@@ -196,7 +197,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-24T19:06:41.855Z",
+        "syncedAt": "2026-09-26T18:34:46.357Z",
         "count": 12
       }
     },
