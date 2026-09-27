@@ -114,6 +114,11 @@
    (上部に店名の帯がある写真が多いため)。この値はポータルの「HP掲載 出店者」→「HP での切り抜き位置」
    から `scripts/fetch-hp-exhibitors.mjs` が取り込むので、**ポータル連携中のエリアは JSON を手で
    直しても次回の取り込みで消える。**
+   **表示だけを変えたいときは `data/shops.json` の `overrides.byName` に店舗名で書く。**
+   取り込みのたびに当たるので、毎日の同期でも消えない (`area` / `name` / `link` を上書きできる)。
+   **地域はポータルの `prefecture` = 出店者が登録した住所 (会社の所在地) で、チラシや地図に出す
+   店舗の所在地とは別物。** ポータル側は請求などに使う正しい値なので書き換えず、ここで合わせる
+   (例: 焼き芋専門店 芋やす = 登録は茨城県 / 店舗は浅草)。
 16. **トップページ `site/index.html` は Colibri を使わない手書きの HTML。** jQuery / Swiper / Colibri の JS・CSS を
    読み込まず、`custom.css` の「C:」の節 (`.oimo-hero` / `.oimo-section` / `.oimo-card` / `.oimo-faq` など) と
    `oimo-ui.js` だけで動く。セクションを足すときは既存の `<section class="oimo-section">` の形に合わせる。

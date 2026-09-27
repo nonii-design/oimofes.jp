@@ -61,6 +61,27 @@ function shortPrefecture(v) {
   return s.replace(/[都府県]$/, '');
 }
 
+/**
+ * data/shops.json の overrides を 1 店舗に当てる。
+ *
+ * ポータルが返す prefecture は **出店者が登録した住所 (会社の所在地)** なので、
+ * チラシや地図に出している **店舗の所在地** と食い違うことがある。
+ *   例: 「焼き芋専門店 芋やす」… 登録は茨城県、店舗は浅草
+ *       「小江戸川越 芋福堂」  … 登録は群馬県、店名・店舗は川越 (埼玉)
+ * ポータル側の住所は請求などに使う正しい値なので書き換えず、
+ * **HP の表示だけ** をここで上書きする。取り込みのたびに毎回当たるので消えない。
+ */
+function applyOverride(shop, overrides) {
+  const o = overrides?.byName?.[shop.name];
+  if (!o) return;
+  if (typeof o.area === 'string') {
+    if (o.area.trim()) shop.area = o.area.trim();
+    else delete shop.area;
+  }
+  if (typeof o.name === 'string' && o.name.trim()) shop.name = o.name.trim();
+  if (typeof o.link === 'string' && /^https?:\/\//.test(o.link)) shop.link = o.link;
+}
+
 /** Instagram のユーザー名または URL → プロフィール URL */
 function instagramUrl(v) {
   const s = String(v ?? '').trim();
@@ -207,6 +228,7 @@ for (const [groupId, list] of byGroup) {
     if (area) shop.area = area;
     const link = instagramUrl(v.instagram);
     if (link) shop.link = link;
+    applyOverride(shop, data.overrides);
     // 正方形に切り抜くときの位置。書き方が想定どおりのときだけ持ち込む
     // (build-shops.mjs が style に入れるため。空なら custom.css の既定)
     const focus = String(v.imageFocus ?? '').trim();

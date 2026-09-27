@@ -13,9 +13,9 @@
           "link": "https://www.instagram.com/oimodo_takajo/"
         },
         {
-          "name": "sweet&healthy SAZANKA",
+          "name": "sweets&healthy SAZANKA",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/a00b7b9d-0917-4148-9628-f560e3f10b85-171l3l3.jpg",
-          "area": "東京",
+          "area": "宮崎",
           "link": "https://www.instagram.com/sazanka.oimo/"
         },
         {
@@ -68,13 +68,13 @@
         {
           "name": "小江戸川越 芋福堂",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/0b51ee1f-1850-4514-9dd8-0524af59648d-yn82hj.png",
-          "area": "群馬",
+          "area": "埼玉",
           "link": "https://www.instagram.com/imofukudo/"
         },
         {
           "name": "焼き芋専門店 芋やす",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/ca73c581-280a-4a4d-ac4f-915091f7ab52-43twi7.jpg",
-          "area": "茨城",
+          "area": "浅草",
           "link": "https://www.instagram.com/imoyasu2005/"
         },
         {
@@ -254,5 +254,20 @@
         "count": 7
       }
     }
-  ]
+  ],
+  "overrides": {
+    "note": "HP の表示だけを上書きする。ポータルが返す地域は出店者の登録住所 (会社の所在地) なので、チラシ・地図に出している店舗の所在地と食い違うことがある。ポータル側は請求などに使う正しい値なので直さず、ここで表示を合わせる。scripts/fetch-hp-exhibitors.mjs が取り込みのたびに当てるので、毎日の同期で消えない。キーは店舗名。",
+    "byName": {
+      "小江戸川越 芋福堂": {
+        "area": "埼玉"
+      },
+      "焼き芋専門店 芋やす": {
+        "area": "浅草"
+      },
+      "sweet&healthy SAZANKA": {
+        "name": "sweets&healthy SAZANKA",
+        "area": "宮崎"
+      }
+    }
+  }
 }
