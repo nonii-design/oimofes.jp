@@ -5,6 +5,7 @@
     {
       "id": "oimo",
       "title": "全国おいもエリア",
+      "columns": 2,
       "shops": [
         {
           "name": "oimodo",

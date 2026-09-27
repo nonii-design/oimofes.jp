@@ -84,7 +84,11 @@ function card(shop, prefix) {
 }
 
 function render(group, prefix) {
-  return `    <div class="oimo-grid oimo-grid--3 oimo-shops">
+  // グループごとに列数を変えられる (data/shops.json の columns)。既定は 3。
+  // 指定できるのは custom.css にある 2 / 3 だけ。ポータルからの取り込みは shops しか
+  // 書き換えないので、この値は毎日の同期で消えない。
+  const cols = group.columns === 2 ? 2 : 3;
+  return `    <div class="oimo-grid oimo-grid--${cols} oimo-shops">
 ${group.shops.map((s) => card(s, prefix)).join('\n')}
     </div>`;
 }
