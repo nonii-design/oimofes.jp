@@ -1431,6 +1431,15 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
 .oimo-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .oimo-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
+/* 2 列の店舗一覧 (全国おいもエリア) は、欄いっぱいに広げると 1 枚 548px になり
+   写真が大きすぎる。欄の幅を絞って 1 枚 440px くらいに収める。
+   3 列 (344px) より大きく、画面を占領しない間。見出しや文章は欄いっぱいのまま。 */
+.oimo-grid--2.oimo-shops {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media (max-width: 991px) {
   .oimo-grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
