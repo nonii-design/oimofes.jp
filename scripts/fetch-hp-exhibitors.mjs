@@ -82,6 +82,31 @@ function applyOverride(shop, overrides) {
   if (typeof o.link === 'string' && /^https?:\/\//.test(o.link)) shop.link = o.link;
 }
 
+/**
+ * data/shops.json の overrides.order で並び順を決める。
+ *
+ * ポータルの並び (sortOrder) は申込順なので、HP で見せたい順とは別。
+ * order に書いた店舗名の順に並べ、書いていない店舗は後ろに回す
+ * (ポータルでの並びは保ったまま)。新しく出店が決まった店舗は後ろに出るので、
+ * そのときは order に足す。名前が変わると当たらなくなるため、外れた分は下に出す。
+ */
+function applyOrder(shops, overrides, groupTitle) {
+  const order = overrides?.order;
+  if (!Array.isArray(order) || order.length === 0) return;
+  const rank = new Map(order.map((name, i) => [name, i]));
+  shops.forEach((s, i) => { s._i = i; });
+  shops.sort((a, b) => {
+    const ra = rank.has(a.name) ? rank.get(a.name) : Number.MAX_SAFE_INTEGER;
+    const rb = rank.has(b.name) ? rank.get(b.name) : Number.MAX_SAFE_INTEGER;
+    return ra - rb || a._i - b._i;
+  });
+  const rest = shops.filter((s) => !rank.has(s.name)).map((s) => s.name);
+  shops.forEach((s) => { delete s._i; });
+  if (rest.length) {
+    console.log(`    - ${groupTitle}: overrides.order に無いため末尾に置きました: ${rest.join(' / ')}`);
+  }
+}
+
 /** Instagram のユーザー名または URL → プロフィール URL */
 function instagramUrl(v) {
   const s = String(v ?? '').trim();
@@ -239,6 +264,7 @@ for (const [groupId, list] of byGroup) {
     console.log(`    - ${group.title}: 画像付きの店舗が無いため、前回の一覧を残します`);
     continue;
   }
+  applyOrder(shops, data.overrides, group.title);
   // 中身が前回と同じなら何も書かない (毎日の実行で syncedAt だけが変わってコミットされないように)
   if (
     group.portal?.event === EVENT_SLUG &&

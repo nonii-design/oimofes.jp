@@ -8,34 +8,26 @@
       "columns": 2,
       "shops": [
         {
-          "name": "oimodo",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/fb382a88-ae54-4c40-875c-96236241320f-cl4ecv.jpg",
-          "area": "静岡",
-          "link": "https://www.instagram.com/oimodo_takajo/"
-        },
-        {
           "name": "sweets&healthy SAZANKA",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/a00b7b9d-0917-4148-9628-f560e3f10b85-171l3l3.jpg",
           "area": "宮崎",
           "link": "https://www.instagram.com/sazanka.oimo/"
         },
         {
-          "name": "THE IMOMITSU",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5ef88258-137e-4ae8-92a1-4fdfac8c7502-gfxahu.jpg",
-          "area": "茨城",
-          "link": "https://www.instagram.com/imomitsu.2023/"
+          "name": "芋屋　蜜の月　倉敷本店",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/3adec433-ec66-4b07-bc6b-816f55c05d8f-12k4hwu.jpg",
+          "area": "岡山",
+          "link": "https://www.instagram.com/imoya_mitsunotsuki/"
         },
         {
-          "name": "おいもカフェ みなと屋",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8add27c2-6705-4132-b451-dbc6f991562c-mkwbt.jpg",
-          "area": "神奈川",
-          "link": "https://www.instagram.com/oimocafe_3710/"
+          "name": "芋屋蜜三郎",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/bc995b2d-a1b4-4a80-aa64-3a3992e899c7-1f8tc34.jpg",
+          "area": "岡山"
         },
         {
-          "name": "お芋処えんむすび",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/c22e039d-77b9-4cd5-9c01-64876ecc3869-1al0f6b.jpg",
-          "area": "岐阜",
-          "link": "https://www.instagram.com/mitsuimodokoro_enmusubi/"
+          "name": "神戸芋屋 志のもと",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/16cb7583-49bf-481a-a79e-c26bfcba2a97-i5okb9.jpg",
+          "area": "兵庫"
         },
         {
           "name": "芋の巣",
@@ -44,9 +36,10 @@
           "link": "https://www.instagram.com/imo_no_su_namba/"
         },
         {
-          "name": "芋屋蜜三郎",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/bc995b2d-a1b4-4a80-aa64-3a3992e899c7-1f8tc34.jpg",
-          "area": "岡山"
+          "name": "京都芋屋 芋と野菜",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/4cc34c11-6693-4c73-8b98-4f5fba07a473-bc5ps7.jpg",
+          "area": "京都",
+          "link": "https://www.instagram.com/imotoyasai_shijokawaramachi/"
         },
         {
           "name": "干し芋専門店ほしいもの百貨",
@@ -55,16 +48,16 @@
           "link": "https://www.instagram.com/hoshiimono100ka/"
         },
         {
-          "name": "京都芋屋 芋と野菜",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/4cc34c11-6693-4c73-8b98-4f5fba07a473-bc5ps7.jpg",
-          "area": "京都",
-          "link": "https://www.instagram.com/imotoyasai_shijokawaramachi/"
+          "name": "お芋処えんむすび",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/c22e039d-77b9-4cd5-9c01-64876ecc3869-1al0f6b.jpg",
+          "area": "岐阜",
+          "link": "https://www.instagram.com/mitsuimodokoro_enmusubi/"
         },
         {
-          "name": "甲州芋徹",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/d44394dd-69cd-4695-8e68-3608b9e7f05e-zli38l.jpg",
-          "area": "山梨",
-          "link": "https://www.instagram.com/imo_tetsu/"
+          "name": "THE IMOMITSU",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/5ef88258-137e-4ae8-92a1-4fdfac8c7502-gfxahu.jpg",
+          "area": "茨城",
+          "link": "https://www.instagram.com/imomitsu.2023/"
         },
         {
           "name": "小江戸川越 芋福堂",
@@ -73,27 +66,34 @@
           "link": "https://www.instagram.com/imofukudo/"
         },
         {
-          "name": "焼き芋専門店 芋やす",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/ca73c581-280a-4a4d-ac4f-915091f7ab52-43twi7.jpg",
-          "area": "浅草",
-          "link": "https://www.instagram.com/imoyasu2005/"
-        },
-        {
-          "name": "神戸芋屋 志のもと",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/16cb7583-49bf-481a-a79e-c26bfcba2a97-i5okb9.jpg",
-          "area": "兵庫"
-        },
-        {
           "name": "壺焼き芋 なべちゃん",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/e6a51cbc-0ca5-4447-bf57-1b1a5f1fcff4-1i9w6k0.jpg",
           "area": "埼玉",
           "link": "https://www.instagram.com/watanabenasien/"
         },
         {
-          "name": "芋屋　蜜の月　倉敷本店",
-          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/3adec433-ec66-4b07-bc6b-816f55c05d8f-12k4hwu.jpg",
-          "area": "岡山",
-          "link": "https://www.instagram.com/imoya_mitsunotsuki/"
+          "name": "焼き芋専門店 芋やす",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/ca73c581-280a-4a4d-ac4f-915091f7ab52-43twi7.jpg",
+          "area": "浅草",
+          "link": "https://www.instagram.com/imoyasu2005/"
+        },
+        {
+          "name": "おいもカフェ みなと屋",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/8add27c2-6705-4132-b451-dbc6f991562c-mkwbt.jpg",
+          "area": "神奈川",
+          "link": "https://www.instagram.com/oimocafe_3710/"
+        },
+        {
+          "name": "甲州芋徹",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/d44394dd-69cd-4695-8e68-3608b9e7f05e-zli38l.jpg",
+          "area": "山梨",
+          "link": "https://www.instagram.com/imo_tetsu/"
+        },
+        {
+          "name": "oimodo",
+          "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/fb382a88-ae54-4c40-875c-96236241320f-cl4ecv.jpg",
+          "area": "静岡",
+          "link": "https://www.instagram.com/oimodo_takajo/"
         },
         {
           "name": "oimo&coco.",
@@ -281,6 +281,25 @@
         "name": "sweets&healthy SAZANKA",
         "area": "宮崎"
       }
-    }
+    },
+    "order": [
+      "sweets&healthy SAZANKA",
+      "芋屋　蜜の月　倉敷本店",
+      "芋屋蜜三郎",
+      "神戸芋屋 志のもと",
+      "芋の巣",
+      "京都芋屋 芋と野菜",
+      "干し芋専門店ほしいもの百貨",
+      "お芋処えんむすび",
+      "THE IMOMITSU",
+      "小江戸川越 芋福堂",
+      "壺焼き芋 なべちゃん",
+      "焼き芋専門店 芋やす",
+      "おいもカフェ みなと屋",
+      "甲州芋徹",
+      "oimodo",
+      "oimo&coco."
+    ],
+    "orderNote": "全国おいもエリアの並び順。静岡で開催するため、遠方から来る店舗ほど珍しく感じられる想定で富士市から遠い順に置いている。ここに無い店舗は末尾に回る (取り込み時にログへ出る)。scripts/fetch-hp-exhibitors.mjs が取り込みのたびに当てるので、毎日の同期で消えない。"
   }
 }
