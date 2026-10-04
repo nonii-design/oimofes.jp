@@ -53,6 +53,96 @@
     el.hidden = false;
   });
 
+  /* --- 6. 会場の切り替え (FUJICITY / SHIZUOKA) ----------------------------
+     1 つのトップページで 2 会場を出し分ける。
+
+       <nav data-oimo-editions data-oimo-switch="2026-10-26"> … タブ
+       <div data-oimo-edition="fujicity">   … 会場別の節をまとめた入れ物
+       <div data-oimo-edition="shizuoka" data-oimo-edition-draft hidden>
+
+     どちらを出すかは次の順で決める。
+       1. ?v=shizuoka のように URL で指定されていれば、それ (下書きは除く)
+       2. 日付。data-oimo-switch の日 (日本時間 0:00) 以降なら後の会場
+       3. それも無ければ最初の会場
+     data-oimo-edition-draft が付いた会場は、中身が固まるまでの下書き。
+     タブにも出さず、URL で指定されても選べない。**出すときはこの属性を外すだけ。**
+
+     JavaScript が動かない環境では、HTML に hidden が書いてあるものだけが隠れ、
+     先頭の会場がそのまま読める状態になる。
+
+     変数名は ed… で始める。このファイルは全体が 1 つの関数なので、
+     他の機能と同じ名前を使うと取り合いになる (CLAUDE.md の編集ルール 13)。 */
+  var edTabsBox = document.querySelector('[data-oimo-editions]');
+  var edBlocks = Array.prototype.slice.call(document.querySelectorAll('[data-oimo-edition]'));
+
+  if (edBlocks.length) {
+    var edNameOf = function (el) { return el.getAttribute('data-oimo-edition'); };
+    var edIsDraft = function (el) { return el.hasAttribute('data-oimo-edition-draft'); };
+    var edLive = edBlocks.filter(function (el) { return !edIsDraft(el); });
+
+    // 出せる会場が 1 つだけなら、タブは出さずにそれを表示する
+    var edPick = function () {
+      if (edLive.length < 2) return edLive[0] || edBlocks[0];
+      var asked = (/[?&]v=([\w-]+)/.exec(window.location.search) || [])[1];
+      if (asked) {
+        var hit = edLive.filter(function (el) { return edNameOf(el) === asked; })[0];
+        if (hit) return hit;
+      }
+      var switchAt = parseJst(edTabsBox && edTabsBox.getAttribute('data-oimo-switch'), false);
+      if (switchAt && now >= switchAt) return edLive[edLive.length - 1];
+      return edLive[0];
+    };
+
+    /* メニューの #oimo などは、今出ている会場の節に向ける。
+       会場ごとに節の id を分ける (#oimo / #oimo-shizuoka) ため、
+       2 つ目以降の会場では末尾に会場名を足したほうを指す。 */
+    var edFixLinks = function (name) {
+      var suffix = (edLive[0] && edNameOf(edLive[0]) === name) ? '' : '-' + name;
+      Array.prototype.forEach.call(document.querySelectorAll('a[href*="#"]'), function (a) {
+        // 元の href は 1 度だけ控えておく (切り替えのたびに書き換わるため)
+        if (!a.hasAttribute('data-oimo-href')) a.setAttribute('data-oimo-href', a.getAttribute('href'));
+        var base = a.getAttribute('data-oimo-href');
+        var parts = /^(.*?)#([\w-]+)$/.exec(base);
+        if (!parts) return;
+        var want = parts[2] + suffix;
+        a.setAttribute('href', suffix && document.getElementById(want)
+          ? parts[1] + '#' + want
+          : base);
+      });
+    };
+
+    var edShow = function (name, push) {
+      edBlocks.forEach(function (el) { el.hidden = edNameOf(el) !== name; });
+      if (edTabsBox) {
+        Array.prototype.forEach.call(edTabsBox.querySelectorAll('[data-oimo-edition-tab]'), function (btn) {
+          var on = btn.getAttribute('data-oimo-edition-tab') === name;
+          btn.classList.toggle('is-on', on);
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+      }
+      edFixLinks(name);
+      if (push && window.history && window.history.replaceState) {
+        var url = window.location.pathname + '?v=' + name + window.location.hash;
+        window.history.replaceState(null, '', url);
+      }
+    };
+
+    var edCurrent = edPick();
+    if (edTabsBox) {
+      // 下書きの会場はタブに出さない
+      Array.prototype.forEach.call(edTabsBox.querySelectorAll('[data-oimo-edition-tab]'), function (btn) {
+        var target = btn.getAttribute('data-oimo-edition-tab');
+        var live = edLive.filter(function (el) { return edNameOf(el) === target; })[0];
+        btn.hidden = !live;
+        if (live) {
+          btn.addEventListener('click', function () { edShow(target, true); });
+        }
+      });
+      edTabsBox.hidden = edLive.length < 2;
+    }
+    edShow(edNameOf(edCurrent), false);
+  }
+
   var reduceMotion = window.matchMedia
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
