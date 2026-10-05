@@ -22,7 +22,8 @@
         {
           "name": "芋屋蜜三郎",
           "image": "wp-content/uploads/portal/oimo-fes-fujicity-2026/bc995b2d-a1b4-4a80-aa64-3a3992e899c7-1f8tc34.jpg",
-          "area": "岡山"
+          "area": "岡山",
+          "link": "https://www.instagram.com/imoya_mitsusaburo/"
         },
         {
           "name": "神戸芋屋 志のもと",
@@ -104,7 +105,7 @@
       ],
       "portal": {
         "event": "oimo-fes-fujicity-2026",
-        "syncedAt": "2026-09-27T02:08:12.801Z",
+        "syncedAt": "2026-10-05T21:59:49.065Z",
         "count": 16
       }
     },
