@@ -164,8 +164,12 @@
      同じ id を 2 つ置かないため。メニューの `#…` リンクは、今出ている会場に
      合わせて `edFixLinks` が付け替える (無ければ元のまま)。
    - 変数名は `ed…` で始める (編集ルール 13 の名前の衝突に注意)。
-   **切替日はいずれポータルから操作できるようにする予定** (イベントの終了日から自動計算)。
-   今は HTML の `data-oimo-switch` が原本。
+   **切替日はポータルのイベント日程から自動で決まる。** `scripts/fetch-display-slots.mjs` が
+   公開 API の `eventDates.endsAt` (FUJICITY の終了日) を受け取り、**その翌日** を
+   `partials/header.html` の `data-oimo-switch` に書いて `sync-partials.mjs` で全ページへ反映する
+   (`display-slots.yml` は `site` と `partials` をコミットする)。日程を変えたいときは
+   ポータルの「イベント編集」で終了日を直すだけ。ポータルが日程を返さないときは今の日付のまま。
+   (ポータル側の対応: nonii-design/event-nonii-portal#1)
 
 ## サイトの特徴 (複製時点)
 

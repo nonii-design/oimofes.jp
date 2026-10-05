@@ -51,7 +51,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A site
+          # 会場の切替日はヘッダーの部品 (partials/) に書くので、そちらも含める
+          git add -A site partials
           if git diff --cached --quiet; then
             echo "表示期間に変更はありませんでした。"
             exit 0

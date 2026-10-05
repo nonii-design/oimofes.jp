@@ -26,6 +26,7 @@
 //   content は { title, period, body, items: [{ label, href, note }] } (すべて任意)
 // =============================================================================
 import { readFile, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
 const TOKEN = process.env.HP_DISPLAY_SLOTS_TOKEN || '';
@@ -226,4 +227,34 @@ if (changed) {
   console.log(`==> ${INDEX} を更新しました (${changed} ブロック)`);
 } else {
   console.log('==> 変更はありませんでした');
+}
+
+// --- 3. 会場の切替日 -------------------------------------------------------
+// トップページは FUJICITY / SHIZUOKA を出し分けており、主会場を切り替える日を
+// ヘッダーの会場セレクタ (partials/header.html の data-oimo-switch) に持たせている。
+// ポータルは eventDates { startsAt, endsAt } (YYYY-MM-DD) を返すので、
+// **このイベントの終了日の翌日** を切替日にする。日程はポータルの「イベント編集」で
+// 変えるだけで、ここまで伝わる。eventDates が無い (古いポータル) ときは何もしない。
+const HEADER = process.env.HEADER_PARTIAL || 'partials/header.html';
+const endsAt = String(json?.eventDates?.endsAt ?? '').slice(0, 10);
+if (/^\d{4}-\d{2}-\d{2}$/.test(endsAt)) {
+  const [y, m, d] = endsAt.split('-').map(Number);
+  // 日付だけの足し算なので UTC で計算する (時差で 1 日ずれないように)
+  const next = new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+  const header = await readFile(HEADER, 'utf8');
+  const updated = header.replace(/data-oimo-switch="[^"]*"/, `data-oimo-switch="${next}"`);
+  if (updated === header && !header.includes(`data-oimo-switch="${next}"`)) {
+    console.error(`!! ${HEADER} に data-oimo-switch が見つかりません`);
+    process.exit(1);
+  }
+  if (updated !== header) {
+    await writeFile(HEADER, updated);
+    // 全ページのヘッダーへ反映する
+    execFileSync(process.execPath, ['scripts/sync-partials.mjs'], { stdio: 'inherit' });
+    console.log(`==> 会場の切替日を ${next} にしました (終了日 ${endsAt} の翌日)`);
+  } else {
+    console.log(`    - 会場の切替日: ${next} (変更なし)`);
+  }
+} else {
+  console.log('    - 会場の切替日: ポータルから日程が届かなかったため、今の日付のままにします');
 }
