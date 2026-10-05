@@ -1421,51 +1421,108 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
 .oimo-figure--logo { max-width: 420px; }
 .oimo-figure--logo img { border-radius: 0; }
 
-/* --- 会場タブ (FUJICITY / SHIZUOKA) ---------------------------------------
-   トップページで会場を切り替える。出し分けは oimo-ui.js の「6. 会場の切り替え」。
-   出せる会場が 1 つだけのときは nav ごと hidden になる。 */
-.oimo-editions {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 14px 16px 0;
-  background: var(--oimo-yellow, #f2be19);
-}
+/* --- 会場セレクタ (FUJICITY / SHIZUOKA) -----------------------------------
+   ヘッダーの中に置き、押すと会場の一覧が開く。出し分けは oimo-ui.js の
+   「6. 会場の切り替え」。会場別の中身があるページでだけ出る (無ければ hidden のまま)。
+   並びは order で決める: パソコンは ロゴ … メニュー → 会場、
+   スマホは ロゴ … 会場 → ハンバーガー。 */
+.oimo-header__inner { position: relative; }
+.oimo-header__logo { order: 1; }
+.oimo-nav { order: 2; }
+.oimo-header__venue { order: 3; }
+.oimo-header__toggle { order: 4; }
 
-.oimo-editions[hidden] { display: none; }
+.oimo-header__venue { position: relative; }
+.oimo-header__venue[hidden] { display: none; }
 
-#colibri .oimo-editions__tab {
+#colibri .oimo-header__venue-btn {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  min-width: 170px;
-  padding: 10px 20px;
-  border: 0;
-  border-radius: 14px 14px 0 0;
-  background: rgba(255, 255, 255, 0.45);
+  gap: 7px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 2px solid var(--oimo-brown);
+  border-radius: 999px;
+  background: #fff;
   color: var(--oimo-brown);
   font-family: var(--oimo-font-brand);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  transition: background 200ms var(--oimo-ease), color 200ms var(--oimo-ease);
+  transition: background-color 200ms var(--oimo-ease);
 }
 
-#colibri .oimo-editions__tab:hover { background: rgba(255, 255, 255, 0.7); }
+#colibri .oimo-header__venue-btn:hover { background: #fdf3d6; }
 
-#colibri .oimo-editions__tab.is-on {
+.oimo-header__venue-caret {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 250ms var(--oimo-ease);
+}
+
+.oimo-header__venue-btn[aria-expanded="true"] .oimo-header__venue-caret { transform: rotate(180deg); }
+
+.oimo-header__venue-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1250;
+  width: 280px;
+  padding: 8px;
+  border-radius: 14px;
   background: #fff;
-  box-shadow: 0 -2px 10px rgba(79, 34, 36, 0.12);
+  box-shadow: 0 12px 30px rgba(23, 37, 42, 0.22);
 }
 
-.oimo-editions__name { font-size: 17px; font-weight: 700; letter-spacing: 0.04em; }
-.oimo-editions__when { font-size: 12px; font-weight: 700; opacity: 0.75; }
+.oimo-header__venue-list[hidden] { display: none; }
 
-@media (max-width: 575px) {
-  .oimo-editions { gap: 6px; padding: 10px 10px 0; }
-  #colibri .oimo-editions__tab { min-width: 0; flex: 1; padding: 8px 10px; }
-  .oimo-editions__name { font-size: 14px; }
-  .oimo-editions__when { font-size: 10.5px; }
+#colibri .oimo-header__venue-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 11px 13px;
+  border: 0;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--oimo-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 180ms var(--oimo-ease);
+}
+
+#colibri .oimo-header__venue-opt:hover { background: #f5fafd; }
+#colibri .oimo-header__venue-opt.is-on { background: #fdf3d6; }
+
+.oimo-header__venue-opt-name {
+  font-family: var(--oimo-font-brand);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+}
+
+.oimo-header__venue-opt-when { font-size: 12px; opacity: 0.75; }
+
+@media (max-width: 991px) {
+  /* ハンバーガーの左に置く */
+  .oimo-header__venue { margin-left: auto; }
+  #colibri .oimo-header__venue-btn { padding: 7px 12px; font-size: 12.5px; }
+
+  /* 一覧はボタンではなくヘッダーの右端に合わせる。
+     ボタン基準だと 270px の板が画面の左にはみ出す。 */
+  .oimo-header__venue { position: static; }
+  .oimo-header__venue-list {
+    top: calc(100% + 6px);
+    right: 16px;
+    width: min(280px, calc(100vw - 32px));
+  }
 }
 
 /* --- グリッドとカード ---------------------------------------------------- */

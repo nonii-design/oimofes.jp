@@ -2559,6 +2559,25 @@ var colibriData = {"14-h2":{"data":{"sticky":{"className":"h-navigation_sticky a
     <a class="oimo-header__logo" href="../" aria-label="おいもフェス ホーム">
       <img src="../wp-content/uploads/2026/09/おいもフェス_ロゴのみ.png" alt="おいもフェス" width="767" height="227" decoding="async">
     </a>
+    <!-- 会場の切り替え (トップページだけで使う)。
+         会場別の中身 (data-oimo-edition) があるページでだけ oimo-ui.js が出す。
+         出せる会場が 1 つのときは hidden のまま。切替日もここが原本。 -->
+    <div class="oimo-header__venue" data-oimo-editions data-oimo-switch="2026-10-26" hidden>
+      <button class="oimo-header__venue-btn" type="button" data-oimo-edition-menu aria-expanded="false" aria-haspopup="true">
+        <span class="oimo-header__venue-now" data-oimo-edition-now>FUJICITY</span>
+        <svg class="oimo-header__venue-caret" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="oimo-header__venue-list" data-oimo-edition-list hidden>
+        <button type="button" class="oimo-header__venue-opt" data-oimo-edition-tab="fujicity">
+          <span class="oimo-header__venue-opt-name">FUJICITY</span>
+          <span class="oimo-header__venue-opt-when">2026年10月23日〜25日 / 富士中央公園</span>
+        </button>
+        <button type="button" class="oimo-header__venue-opt" data-oimo-edition-tab="shizuoka">
+          <span class="oimo-header__venue-opt-name">SHIZUOKA</span>
+          <span class="oimo-header__venue-opt-when">2027年2月26日〜28日 / グランシップ広場</span>
+        </button>
+      </div>
+    </div>
     <button class="oimo-header__toggle" type="button" aria-expanded="false" aria-controls="oimo-nav" aria-label="メニューを開く">
       <span class="oimo-header__bar"></span>
       <span class="oimo-header__bar"></span>

@@ -56,31 +56,41 @@
   /* --- 6. 会場の切り替え (FUJICITY / SHIZUOKA) ----------------------------
      1 つのトップページで 2 会場を出し分ける。
 
-       <nav data-oimo-editions data-oimo-switch="2026-10-26"> … タブ
-       <div data-oimo-edition="fujicity">   … 会場別の節をまとめた入れ物
-       <div data-oimo-edition="shizuoka" data-oimo-edition-draft hidden>
+       partials/header.html … ヘッダーの中の会場セレクタ
+         <div data-oimo-editions data-oimo-switch="2026-10-26" hidden>
+           <button data-oimo-edition-menu>   … 押すと一覧が開く
+           <div data-oimo-edition-list hidden>
+             <button data-oimo-edition-tab="fujicity">
+       site/index.html    … 会場別の節をまとめた入れ物
+         <div data-oimo-edition="fujicity">
+         <div data-oimo-edition="shizuoka" data-oimo-edition-draft hidden>
 
      どちらを出すかは次の順で決める。
        1. ?v=shizuoka のように URL で指定されていれば、それ (下書きは除く)
        2. 日付。data-oimo-switch の日 (日本時間 0:00) 以降なら後の会場
        3. それも無ければ最初の会場
      data-oimo-edition-draft が付いた会場は、中身が固まるまでの下書き。
-     タブにも出さず、URL で指定されても選べない。**出すときはこの属性を外すだけ。**
+     一覧に出さず、URL で指定されても選べない。**出すときはこの属性を外すだけ。**
+
+     セレクタはヘッダー (全ページ共通) にあるが、会場別の中身が無いページでは
+     何もせず hidden のままにする。出せる会場が 1 つのときも出さない。
 
      JavaScript が動かない環境では、HTML に hidden が書いてあるものだけが隠れ、
      先頭の会場がそのまま読める状態になる。
 
      変数名は ed… で始める。このファイルは全体が 1 つの関数なので、
      他の機能と同じ名前を使うと取り合いになる (CLAUDE.md の編集ルール 13)。 */
-  var edTabsBox = document.querySelector('[data-oimo-editions]');
+  var edBox = document.querySelector('[data-oimo-editions]');
   var edBlocks = Array.prototype.slice.call(document.querySelectorAll('[data-oimo-edition]'));
 
-  if (edBlocks.length) {
+  if (edBox && edBlocks.length) {
     var edNameOf = function (el) { return el.getAttribute('data-oimo-edition'); };
-    var edIsDraft = function (el) { return el.hasAttribute('data-oimo-edition-draft'); };
-    var edLive = edBlocks.filter(function (el) { return !edIsDraft(el); });
+    var edLive = edBlocks.filter(function (el) { return !el.hasAttribute('data-oimo-edition-draft'); });
+    var edMenu = edBox.querySelector('[data-oimo-edition-menu]');
+    var edList = edBox.querySelector('[data-oimo-edition-list]');
+    var edNow = edBox.querySelector('[data-oimo-edition-now]');
+    var edOpts = Array.prototype.slice.call(edBox.querySelectorAll('[data-oimo-edition-tab]'));
 
-    // 出せる会場が 1 つだけなら、タブは出さずにそれを表示する
     var edPick = function () {
       if (edLive.length < 2) return edLive[0] || edBlocks[0];
       var asked = (/[?&]v=([\w-]+)/.exec(window.location.search) || [])[1];
@@ -88,7 +98,7 @@
         var hit = edLive.filter(function (el) { return edNameOf(el) === asked; })[0];
         if (hit) return hit;
       }
-      var switchAt = parseJst(edTabsBox && edTabsBox.getAttribute('data-oimo-switch'), false);
+      var switchAt = parseJst(edBox.getAttribute('data-oimo-switch'), false);
       if (switchAt && now >= switchAt) return edLive[edLive.length - 1];
       return edLive[0];
     };
@@ -111,36 +121,55 @@
       });
     };
 
+    var edOpen = function (on) {
+      if (edList) edList.hidden = !on;
+      if (edMenu) edMenu.setAttribute('aria-expanded', on ? 'true' : 'false');
+    };
+
     var edShow = function (name, push) {
       edBlocks.forEach(function (el) { el.hidden = edNameOf(el) !== name; });
-      if (edTabsBox) {
-        Array.prototype.forEach.call(edTabsBox.querySelectorAll('[data-oimo-edition-tab]'), function (btn) {
-          var on = btn.getAttribute('data-oimo-edition-tab') === name;
-          btn.classList.toggle('is-on', on);
-          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-        });
-      }
+      edOpts.forEach(function (btn) {
+        var on = btn.getAttribute('data-oimo-edition-tab') === name;
+        btn.classList.toggle('is-on', on);
+        btn.setAttribute('aria-current', on ? 'true' : 'false');
+        if (on && edNow) {
+          var label = btn.querySelector('.oimo-header__venue-opt-name');
+          edNow.textContent = label ? label.textContent : name;
+        }
+      });
       edFixLinks(name);
       if (push && window.history && window.history.replaceState) {
-        var url = window.location.pathname + '?v=' + name + window.location.hash;
-        window.history.replaceState(null, '', url);
+        window.history.replaceState(null, '', window.location.pathname + '?v=' + name + window.location.hash);
       }
     };
 
-    var edCurrent = edPick();
-    if (edTabsBox) {
-      // 下書きの会場はタブに出さない
-      Array.prototype.forEach.call(edTabsBox.querySelectorAll('[data-oimo-edition-tab]'), function (btn) {
-        var target = btn.getAttribute('data-oimo-edition-tab');
-        var live = edLive.filter(function (el) { return edNameOf(el) === target; })[0];
-        btn.hidden = !live;
-        if (live) {
-          btn.addEventListener('click', function () { edShow(target, true); });
-        }
+    // 下書きの会場は一覧に出さない
+    edOpts.forEach(function (btn) {
+      var target = btn.getAttribute('data-oimo-edition-tab');
+      var live = edLive.filter(function (el) { return edNameOf(el) === target; })[0];
+      btn.hidden = !live;
+      if (live) {
+        btn.addEventListener('click', function () { edShow(target, true); edOpen(false); });
+      }
+    });
+
+    if (edMenu) {
+      edMenu.addEventListener('click', function (e) {
+        e.stopPropagation();
+        edOpen(edList && edList.hidden);
       });
-      edTabsBox.hidden = edLive.length < 2;
+      // 外を押す / Esc で閉じる
+      document.addEventListener('click', function (e) {
+        if (!edBox.contains(e.target)) edOpen(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') edOpen(false);
+      });
     }
-    edShow(edNameOf(edCurrent), false);
+
+    edBox.hidden = edLive.length < 2;
+    edOpen(false);
+    edShow(edNameOf(edPick()), false);
   }
 
   var reduceMotion = window.matchMedia
