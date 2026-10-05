@@ -1720,6 +1720,61 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
 }
 
 /* おいも単体の画像はスマホ表示のときだけ使う (広い画面は背景の作品画像) */
+/* --- 文字の見出しのヒーロー (SHIZUOKA) --------------------------------------
+   ロゴ画像がまだ無い会場用。FUJICITY のヒーローと同じ枠 (パソコンはおいもの背景、
+   スマホは黄色地) に、名称・日程・会場を文字で置く。 */
+#colibri .oimo-hero--text .oimo-hero__name {
+  margin: 0;
+  color: var(--oimo-brown);
+  font-family: var(--oimo-font-brand);
+  font-size: clamp(32px, 4.6vw, 62px);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 18px rgba(242, 190, 25, 0.9);
+}
+
+#colibri .oimo-hero--text .oimo-hero__name-sub {
+  display: inline-block;
+  margin-top: 0.15em;
+  font-size: 0.62em;
+}
+
+/* 社名やイベント名の途中で折らない */
+.oimo-nowrap { white-space: nowrap; }
+
+#colibri .oimo-hero--text .oimo-hero__when {
+  margin: 0.9em 0 0;
+  color: var(--oimo-brown);
+  /* p は本文書体に揃える指定 (!important) があるので、こちらも !important で上書きする */
+  font-family: var(--oimo-font-brand) !important;
+  font-weight: 700;
+  font-size: clamp(20px, 2.3vw, 30px);
+}
+
+#colibri .oimo-hero--text .oimo-hero__where {
+  margin: 0.35em 0 0;
+  color: var(--oimo-brown);
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 20px);
+}
+
+#colibri .oimo-hero--text .oimo-hero__note {
+  margin: 1.4em auto 0;
+  max-width: 30em;
+  color: var(--oimo-brown);
+  font-size: 14px;
+  line-height: 1.8;
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  /* スマホのヒーローは左寄せだが、文字だけの見出しは中央に置いたほうが収まる */
+  /* .oimo-hero のスマホ指定 (上寄せ) より後ろにあっても勝つよう、クラス 2 つで指定 */
+  .oimo-hero.oimo-hero--text { align-items: center; }
+  .oimo-hero--text .oimo-hero__content { text-align: center; }
+  #colibri .oimo-hero--text .oimo-hero__actions { align-items: center; }
+}
+
 .oimo-hero__layer--potato { display: none; }
 .oimo-hero__potato { display: block; width: 100%; height: auto; }
 
