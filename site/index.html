@@ -722,16 +722,26 @@
 <!-- SHIZUOKA。中身が固まるまで data-oimo-edition-draft を付けて隠している。
      出すときはこの属性を外すだけ (タブも一緒に出る)。 -->
 <div class="oimo-edition" data-oimo-edition="shizuoka">
-<section class="oimo-hero oimo-hero--text" id="hero-shizuoka">
+<section class="oimo-hero" id="hero-shizuoka">
   <div class="oimo-hero__inner">
     <div class="oimo-hero__content">
-      <!-- 決まっている情報だけを載せている (2026-10 時点: 名称・日程・会場)。
+      <!-- FUJICITY のヒーロー (#hero) と同じ組み方。ロゴの大きさ・おいもとの重なりも同じ CSS で決まる。
+           決まっている情報だけを載せている (2026-10 時点: 名称・日程・会場)。
            入場料・出店店舗・アクセスなどは決まり次第ここに節を足す。
            節の id は #oimo-shizuoka のように末尾に -shizuoka を付ける (CLAUDE.md 18) -->
-      <h1 class="oimo-hero__name">おいもフェス <span class="oimo-nowrap">SHIZUOKA 2027</span></h1>
-      <p class="oimo-hero__when">2027年2月26日（金）〜28日（日）</p>
-      <p class="oimo-hero__where">グランシップ広場（東静岡）</p>
-      <p class="oimo-hero__note">出店店舗・入場料などの詳しい内容は、決まり次第お知らせします。</p>
+      <div class="oimo-hero__lead">
+        <div class="oimo-hero__layer oimo-hero__layer--potato" data-oimo-parallax="0.18">
+          <img class="oimo-hero__potato" src="./wp-content/uploads/2026/09/おいも_単体.jpg" alt="" width="234" height="704" decoding="async">
+        </div>
+        <h1 class="oimo-hero__title oimo-hero__layer" data-oimo-parallax="-0.07">
+          <img src="./wp-content/uploads/2026/10/おいもフェス_SHIZUOKA2027_ロゴ_trim.png" alt="おいもフェス SHIZUOKA 2027" width="1418" height="467" decoding="async">
+        </h1>
+      </div>
+      <div class="oimo-hero__info">
+        <p class="oimo-hero__when">2027年2月26日（金）〜28日（日）</p>
+        <p class="oimo-hero__where">グランシップ広場（東静岡）</p>
+        <p class="oimo-hero__note">出店店舗・入場料などの詳しい内容は、決まり次第お知らせします。</p>
+      </div>
       <div class="oimo-hero__actions">
         <a class="h-button" href="https://www.instagram.com/oimo.fes/" target="_blank" rel="noopener">
           <span>おいもフェス Instagram</span><svg class="oimo-icon oimo-icon--btn" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1896.0833"><path d="M1024 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm138 0q0 164-115 279t-279 115-279-115-115-279 115-279 279-115 279 115 115 279zm108-410q0 38-27 65t-65 27-65-27-27-65 27-65 65-27 65 27 27 65zM768 266q-7 0-76.5-.5t-105.5 0-96.5 3-103 10T315 297q-50 20-88 58t-58 88q-11 29-18.5 71.5t-10 103-3 96.5 0 105.5.5 76.5-.5 76.5 0 105.5 3 96.5 10 103T169 1349q20 50 58 88t88 58q29 11 71.5 18.5t103 10 96.5 3 105.5 0 76.5-.5 76.5.5 105.5 0 96.5-3 103-10 71.5-18.5q50-20 88-58t58-88q11-29 18.5-71.5t10-103 3-96.5 0-105.5-.5-76.5.5-76.5 0-105.5-3-96.5-10-103T1367 443q-20-50-58-88t-88-58q-29-11-71.5-18.5t-103-10-96.5-3-105.5 0-76.5.5zm768 630q0 229-5 317-10 208-124 322t-322 124q-88 5-317 5t-317-5q-208-10-322-124T5 1213q-5-88-5-317t5-317q10-208 124-322t322-124q88-5 317-5t317 5q208 10 322 124t124 322q5 88 5 317z"></path></svg>
