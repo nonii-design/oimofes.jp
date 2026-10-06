@@ -64,6 +64,8 @@
        site/index.html    … 会場別の節をまとめた入れ物
          <div data-oimo-edition="fujicity">
          <div data-oimo-edition="shizuoka" data-oimo-edition-draft hidden>
+         <div data-oimo-shared>               … 会場によらず共通の節。表示中の会場の
+                                                data-oimo-shared-slot の後ろへ動かす
 
      どちらを出すかは次の順で決める。
        1. ?v=shizuoka のように URL で指定されていれば、それ (下書きは除く)
@@ -126,8 +128,23 @@
       if (edMenu) edMenu.setAttribute('aria-expanded', on ? 'true' : 'false');
     };
 
+    /* 会場によらず共通の節 (Instagram / おいもでホッ) はページに 1 つだけ置き、
+       いま出ている会場の data-oimo-shared-slot の後ろへ動かす。
+       会場ごとに置く位置を変えられ (FUJICITY は体験エリアの後ろ)、
+       INSTAGRAM の自動生成の目印も 1 組のまま済む。 */
+    var edShared = document.querySelector('[data-oimo-shared]');
+    var edPlaceShared = function (name) {
+      if (!edShared) return;
+      var block = edBlocks.filter(function (el) { return edNameOf(el) === name; })[0];
+      var slot = block && block.querySelector('[data-oimo-shared-slot]');
+      if (slot && slot.nextElementSibling !== edShared) {
+        slot.parentNode.insertBefore(edShared, slot.nextSibling);
+      }
+    };
+
     var edShow = function (name, push) {
       edBlocks.forEach(function (el) { el.hidden = edNameOf(el) !== name; });
+      edPlaceShared(name);
       edOpts.forEach(function (btn) {
         var on = btn.getAttribute('data-oimo-edition-tab') === name;
         btn.classList.toggle('is-on', on);

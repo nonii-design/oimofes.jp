@@ -149,7 +149,13 @@
 
 18. **トップページは会場 (FUJICITY / SHIZUOKA) をタブで切り替える。**
    `<div data-oimo-edition="fujicity">` の入れ物に会場別の節をまとめ、その下に
-   **共通の節 (Instagram / おいもでホッ / お問い合わせ)** を置いている。
+   **共通の節 (お問い合わせ)** を置いている。
+   **共通の節のうち Instagram / おいもでホッ (`<div data-oimo-shared>`) は、会場ごとに置く位置を変える。**
+   ページには 1 つだけ置き (INSTAGRAM の目印を増やさない)、`oimo-ui.js` の `edPlaceShared` が
+   いま出ている会場の `<div data-oimo-shared-slot>` の後ろへ動かす。
+   FUJICITY は体験エリア (`#experience`) の直後、SHIZUOKA はヒーローの直後。
+   置く位置を変えたいときは、その会場の中で `data-oimo-shared-slot` を動かすだけ。
+   メニューの「おいもでホッ」はこの並びに合わせて「過去開催の様子」と「アクセス」の間。
    お知らせ・過去開催の様子は元から別ページ。
    切り替えの操作は **ヘッダーの会場セレクタ** (`partials/header.html` の
    `.oimo-header__venue`)。全ページのヘッダーに入っているが、**会場別の中身がある
