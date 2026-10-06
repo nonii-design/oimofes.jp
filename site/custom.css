@@ -1511,8 +1511,11 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
 .oimo-header__venue-opt-when { font-size: 12px; opacity: 0.75; }
 
 @media (max-width: 991px) {
-  /* ハンバーガーの左に置く */
+  /* ハンバーガーのすぐ左に置く。ハンバーガー側にも margin-left: auto があるので、
+     会場ボタンが出ているときは外す (両方 auto だと空きを半分ずつ取り、ボタンが宙に浮く) */
+  .oimo-header__inner { gap: 12px; }
   .oimo-header__venue { margin-left: auto; }
+  .oimo-header__venue:not([hidden]) + .oimo-header__toggle { margin-left: 0; }
   #colibri .oimo-header__venue-btn { padding: 7px 12px; font-size: 12.5px; }
 
   /* 一覧はボタンではなくヘッダーの右端に合わせる。
@@ -1522,6 +1525,20 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
     top: calc(100% + 6px);
     right: 16px;
     width: min(280px, calc(100vw - 32px));
+  }
+}
+
+/* トップページのスマホ表示は左上のロゴを隠しているので、その場所 (左端) に置く。
+   「いま見ている会場」の札として左に、操作のメニューは右に分ける。
+   一覧も左端に合わせて開く */
+@media (max-width: 767px) {
+  .oimo-home .oimo-header__venue { margin-left: 0; }
+  .oimo-home .oimo-header__venue:not([hidden]) + .oimo-header__toggle { margin-left: auto; }
+  .oimo-home .oimo-header__venue-list { right: auto; left: 24px; }
+
+  /* 固定表示では下地を出さず写真の上に浮くので、ハンバーガーと同じ影を付ける */
+  html.oimo-nav-stuck body.oimo-home .oimo-header__venue-btn {
+    box-shadow: 0 4px 16px rgba(79, 34, 36, 0.28);
   }
 }
 
