@@ -185,6 +185,12 @@ for (const target of SLOTS) {
   const attrs = ` data-oimo-from="${from}" data-oimo-to="${to}"${force ? ` data-oimo-force="${force}"` : ''}`;
 
   if (target.marker) {
+    // 中身が未入力の枠 (ポータルで枠ができただけの状態) は、HP の今の表示を残す。
+    // これが無いと、枠ができた時点で既にあるボタン (リンク付き) が押せない表示に置き換わる。
+    if (!slot.content || Object.keys(slot.content).length === 0) {
+      console.log(`    - ${target.label} (${target.slotKey}): ポータルで中身が未入力のため、そのままにします`);
+      continue;
+    }
     // ブロックごと作り直す
     const re = new RegExp(`(<!-- SLOT:START ${target.slotKey}[^>]*-->)([\\s\\S]*?)(<!-- SLOT:END -->)`);
     const m = re.exec(html);
