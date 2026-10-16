@@ -1421,6 +1421,190 @@ a.oimo-figure:hover { transform: translateY(-3px); opacity: 0.92; }
 .oimo-figure--logo { max-width: 420px; }
 .oimo-figure--logo img { border-radius: 0; }
 
+/* --- 会場レイアウト (エリアマップ) -----------------------------------------
+   トップの #layout。画像でプレビューし、押すと全画面のビューア (.oimo-viewer) が開く。
+   動きは oimo-ui.js の「7. 会場レイアウトの全画面表示」。 */
+.oimo-layoutmap {
+  max-width: 1060px;
+  margin: 8px auto 0;
+}
+
+.oimo-layoutmap__open {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--oimo-radius);
+  overflow: hidden;
+  background: none;
+  line-height: 0;
+  cursor: zoom-in;
+  box-shadow: 0 10px 30px rgba(79, 34, 36, 0.12);
+}
+
+.oimo-layoutmap__open img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 500ms var(--oimo-ease);
+}
+
+.oimo-layoutmap__open:hover img { transform: scale(1.01); }
+
+.oimo-layoutmap__open:focus-visible {
+  outline: 3px solid var(--oimo-brown);
+  outline-offset: 3px;
+}
+
+.oimo-layoutmap__hint {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(79, 34, 36, 0.86);
+  color: #fff;
+  font-family: var(--oimo-font-brand);
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.oimo-layoutmap__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 18px;
+  margin-top: 26px;
+}
+
+#colibri .oimo-layoutmap__actions .h-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 全画面のビューア。<dialog> を画面いっぱいに広げる */
+html.oimo-viewer-open { overflow: hidden; }
+
+.oimo-viewer {
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #1f1717;
+  color: #fff;
+}
+
+.oimo-viewer[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.oimo-viewer::backdrop { background: rgba(20, 12, 12, 0.85); }
+
+.oimo-viewer__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px max(12px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
+  padding-top: max(10px, env(safe-area-inset-top));
+}
+
+#colibri .oimo-viewer__title {
+  flex: 1;
+  margin: 0;
+  color: #fff;
+  font-family: var(--oimo-font-brand) !important;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-align: left;
+}
+
+/* スマホを縦に持っているときだけ出す (横長の図が小さくなるため) */
+#colibri .oimo-viewer__tip {
+  display: none;
+  margin: 0;
+  padding: 0 16px max(14px, env(safe-area-inset-bottom));
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+  /* 文の途中で折らず「。」で 2 行に分ける */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  #colibri .oimo-viewer__tip { display: block; }
+  #colibri .oimo-viewer__stage.is-zoomed + .oimo-viewer__tip { display: none; }
+}
+
+#colibri .oimo-viewer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font-family: var(--oimo-font-brand);
+  font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 200ms var(--oimo-ease);
+}
+
+#colibri .oimo-viewer__btn:hover { background: rgba(255, 255, 255, 0.14); }
+#colibri .oimo-viewer__btn--close { padding: 0; font-size: 24px; }
+
+.oimo-viewer__stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 8px 12px max(12px, env(safe-area-inset-bottom));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.oimo-viewer__stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 6px;
+  cursor: zoom-in;
+}
+
+/* 拡大中は原寸 (2000px) にしてスクロールで動かす。
+   flex の中央そろえのままだと左上がはみ出して戻れないので block にする */
+.oimo-viewer__stage.is-zoomed {
+  display: block;
+  padding: 0;
+}
+
+.oimo-viewer__stage.is-zoomed img {
+  width: 2000px;
+  max-width: none;
+  max-height: none;
+  border-radius: 0;
+  cursor: zoom-out;
+}
+
 /* --- 会場セレクタ (FUJICITY / SHIZUOKA) -----------------------------------
    ヘッダーの中に置き、押すと会場の一覧が開く。出し分けは oimo-ui.js の
    「6. 会場の切り替え」。会場別の中身があるページでだけ出る (無ければ hidden のまま)。

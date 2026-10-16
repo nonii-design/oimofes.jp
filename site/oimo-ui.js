@@ -189,6 +189,89 @@
     edShow(edNameOf(edPick()), false);
   }
 
+  /* --- 7. 会場レイアウトの全画面表示 ------------------------------------
+     トップの会場レイアウト (エリアマップ) を押すと、<dialog data-oimo-layout-viewer> を
+     画面いっぱいに開く。使えるブラウザでは Fullscreen API で本当の全画面にする
+     (iPhone の Safari は要素の全画面に対応していないので、画面いっぱいの表示まで)。
+     中の画像は押すか「拡大」で原寸 (2000px) に切り替わり、ドラッグ / スクロールで動かせる。
+     細かい文字は PDF のほうが鮮明なので、PDF へのリンクも置いている。
+     変数名は lv… で始める (編集ルール 13)。 */
+  var lvDialog = document.querySelector('[data-oimo-layout-viewer]');
+  if (lvDialog) {
+    var lvStage = lvDialog.querySelector('[data-oimo-viewer-stage]');
+    var lvImg = lvStage && lvStage.querySelector('img');
+    var lvZoomBtn = lvDialog.querySelector('[data-oimo-viewer-zoom]');
+    var lvPdf = lvDialog.querySelector('a[href$=".pdf"]');
+
+    var lvZoom = function (on, x, y) {
+      if (!lvStage || !lvImg) return;
+      // 押した位置 (画像の中の割合) を拡大後も画面の中央付近に保つ
+      var r = lvImg.getBoundingClientRect();
+      var fx = x == null ? 0.5 : Math.min(Math.max((x - r.left) / r.width, 0), 1);
+      var fy = y == null ? 0.5 : Math.min(Math.max((y - r.top) / r.height, 0), 1);
+      lvStage.classList.toggle('is-zoomed', on);
+      if (lvZoomBtn) {
+        lvZoomBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        lvZoomBtn.textContent = on ? '全体' : '拡大';
+      }
+      if (on) {
+        lvStage.scrollLeft = lvImg.offsetWidth * fx - lvStage.clientWidth / 2;
+        lvStage.scrollTop = lvImg.offsetHeight * fy - lvStage.clientHeight / 2;
+      }
+    };
+
+    var lvOpen = function () {
+      if (typeof lvDialog.showModal !== 'function') {
+        // dialog に対応していない古いブラウザは PDF を開く
+        if (lvPdf) window.open(lvPdf.href, '_blank', 'noopener');
+        return;
+      }
+      lvZoom(false);
+      lvDialog.showModal();
+      document.documentElement.classList.add('oimo-viewer-open');
+      if (lvDialog.requestFullscreen) {
+        lvDialog.requestFullscreen().catch(function () { /* 使えなければ画面いっぱいのまま */ });
+      }
+    };
+
+    var lvClose = function () {
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(function () {});
+      }
+      if (lvDialog.open) lvDialog.close();
+    };
+
+    lvDialog.addEventListener('close', function () {
+      document.documentElement.classList.remove('oimo-viewer-open');
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(function () {});
+      }
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-oimo-layout-open]'), function (btn) {
+      btn.addEventListener('click', lvOpen);
+    });
+    Array.prototype.forEach.call(lvDialog.querySelectorAll('[data-oimo-viewer-close]'), function (btn) {
+      btn.addEventListener('click', lvClose);
+    });
+    if (lvZoomBtn) {
+      lvZoomBtn.addEventListener('click', function () {
+        lvZoom(!lvStage.classList.contains('is-zoomed'));
+      });
+    }
+    if (lvImg) {
+      lvImg.addEventListener('click', function (e) {
+        lvZoom(!lvStage.classList.contains('is-zoomed'), e.clientX, e.clientY);
+      });
+    }
+    // 画像の外 (暗い余白) を押したら閉じる
+    if (lvStage) {
+      lvStage.addEventListener('click', function (e) {
+        if (e.target === lvStage && !lvStage.classList.contains('is-zoomed')) lvClose();
+      });
+    }
+  }
+
   var reduceMotion = window.matchMedia
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
