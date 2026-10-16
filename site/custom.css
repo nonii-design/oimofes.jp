@@ -1856,6 +1856,17 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
   border-radius: var(--oimo-radius-sm);
 }
 
+/* 協賛企業のロゴ。白地のロゴが白い節に溶けないよう、薄い枠を付ける。
+   スマホでも 2 つ横に並べる (縦に積むと 1 つずつが大きすぎる) */
+.oimo-logos--sponsor .oimo-logos__item img {
+  border: 1px solid rgba(79, 34, 36, 0.12);
+}
+
+@media (max-width: 575px) {
+  .oimo-logos--sponsor { gap: 14px; }
+  .oimo-logos--sponsor .oimo-logos__item { flex: 1 1 calc(50% - 7px); }
+}
+
 /* --- ヒーロー ------------------------------------------------------------ */
 .oimo-hero {
   position: relative;
