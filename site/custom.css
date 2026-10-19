@@ -1862,6 +1862,29 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
   border: 1px solid rgba(79, 34, 36, 0.12);
 }
 
+/* 後援 (自治体など)。市章と名前を横に並べる */
+.oimo-supporter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.oimo-supporter__mark {
+  display: block;
+  width: 72px;
+  height: auto;
+}
+
+#colibri .oimo-supporter__name {
+  color: var(--oimo-ink);
+  font-family: var(--oimo-font-brand);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+}
+
 @media (max-width: 575px) {
   .oimo-logos--sponsor { gap: 14px; }
   .oimo-logos--sponsor .oimo-logos__item { flex: 1 1 calc(50% - 7px); }
