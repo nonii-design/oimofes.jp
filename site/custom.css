@@ -1871,6 +1871,16 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
   margin-top: 8px;
 }
 
+.oimo-supporter__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  transition: transform 300ms var(--oimo-ease), opacity 200ms var(--oimo-ease);
+}
+
+.oimo-supporter__link:hover { transform: translateY(-3px); opacity: 0.85; }
+
 .oimo-supporter__mark {
   display: block;
   width: 72px;
