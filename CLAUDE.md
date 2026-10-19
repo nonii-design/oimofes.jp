@@ -181,6 +181,14 @@
    ポータルの「イベント編集」で終了日を直すだけ。ポータルが日程を返さないときは今の日付のまま。
    (ポータル側の対応: nonii-design/event-nonii-portal#1)
 
+19. **アクセス解析は Google アナリティクス 4 (GA4)。** `site/oimo-analytics.js` を全ページのヘッダー
+   (`partials/header.html`) から読み込む。**測定 ID はこのファイルの `GA_ID` の 1 か所だけ**
+   (空のあいだは何も送らない。localhost でも送らない)。HTML に gtag のタグを直接書かない。
+   独自のイベントは `ticket_click` / `layout_fullscreen` / `venue_switch` / `contact_submit`。
+   増やすときは同ファイルのクリックの見分けに足す (`oimo-ui.js` には書かない)。
+   お問い合わせの送信完了は `contact-form.js` が `oimo:contact-sent` で知らせる (内容は渡さない)。
+   WordPress 時代の WP Statistics はコメントが残っているだけで動いていない。
+
 ## サイトの特徴 (複製時点)
 
 - テーマ / ページビルダー: **Colibri Page Builder Pro**。各ページの HTML は Colibri が生成した構造で、

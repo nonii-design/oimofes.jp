@@ -118,6 +118,8 @@
           form.reset();
           if (counter) counter.textContent = '0';
           show('送信しました。お問い合わせありがとうございます。折り返しご連絡いたします。', 'done');
+          // アクセス解析 (oimo-analytics.js) に送信完了を知らせる。内容は渡さない
+          document.dispatchEvent(new CustomEvent('oimo:contact-sent'));
         } else {
           show((result && result.error) || '送信できませんでした。' + MAIL_TO + ' 宛にメールでお問い合わせください。', 'error');
         }
