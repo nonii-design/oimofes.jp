@@ -1353,8 +1353,11 @@ html.oimo-nav-stuck .oimo-header__logo img { height: 38px; }
 }
 
 /* --- セクションの共通レイアウト ------------------------------------------ */
-/* トップページはテーマの CSS を読み込まないので、最小限のリセットをここで行う */
-body.oimo-home {
+/* トップページはテーマの CSS を読み込まないので、最小限のリセットをここで行う。
+   .oimo-plain は同じく手書きの下層ページ (プライバシーポリシーなど) 用。
+   .oimo-home と違い、スマホでもヘッダーのロゴを隠さない */
+body.oimo-home,
+body.oimo-plain {
   margin: 0;
   font-family: var(--oimo-font-gothic);
   color: var(--oimo-ink);
@@ -1363,10 +1366,82 @@ body.oimo-home {
 
 .oimo-home *,
 .oimo-home *::before,
-.oimo-home *::after { box-sizing: border-box; }
+.oimo-home *::after,
+.oimo-plain *,
+.oimo-plain *::before,
+.oimo-plain *::after { box-sizing: border-box; }
 
-.oimo-home img { max-width: 100%; }
-.oimo-home main { display: block; }
+.oimo-home img,
+.oimo-plain img { max-width: 100%; }
+.oimo-home main,
+.oimo-plain main { display: block; }
+
+/* --- 規約などの文章ページ (privacy/) ------------------------------------- */
+.oimo-policy { text-align: left; }
+
+#colibri .oimo-policy h1 {
+  margin: 0 0 1.2em;
+  color: var(--oimo-ink);
+  font-family: var(--oimo-font-brand);
+  font-size: clamp(28px, 3.4vw, 40px);
+  text-align: center;
+}
+
+/* .oimo-section h2 (後ろにある、大きな中央寄せの見出し) に勝つよう .oimo-section から指定する */
+#colibri .oimo-section .oimo-policy h2 {
+  margin: 2.4em 0 0.7em;
+  padding-bottom: 0.35em;
+  border-bottom: 2px solid var(--oimo-yellow);
+  font-size: clamp(19px, 2vw, 22px);
+  text-align: left;
+}
+
+#colibri .oimo-policy p,
+#colibri .oimo-policy li,
+#colibri .oimo-policy td,
+#colibri .oimo-policy th,
+#colibri .oimo-policy dd,
+#colibri .oimo-policy dt {
+  color: var(--oimo-ink);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+#colibri .oimo-policy p { margin: 0 0 1em; }
+.oimo-policy ul { margin: 0 0 1em; padding-left: 1.4em; }
+.oimo-policy li + li { margin-top: 0.3em; }
+.oimo-policy a { color: var(--oimo-brown); text-underline-offset: 3px; }
+
+/* 表は狭い画面では横にスクロールさせる (ページ全体を横にはみ出させない) */
+.oimo-policy__table { margin: 0 0 1em; overflow-x: auto; }
+.oimo-policy table { width: 100%; min-width: 560px; border-collapse: collapse; }
+#colibri .oimo-policy th,
+#colibri .oimo-policy td {
+  padding: 10px 12px;
+  border: 1px solid #e3dccb;
+  vertical-align: top;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.7;
+}
+#colibri .oimo-policy th { background: var(--oimo-tint); font-weight: 700; white-space: nowrap; }
+#colibri .oimo-policy td:nth-child(2) { white-space: nowrap; }
+
+.oimo-policy__contact {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 20px;
+  margin: 0 0 1.4em;
+}
+#colibri .oimo-policy__contact dt { font-weight: 700; }
+.oimo-policy__contact dd { margin: 0; }
+
+#colibri .oimo-policy__date { margin-top: 2.4em; text-align: right; }
+
+@media (max-width: 575px) {
+  .oimo-policy__contact { grid-template-columns: 1fr; gap: 0; }
+  .oimo-policy__contact dd { margin-bottom: 10px; }
+}
 
 .oimo-section {
   padding: 72px 24px;
