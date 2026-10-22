@@ -1972,7 +1972,8 @@ a.oimo-shop__link:hover img { transform: scale(1.03); }
 
 @media (max-width: 575px) {
   .oimo-logos--sponsor { gap: 14px; }
-  .oimo-logos--sponsor .oimo-logos__item { flex: 1 1 calc(50% - 7px); }
+  /* 奇数個のときも最後の 1 つが横いっぱいに広がらないよう、幅は半分までにする */
+  .oimo-logos--sponsor .oimo-logos__item { flex: 1 1 calc(50% - 7px); max-width: calc(50% - 7px); }
 }
 
 /* --- ヒーロー ------------------------------------------------------------ */
