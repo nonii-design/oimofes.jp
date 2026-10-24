@@ -1644,15 +1644,22 @@ html.oimo-viewer-open { overflow: hidden; }
 #colibri .oimo-viewer__btn:hover { background: rgba(255, 255, 255, 0.14); }
 #colibri .oimo-viewer__btn--close { padding: 0; font-size: 24px; }
 
+/* 拡大・縮小と移動は oimo-ui.js が画像の transform で行う (「7.」)。
+   ページ全体の拡大やスクロールと取り合わないよう、指の動きはすべてここで受け取る */
 .oimo-viewer__stage {
+  position: relative;   /* 画像の offsetLeft / offsetTop の基準にする */
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 0;
   padding: 8px 12px max(12px, env(safe-area-inset-bottom));
-  overflow: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: zoom-in;
 }
 
 .oimo-viewer__stage img {
@@ -1662,23 +1669,14 @@ html.oimo-viewer-open { overflow: hidden; }
   max-width: 100%;
   max-height: 100%;
   border-radius: 6px;
-  cursor: zoom-in;
+  transform-origin: 0 0;
+  will-change: transform;
+  -webkit-user-drag: none;
+  pointer-events: auto;
 }
 
-/* 拡大中は原寸 (2000px) にしてスクロールで動かす。
-   flex の中央そろえのままだと左上がはみ出して戻れないので block にする */
-.oimo-viewer__stage.is-zoomed {
-  display: block;
-  padding: 0;
-}
-
-.oimo-viewer__stage.is-zoomed img {
-  width: 2000px;
-  max-width: none;
-  max-height: none;
-  border-radius: 0;
-  cursor: zoom-out;
-}
+.oimo-viewer__stage.is-zoomed { cursor: grab; }
+.oimo-viewer__stage.is-zoomed.is-dragging { cursor: grabbing; }
 
 /* --- 会場セレクタ (FUJICITY / SHIZUOKA) -----------------------------------
    ヘッダーの中に置き、押すと会場の一覧が開く。出し分けは oimo-ui.js の

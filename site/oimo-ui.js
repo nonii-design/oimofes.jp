@@ -193,7 +193,14 @@
      トップの会場レイアウト (エリアマップ) を押すと、<dialog data-oimo-layout-viewer> を
      画面いっぱいに開く。使えるブラウザでは Fullscreen API で本当の全画面にする
      (iPhone の Safari は要素の全画面に対応していないので、画面いっぱいの表示まで)。
-     中の画像は押すか「拡大」で原寸 (2000px) に切り替わり、ドラッグ / スクロールで動かせる。
+
+     中の画像は自由に拡大・縮小できる:
+       スマホ … 2 本指のピンチで拡大・縮小、1 本指で移動、ダブルタップで拡大 / 全体
+       パソコン … ホイール (トラックパッドのピンチ) で拡大・縮小、ドラッグで移動、クリックで拡大 / 全体
+       「拡大」ボタン … 2.5 倍と全体を切り替え
+     ブラウザのページ全体の拡大と取り合わないよう、画像の枠は touch-action: none にして
+     指の動きをすべてここで受け取る。拡大は画像に transform を掛けるだけで、画像自体は
+     2000px のものを読み込んであるので、5 倍ほどまでは文字がつぶれない。
      細かい文字は PDF のほうが鮮明なので、PDF へのリンクも置いている。
      変数名は lv… で始める (編集ルール 13)。 */
   var lvDialog = document.querySelector('[data-oimo-layout-viewer]');
@@ -203,22 +210,150 @@
     var lvZoomBtn = lvDialog.querySelector('[data-oimo-viewer-zoom]');
     var lvPdf = lvDialog.querySelector('a[href$=".pdf"]');
 
-    var lvZoom = function (on, x, y) {
-      if (!lvStage || !lvImg) return;
-      // 押した位置 (画像の中の割合) を拡大後も画面の中央付近に保つ
-      var r = lvImg.getBoundingClientRect();
-      var fx = x == null ? 0.5 : Math.min(Math.max((x - r.left) / r.width, 0), 1);
-      var fy = y == null ? 0.5 : Math.min(Math.max((y - r.top) / r.height, 0), 1);
-      lvStage.classList.toggle('is-zoomed', on);
+    // 拡大率と、全体表示の位置からのずれ (px)
+    var lvS = 1, lvX = 0, lvY = 0;
+    var lvMax = function () {
+      // 画像の画素が足りる倍率の 1.5 倍まで (最低 3 倍)
+      var w = lvImg.offsetWidth || 1;
+      return Math.max(3, (lvImg.naturalWidth || 2000) / w * 1.5);
+    };
+
+    // はみ出した画像が画面の外へ逃げないようにそろえる
+    var lvClamp = function () {
+      var sw = lvStage.clientWidth, sh = lvStage.clientHeight;
+      var left = lvImg.offsetLeft, top = lvImg.offsetTop;
+      var w = lvImg.offsetWidth * lvS, h = lvImg.offsetHeight * lvS;
+      if (w <= sw) lvX = (sw - w) / 2 - left;
+      else lvX = Math.min(-left, Math.max(sw - w - left, lvX));
+      if (h <= sh) lvY = (sh - h) / 2 - top;
+      else lvY = Math.min(-top, Math.max(sh - h - top, lvY));
+    };
+
+    var lvApply = function (animate) {
+      lvClamp();
+      lvImg.style.transition = animate ? 'transform 220ms ease' : 'none';
+      lvImg.style.transform = 'translate(' + lvX + 'px,' + lvY + 'px) scale(' + lvS + ')';
+      var zoomed = lvS > 1.01;
+      lvStage.classList.toggle('is-zoomed', zoomed);
       if (lvZoomBtn) {
-        lvZoomBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-        lvZoomBtn.textContent = on ? '全体' : '拡大';
-      }
-      if (on) {
-        lvStage.scrollLeft = lvImg.offsetWidth * fx - lvStage.clientWidth / 2;
-        lvStage.scrollTop = lvImg.offsetHeight * fy - lvStage.clientHeight / 2;
+        lvZoomBtn.setAttribute('aria-pressed', zoomed ? 'true' : 'false');
+        lvZoomBtn.textContent = zoomed ? '全体' : '拡大';
       }
     };
+
+    // 画面上の点 (cx, cy) の下にある画像の位置を動かさずに、倍率を s にする
+    var lvZoomAt = function (s, cx, cy, animate) {
+      var r = lvStage.getBoundingClientRect();
+      var px = cx - r.left, py = cy - r.top;
+      var u = (px - lvImg.offsetLeft - lvX) / lvS;
+      var v = (py - lvImg.offsetTop - lvY) / lvS;
+      lvS = Math.min(lvMax(), Math.max(1, s));
+      lvX = px - lvImg.offsetLeft - lvS * u;
+      lvY = py - lvImg.offsetTop - lvS * v;
+      lvApply(animate);
+    };
+
+    var lvCenter = function () {
+      var r = lvStage.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    };
+
+    var lvToggle = function (cx, cy) {
+      if (lvS > 1.01) { lvS = 1; lvX = 0; lvY = 0; lvApply(true); return; }
+      var c = lvCenter();
+      lvZoomAt(2.5, cx == null ? c.x : cx, cy == null ? c.y : cy, true);
+    };
+
+    var lvReset = function () { lvS = 1; lvX = 0; lvY = 0; lvApply(false); };
+
+    // --- 指・マウスの動き (Pointer Events) ---
+    var lvPts = {};          // 画面に触れている指 (pointerId → 位置)
+    var lvGesture = null;    // 動かし始めたときの状態
+    var lvMoved = false, lvDownAt = 0, lvLastTap = 0;
+    var lvCount = function () { return Object.keys(lvPts).length; };
+    var lvStart = function () {
+      var ids = Object.keys(lvPts);
+      if (ids.length >= 2) {
+        var a = lvPts[ids[0]], b = lvPts[ids[1]];
+        lvGesture = { pinch: true, d: Math.hypot(a.x - b.x, a.y - b.y) || 1, s: lvS,
+          mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, x: lvX, y: lvY };
+      } else if (ids.length === 1) {
+        var p = lvPts[ids[0]];
+        lvGesture = { pinch: false, px: p.x, py: p.y, x: lvX, y: lvY };
+      } else {
+        lvGesture = null;
+      }
+    };
+
+    if (lvStage && lvImg) {
+      lvStage.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        lvPts[e.pointerId] = { x: e.clientX, y: e.clientY };
+        if (lvStage.setPointerCapture) { try { lvStage.setPointerCapture(e.pointerId); } catch (err) { /* 古いブラウザ */ } }
+        if (lvCount() === 1) { lvMoved = false; lvDownAt = Date.now(); }
+        lvStart();
+        lvStage.classList.add('is-dragging');
+      });
+
+      lvStage.addEventListener('pointermove', function (e) {
+        if (!lvPts[e.pointerId] || !lvGesture) return;
+        lvPts[e.pointerId] = { x: e.clientX, y: e.clientY };
+        var g = lvGesture;
+        if (g.pinch && lvCount() >= 2) {
+          var ids = Object.keys(lvPts), a = lvPts[ids[0]], b = lvPts[ids[1]];
+          var d = Math.hypot(a.x - b.x, a.y - b.y);
+          var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          // 始めたときの指の中点の下にあった画像の位置を、今の中点に合わせる (拡大しながら動かせる)
+          var r = lvStage.getBoundingClientRect();
+          var u = (g.mx - r.left - lvImg.offsetLeft - g.x) / g.s;
+          var v = (g.my - r.top - lvImg.offsetTop - g.y) / g.s;
+          lvS = Math.min(lvMax(), Math.max(1, g.s * d / g.d));
+          lvX = mx - r.left - lvImg.offsetLeft - lvS * u;
+          lvY = my - r.top - lvImg.offsetTop - lvS * v;
+          lvMoved = true;
+          lvApply(false);
+        } else if (!g.pinch) {
+          var dx = e.clientX - g.px, dy = e.clientY - g.py;
+          if (Math.abs(dx) + Math.abs(dy) > 6) lvMoved = true;
+          if (lvS > 1.01) { lvX = g.x + dx; lvY = g.y + dy; lvApply(false); }
+        }
+      });
+
+      var lvEnd = function (e) {
+        if (!lvPts[e.pointerId]) return;
+        delete lvPts[e.pointerId];
+        var wasTap = !lvMoved && Date.now() - lvDownAt < 300 && lvCount() === 0;
+        lvStart();   // 2 本 → 1 本になったら、そのまま移動を続けられるように
+        if (lvCount() === 0) lvStage.classList.remove('is-dragging');
+        if (!wasTap || e.type === 'pointercancel') return;
+        var onImg = e.target === lvImg;
+        if (e.pointerType === 'mouse') {
+          // パソコン: 画像のクリックで拡大 / 全体。画像の外 (暗い余白) のクリックで閉じる
+          if (onImg) lvToggle(e.clientX, e.clientY);
+          else if (lvS <= 1.01) lvClose();
+          return;
+        }
+        // スマホ: ダブルタップで拡大 / 全体
+        var now = Date.now();
+        if (now - lvLastTap < 320) { lvLastTap = 0; lvToggle(e.clientX, e.clientY); }
+        else lvLastTap = now;
+      };
+      lvStage.addEventListener('pointerup', lvEnd);
+      lvStage.addEventListener('pointercancel', lvEnd);
+
+      // パソコンのホイール / トラックパッドのピンチ (ctrlKey 付きの wheel になる)
+      lvStage.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        var k = Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0025));
+        lvZoomAt(lvS * k, e.clientX, e.clientY, false);
+      }, { passive: false });
+
+      // 古い iOS Safari の独自ジェスチャー (ページ全体の拡大) を止める
+      lvStage.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+
+      // 画面の向きや大きさが変わったら、はみ出しを直す
+      window.addEventListener('resize', function () { if (lvDialog.open) lvApply(false); });
+    }
 
     var lvOpen = function () {
       if (typeof lvDialog.showModal !== 'function') {
@@ -226,9 +361,9 @@
         if (lvPdf) window.open(lvPdf.href, '_blank', 'noopener');
         return;
       }
-      lvZoom(false);
       lvDialog.showModal();
       document.documentElement.classList.add('oimo-viewer-open');
+      lvReset();
       if (lvDialog.requestFullscreen) {
         lvDialog.requestFullscreen().catch(function () { /* 使えなければ画面いっぱいのまま */ });
       }
@@ -243,6 +378,7 @@
 
     lvDialog.addEventListener('close', function () {
       document.documentElement.classList.remove('oimo-viewer-open');
+      lvPts = {}; lvGesture = null;
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen().catch(function () {});
       }
@@ -255,20 +391,7 @@
       btn.addEventListener('click', lvClose);
     });
     if (lvZoomBtn) {
-      lvZoomBtn.addEventListener('click', function () {
-        lvZoom(!lvStage.classList.contains('is-zoomed'));
-      });
-    }
-    if (lvImg) {
-      lvImg.addEventListener('click', function (e) {
-        lvZoom(!lvStage.classList.contains('is-zoomed'), e.clientX, e.clientY);
-      });
-    }
-    // 画像の外 (暗い余白) を押したら閉じる
-    if (lvStage) {
-      lvStage.addEventListener('click', function (e) {
-        if (e.target === lvStage && !lvStage.classList.contains('is-zoomed')) lvClose();
-      });
+      lvZoomBtn.addEventListener('click', function () { lvToggle(); });
     }
   }
 
